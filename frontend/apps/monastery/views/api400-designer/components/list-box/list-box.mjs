@@ -21,6 +21,7 @@ async function elementRendered(element) {
   const noOfElements = parentContainer.children.length;
 
   if (element.getAttribute("value")) {
+    
     let values;
     if (element.getAttribute("value")) values = JSON.parse(element.getAttribute("value"));
     if (values && values.length && element.getAttribute("type") == "Parameter") _setValue(values, element.getAttribute("type"));

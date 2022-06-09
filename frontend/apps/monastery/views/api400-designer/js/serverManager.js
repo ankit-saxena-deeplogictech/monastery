@@ -4,9 +4,9 @@
  * License: See enclosed LICENSE file.
  */
 import { apimanager as apiman } from "/framework/js/apimanager.mjs";
-import { open } from "../components/pluggable-ribbon/topribbon/open/open.mjs"
 import { api400model } from "../model/api400model.mjs";
 import { openserverhelper } from "./openserverhelper.mjs";
+import {apiclparser} from "../model/apiclparser.mjs"
 
 /**
  * Returns the list of models present on the server
@@ -43,7 +43,7 @@ async function getApicl(name, server, port, user, password) {
 
     try {   // try to read the apicl now
         const result = await apiman.rest(`http://${server}:${port}/admin/getAPI`, "POST", { user, password, name }, true);
-        let data = await open.apiclParser(atob(result.data).toString());
+        let data = await apiclparser.apiclParser(atob(result.data).toString());
         return {
             result: result.result, model: result.result ? JSON.stringify(data) : null, err: "Apicl read failed at the server",
             name: result.result ? name : null, raw_err: "Apicl read failed at the server", key: "ApiclReadServerIssue"
@@ -131,7 +131,7 @@ async function publishModule(name, server, port, user, password) {
     try {
         let count = 0;
         let result;
-        const runJsModArray = api400model.runJsMod();
+        const runJsModArray = api400model.getModules();
         if (runJsModArray.length != 0) {
             for (let runJsMod of runJsModArray) {
                 if (runJsMod[0] == "")  return { result: false, key: "FailedModule" };

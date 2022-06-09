@@ -21,7 +21,9 @@
  };
  
  async function elementRendered(element) {
-   if (element.getAttribute("value")) _setValue(element.getAttribute("value"), element)
+
+   if (element.getAttribute("value")) _setValue(element.getAttribute("value"), element);
+   
  }
  
  
