@@ -46,7 +46,7 @@ const _parseCommand = async function (command, counter, dependencies,key) {
     let ret = {}, nodeNameAsSubCmd = '', attr;
     let cmd = command.split(' ');
     let nodeName = cmd[0].toLowerCase();
-    if (nodeName == "runjs" && _patternMatch(command, /MOD\(([^)]+)\)/) != "") nodeName = "mod";
+    if (nodeName == "runjs" && _findBetweenParenthesis(command,"MOD") != "") nodeName = "mod";
     if (nodeName == "if") nodeName = "condition";
     if (nodeName == 'chgvar') {
         let nodenameAsSubCmd = await _checkChgvarSubCommand(command);
@@ -58,7 +58,7 @@ const _parseCommand = async function (command, counter, dependencies,key) {
     ret["nodeName"] = nodeName;
     
 
-    if (nodeName == 'strapi' || nodeName == 'sndapimsg') { ret["listbox"] = await _parseStrapi(command) }
+    if (nodeName == 'strapi')         { ret["listbox"] = await _parseStrapi(command) }
     else if (nodeName == 'call')       { ret = await _parseCall(command) }
     else if (nodeName == 'runsqlprc')  { ret = await _parseRunsqlprc(command) }
     else if (nodeName == 'runsql')     { ret = await _parseRunsql(command, isThisSubCmd) }
@@ -80,6 +80,7 @@ const _parseCommand = async function (command, counter, dependencies,key) {
     else if (nodeName == 'scr')        { ret = await _parseScr(command, isThisSubCmd,key) }  
     else if (nodeName == 'map')        { ret = await _parseMap(command, isThisSubCmd) }
     else if (nodeName == 'substr')     { ret = await _parseSubstr(command, isThisSubCmd) }
+    else if (nodeName == 'sndapimsg')  { ret["listbox"] = await _parseSndapimsg(command) }
     else if (nodeName == 'endapi')     { ret = await _parseEndapi()}
    
     if (ret && ret.nodeName) { attr = await _setAttribute(ret.nodeName,key); }
@@ -93,7 +94,7 @@ const _parseCommand = async function (command, counter, dependencies,key) {
  * @returns STRAPI node with all required 
  */
 
-const _parseStrapi = async function (command) {
+const _parseStrapi= async function (command) {
     return command.match(/\(([^)]+)\)/) ? JSON.stringify(command.match(/\(([^)]+)\)/)[1].split(" ").filter(Boolean)) : JSON.stringify(['']);
 };
 
@@ -108,10 +109,10 @@ const _parseCall = async function (command) {
     let ret = {};
     ret["nodeName"] = "call";
     ret["description"] = "Call";
-    let programName = _patternMatch(command, /PGM\(([^)]+)\)/).split("/");
+    let programName = _findBetweenParenthesis(command,"PGM").split("/");
     ret["libraryname"] = programName[0];
     ret["programname"] = programName[1];  
-    ret["listbox"] = JSON.stringify(_patternMatch(command, /PARM\(([^)]+)\)/).split(" ").filter(Boolean));
+    ret["listbox"] = JSON.stringify(_findBetweenParenthesis(command,"PARM").split(" ").filter(Boolean));
     return ret;
 };
 
@@ -127,10 +128,10 @@ const _parseRunsqlprc = async function (command) {
     
     ret["nodeName"] = "runsqlprc";
     ret["description"] = "Runsqlprc";
-    let procedureName = _patternMatch(command, /PRC\(([^)]+)\)/).split("/");
+    let procedureName = _findBetweenParenthesis(command,"PRC").split("/");
     ret["libraryname"] = procedureName[0];
     ret["procedurename"] = procedureName[1];
-    let listOfParams =  _patternMatch(command, /PARM\(([^)]+)\)/).split(" ").filter(Boolean);
+    let listOfParams =  _findBetweenParenthesis(command,"PARM").split(" ").filter(Boolean);
     for(let param of listOfParams ){
         paramType='',parameter='',paramNature='';
       if(param.includes(":")){
@@ -151,6 +152,7 @@ const _parseRunsqlprc = async function (command) {
  * Convert the apicl command into RUNSQL node 
  * RUNSQL : Execute the SQL Query
  * @param command  apicl command for RUNSQL
+ * @param isThisSubCmd Contains true or false to check wheather a sub command or not
  * @returns RUNSQL node with all required properties
  */
 
@@ -176,6 +178,7 @@ const _parseRunsql = async function (command, isThisSubCmd) {
  * Convert the apicl command into RUNJS node 
  * RUNJS : Execute the Javascript Code
  * @param command  apicl command for RUNJS
+ * @param isThisSubCmd Contains true or false to check wheather a sub command or not
  * @returns RUNJS node with all required properties
  */
 
@@ -203,13 +206,13 @@ const _parseRunjs = async function (command, isThisSubCmd) {
  */
 
 const _parseLog = async function (command) {
-    return command.match(/\(([^)]+)\)/) ? command.match(/\(([^)]+)\)/)[1] : "";
+    return _findBetweenParenthesis(command,"MSG")
 };
 
 const _parseIfCondition = async function (command,key) {
     let ret = {},afterTrueCmd;
     ret["nodeName"] = "condition";
-    ret["condition"] = _patternMatch(command, /COND\(([^)]+)\)/);
+    ret["condition"] = _findBetweenParenthesis(command,"COND");
     ret["description"] = `Condition${_addCommandCount(ret["nodeName"])}`;
 
     let attr = await _setAttribute("condition");
@@ -299,11 +302,11 @@ const _parseChgdtaara = async function (command) {
     let ret = {};
     ret["nodeName"] = "chgdtaara";
     ret["description"] = "Chgdtaara";
-    let dataAreaName = _patternMatch(command, /DTAARA\(([^)]+)\)/).split("/");
+    let dataAreaName = _findBetweenParenthesis(command,"DTAARA").split("/");
     ret["libraryname"] = dataAreaName[0];
     ret["dataarea"] = dataAreaName[1];
-    ret["datatype"] = _patternMatch(command, /TYPE\(([^)]+)\)/) == "*CHAR" ? "Character" : "BigDecimal";
-    ret["value"] = _patternMatch(command, /VALUE\(([^)]+)\)/);
+    ret["datatype"] = _findBetweenParenthesis(command, "TYPE") == "*CHAR" ? "Character" : "BigDecimal";
+    ret["value"] = _findBetweenParenthesis(command,"VALUE");
     return ret;
 };
 
@@ -318,8 +321,8 @@ const _parseChgvar = async function (command) {
     let ret = {};
     ret["nodeName"] = "chgvar";
     ret["description"] = "Chgvar";
-    ret["variable"] =_patternMatch(command, /VAR\(([^)]+)\)/);
-    ret["value"] = _patternMatch(command, /VALUE\(([^)]+)\)/);
+    ret["variable"] =_findBetweenParenthesis(command, "VAR");
+    ret["value"] = _findBetweenParenthesis(command, "VALUE");
     return ret;
 };
 
@@ -334,11 +337,11 @@ const _parseRtvdtaara = async function (command) {
     let ret = {};
     ret["nodeName"] = "rtvdtaara";
     ret["description"] = "Rtvdtaara";
-    let dataAreaName = _patternMatch(command, /DTAARA\(([^)]+)\)/).split("/");
+    let dataAreaName = _findBetweenParenthesis(command,"DTAARA").split("/");
     ret["libraryname"] = dataAreaName[0];
     ret["dataarea"] = dataAreaName[1];
-    ret["datatype"] = _patternMatch(command, /TYPE\(([^)]+)\)/) == "*CHAR" ? "Character" : "BigDecimal";
-    ret["value"] = _patternMatch(command, /RTNVAR\(([^)]+)\)/);
+    ret["datatype"] = _findBetweenParenthesis(command, "TYPE") == "*CHAR" ? "Character" : "BigDecimal";
+    ret["value"] = _findBetweenParenthesis(command, "RTNVAR");
     return ret ;
 };
 
@@ -353,12 +356,12 @@ const _parseQrcvdtaq = async function (command) {
     let ret = {};
     ret["nodeName"] = "qrcvdtaq";
     ret["description"] = "Qrcvdtaq";
-    let qrcvdtaqParm = _patternMatch(command, /PARM\(([^)]+)\)/).split(/\s+/).filter(Boolean);
+    let qrcvdtaqParm = _findBetweenParenthesis(command,"PARM").split(/\s+/).filter(Boolean);
     ret["libraryname"] = qrcvdtaqParm[0].split("/")[0];
     ret["dataqueue"] = qrcvdtaqParm[0].split("/")[1];
     ret["wait"] = qrcvdtaqParm[1];
     ret["allowpeek"] = qrcvdtaqParm[2] == "true" ? "true" : "false";
-    ret["data"] = qrcvdtaqParm[3].includes("&")?qrcvdtaqParm[3]: qrcvdtaqParm.slice(3).join(" ");
+    ret["data"] = qrcvdtaqParm[3].includes("&") ? qrcvdtaqParm[3] : qrcvdtaqParm.slice(3).join(" ");
     return ret;
 };
 
@@ -373,10 +376,11 @@ const _parseQsnddtaq = async function (command) {
     let ret = {};
     ret["nodeName"] = "qsnddtaq";
     ret["description"] = "Qsnddtaq";
-    let qsnddtaqParm = _patternMatch(command, /PARM\(([^)]+)\)/).split(/\s+/).filter(Boolean);
+    
+    let qsnddtaqParm = _findBetweenParenthesis(command, "PARM").split(/\s+/).filter(Boolean);
     ret["libraryname"] = qsnddtaqParm[0].split("/")[0];
     ret["dataqueue"] = qsnddtaqParm[0].split("/")[1];
-    ret["value"] = qsnddtaqParm[1].includes("&")?qsnddtaqParm[1]:qsnddtaqParm.slice(1).join(" ");
+    ret["value"] = qsnddtaqParm[1].includes("&") ? qsnddtaqParm[1]:qsnddtaqParm.slice(1).join(" ");
     return ret;
 };
 
@@ -384,6 +388,7 @@ const _parseQsnddtaq = async function (command) {
  * Convert the apicl command into DSPPFM node 
  * DSPPFM : Display Physical File Member
  * @param command  apicl command for DSPPFM
+ * @param isThisSubCmd Contains true or false to check wheather a sub command or not
  * @returns DSPPFM node with all required properties
  */
 
@@ -408,6 +413,7 @@ const _parseDsppfm = async function (command, isThisSubCmd) {
  * Convert the apicl command into REST node 
  * REST : To Call the REST URL
  * @param command  apicl command for REST
+ * @param isThisSubCmd Contains true or false to check wheather a sub command or not  
  * @returns REST node with all required properties
  */
 
@@ -419,10 +425,10 @@ const _parseRest = async function (command, isThisSubCmd) {
         ret["result"] = _subStrUsingNextIndex(command, "VAR(", ")");
         command = _subStrUsingLastIndex(command, "VALUE(", ")");
     }
-    ret["url"] = _patternMatch(command, /URL\(([^)]+)\)/);
-    ret["method"] = _patternMatch(command, /METHOD\(([^)]+)\)/);
-    ret["parameter"] = _patternMatch(command, /PARM\(([^)]+)\)/);
-    ret["headers"] = _patternMatch(command, /HEADERS\(([^)]+)\)/);
+    ret["url"] = _findBetweenParenthesis(command,"URL");
+    ret["method"] = _findBetweenParenthesis(command,"METHOD");
+    ret["parameter"] = _findBetweenParenthesis(command,"PARM");
+    ret["headers"] = _findBetweenParenthesis(command,"Headers");
     return ret;
 
 };
@@ -431,6 +437,7 @@ const _parseRest = async function (command, isThisSubCmd) {
  * Convert the apicl command into JSONATA node 
  * JSONATA : To execute the JSONATA expression
  * @param command  apicl command for JSONATA
+ * @param isThisSubCmd Contains true or false to check wheather a sub command or not
  * @returns JSONATA node with all required properties
  */
 
@@ -459,16 +466,20 @@ async function _parseMod(command) {
     let ret = {};
     ret["nodeName"] = "mod";
     ret["description"] = "Mod";
-    ret["modulename"] = _patternMatch(command, /MOD\(([^)]+)\)/);
-    const jsData = await serverManager.getModule(_patternMatch(command, /MOD\(([^)]+)\)/));
+    ret["modulename"] = _findBetweenParenthesis(command, "MOD");
+    const jsData = await serverManager.getModule(_findBetweenParenthesis(command,"MOD"));
     ret["code"] = jsData.mod;
     return ret;
 };
 
 /**
- * Convert the apicl command into CHGVAR node 
- * CHGVAR : Change the Variable
+ * Convert the apicl command into the SCR READ node or SCR KEYS or SCR OPS
+ * SCR READ : Screen Scrapping Read the coordinates
+ * SCR KEYS : Screen Scrapping , hit the command and keys on particular coordinates
+ * SCR OPS  : Screen Scrapping , start , release
  * @param command  apicl command for CHGVAR
+ * @param isThisSubCmd Contains true or false to check wheather a sub command or not
+ * 
  * @returns CHGVAR node with all required properties
  */
 
@@ -524,7 +535,7 @@ const _parseScr = async function (command, isThisSubCmd,key) {
         ret["description"] = "Scrread";
         ret["listbox"] = JSON.stringify(allReads);
     } else if (subCmdVar.includes("KEYS")) {
-        keysParams = _patternMatch(subCmdVar, /KEYS\(([^)]+)\)/);
+        keysParams = _findBetweenParenthesis(subCmdVar,"KEYS");
         
         let allKeys = [];
         let values;
@@ -548,6 +559,7 @@ const _parseScr = async function (command, isThisSubCmd,key) {
  * Convert the apicl command into MAP node 
  * MAP : To Extract the particular String
  * @param command  apicl command for MAP
+ * @param isThisSubCmd Contains true or false to check wheather a sub command or not
  * @returns MAP node with all required properties
  */
 
@@ -581,6 +593,7 @@ const _parseMap = async function (command, isThisSubCmd) {
  * Convert the apicl command into SUBSTR node 
  * SUBSTR : To Extract out the Substring from a String
  * @param command  apicl command for SUBSTR
+ * @param isThisSubCmd Contains true or false to check wheather a sub command or not
  * @returns SUBSTR node with all required properties
  */
 
@@ -596,11 +609,21 @@ const _parseSubstr = async function (command, isThisSubCmd) {
     ret["variable"] = _subStrUsingNextIndex(command, "VAR(", ")");
     ret["string"] = substr[0];
     ret["index"] = substr[1];
-    ret["noofchar"] = substr[2]
+    ret["noofchar"] = substr[2];
     ret["nodeName"] = "substr";
     ret["description"] = "Substr";
     return ret;
 }
+
+/**
+ * Convert the apicl command into SNDAPIMSG node 
+ * SNDAPIMSG : Send API Messages
+ * @param command  apicl command for SNDAPIMSG
+ * @returns SNDAPIMSG node with all required 
+ */
+const _parseSndapimsg= async function (command) {
+    return command.match(/\(([^)]+)\)/) ? JSON.stringify(command.match(/\(([^)]+)\)/)[1].split(" ").filter(Boolean)) : JSON.stringify(['']);
+};
 
 /**
  * Convert the apicl command into ENDAPI node 
@@ -643,6 +666,26 @@ const _findPosition = async function (id) {
 
 }
 
+const _addCommandCount = function (command) {
+    commandCounter[command] = (commandCounter[command]>=1) ? ++commandCounter[command] : 1; 
+    return commandCounter[command];
+
+}
+
+const _initializeAPICLIndex = function (initApicl) {
+    for (let key in initApicl) {
+        initApicl[key] = false;
+    } 
+    return initApicl;
+}
+
+const _correctAPICL = function (result) {
+
+    let finalAPICL = [];
+    for (let key in result) {  if (Object.keys(result[key]).length>0) { finalAPICL.push(result[key]); } }
+    return finalAPICL;
+}
+
 const _putDependency = function (nodeid,nodeName) {
     
     let dependencyId;
@@ -672,10 +715,9 @@ const _subStrUsingNextIndex = function (str, startStr, lastIndex) {
     return str.substring(str.indexOf(startStr) + startStr.length, str.indexOf(lastIndex));
 };
 
-
-const _patternMatch = function (string, pattern) {
-
-    return string.match(pattern) ? string.match(pattern)[1] : "";
+const _findBetweenParenthesis = function (string,fromWord) {
+     
+    return string.match(new RegExp(`${fromWord}\\(([^)]+)\\)`)) ? string.match(new RegExp(`${fromWord}\\(([^)]+)\\)`))[1] : "";
 }
 
 const _getUniqueID = _ => `${Date.now()}${Math.random() * 100}`;
