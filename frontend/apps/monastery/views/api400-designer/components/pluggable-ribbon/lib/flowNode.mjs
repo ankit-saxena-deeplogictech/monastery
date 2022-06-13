@@ -3,8 +3,9 @@
  * (C) 2020 TekMonks. All rights reserved.
  */
 import { blackboard } from "/framework/js/blackboard.mjs";
-const MSG_SHAPE_INIT = "SHAPE_INIT_ON_RIBBON", MSG_SHAPE_CLICKED_ON_RIBBON = "SHAPE_CLICKED_ON_RIBBON", MSG_CONNECT_SHAPES = "CONNECT_SHAPES", GRAPH_ID = "flowui", ADDED = "added";
 import { api400model } from "../../../model/api400model.mjs"
+
+const MSG_SHAPE_INIT = "SHAPE_INIT_ON_RIBBON", MSG_SHAPE_CLICKED_ON_RIBBON = "SHAPE_CLICKED_ON_RIBBON", MSG_CONNECT_SHAPES = "CONNECT_SHAPES", GRAPH_ID = "flowui", ADDED = "added";
 class FlowNode {
     DIAG_ELEMENT_ID; PLUGIN_PATH; I18N; SHAPE_NAME; IMAGE; SHAPE_CONNECTABLE; ID_MAP = {};
 
