@@ -18,8 +18,8 @@ import {apiclparser} from "../model/apiclparser.mjs"
  */
 async function getApiclList(server, port, user, password) {
     try {   // try to get the list now
-        const result = await apiman.rest(`http://${server}:${port}/admin/listAPIs`, "POST",
-            { user, password }, true);
+        const result = JSON.parse(await apiman.rest(`http://${server}:${port}/admin/listAPIs`, "POST",
+        { user, password }, true));
         const list = [];
         result.list.forEach(function (el) { list.push(el.substring(1)); });
         result.list = list;
@@ -42,7 +42,7 @@ async function getApiclList(server, port, user, password) {
 async function getApicl(name, server, port, user, password) {
 
     try {   // try to read the apicl now
-        const result = await apiman.rest(`http://${server}:${port}/admin/getAPI`, "POST", { user, password, name }, true);
+        const result = JSON.parse(await apiman.rest(`http://${server}:${port}/admin/getAPI`, "POST", { user, password, name }, true));
         let data = await apiclparser.apiclParser(atob(result.data).toString());
         return {
             result: result.result, model: result.result ? JSON.stringify(data) : null, err: "Apicl read failed at the server",
@@ -91,8 +91,9 @@ async function publishApicl(model, name, server, port, user, password) {
     const b64Data = btoa(JSON.stringify(model, null, ' '));
     try {   // try to publish now
         return {
-            result: (await apiman.rest(`http://${server}:${port}/admin/publishAPI`, "POST", { user, password, name, type: "apicl", src: b64Data }, true)).result, err: "Publishing failed at the server",
+            result: (JSON.parse(await apiman.rest(`http://${server}:${port}/admin/publishAPI`, "POST", { user, password, name, type: "apicl", src: b64Data }, true))).result, err: "Publishing failed at the server",
             raw_err: "Publishing failed at the server", key: "PublishServerIssue"
+        
         };
     } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
 
@@ -118,7 +119,7 @@ async function _loginToServer(server, port, adminid, adminpassword) {
 async function getModule(name) {
     let serverDetails = await openserverhelper.serverDetails();
     try {   // try to read the module now
-        const result = await apiman.rest(`http://${serverDetails.server}:${serverDetails.port}/admin/getMOD`, "POST", { "user": serverDetails.adminid, "password": serverDetails.adminpassword, name }, true);
+        const result = JSON.parse(await apiman.rest(`http://${serverDetails.server}:${serverDetails.port}/admin/getMOD`, "POST", { "user": serverDetails.adminid, "password": serverDetails.adminpassword, name }, true));
         let data = atob(result.data).toString();
         return {
             result: result.result, mod: result.result ? data : null, err: "Module read failed at the server or Not Found", key: "ModuleNotFound",
@@ -137,7 +138,7 @@ async function publishModule(name, server, port, user, password) {
                 if (runJsMod[0] == "")  return { result: false, key: "FailedModule" };
                 if (runJsMod[1] == "") runJsMod[1] = "exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n";
                 let b64Data = btoa(runJsMod[1]);
-                result = await apiman.rest(`http://${server}:${port}/admin/publishModule`, "POST", { user, password, name: runJsMod[0], type: "js", src: b64Data }, true);
+                result = JSON.parse(await apiman.rest(`http://${server}:${port}/admin/publishModule`, "POST", { user, password, name: runJsMod[0], type: "js", src: b64Data }, true))
                 count = result.result ? ++count : count;
             }
         }
