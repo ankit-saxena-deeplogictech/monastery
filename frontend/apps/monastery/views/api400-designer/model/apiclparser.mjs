@@ -36,7 +36,7 @@ async function apiclParser(data) {
 * @param counter  used to put the id of the previous node into the dependency of the next node.
 * @param dependencies contains id's of the nodes
 * @param key index number of the command 
-* @returns The  modelobject, which contains nodeName, description, id, x-coordinates, y-coordinates, and other required properties for that command
+* @returns modelobject, which contains nodeName, description, id, x-coordinates, y-coordinates, and other required properties for that command
 */
 const _parseCommand = async function (command, counter, dependencies, key) {
 
@@ -83,21 +83,21 @@ const _parseCommand = async function (command, counter, dependencies, key) {
  * Convert the apicl command into STRAPI node 
  * STRAPI : Start API
  * @param command  apicl command for STRAPI
- * @returns STRAPI node object with some required properties 
+ * @returns STRAPI node object with required properties 
  */
 const _parseStrapi = async function (command) {
     const ret = {};
     ret["listbox"] = command.match(/\(([^)]+)\)/) ? JSON.stringify(command.match(/\(([^)]+)\)/)[1].split(" ").filter(Boolean)) : JSON.stringify(['']);
     ret["nodeName"] = "strapi";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into RUNSQL node 
  * RUNSQL : Execute the SQL Query
  * @param command  apicl command for RUNSQL
  * @param isThisSubCmd Contains true or false to check wheather a sub command or not
- * @returns RUNSQL node object with some required properties
+ * @returns RUNSQL node object with required properties
  */
  const _parseRunsql = async function (command, isThisSubCmd) {
     const ret = {};
@@ -110,14 +110,14 @@ const _parseStrapi = async function (command) {
     ret["sql"] = _subStrUsingLastIndex(command, "SQL(", ")");
     ret["nodeName"] = "runsql";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into RUNJS node 
  * RUNJS : Execute the Javascript Code
  * @param command  apicl command for RUNJS
  * @param isThisSubCmd Contains true or false to check wheather a sub command or not
- * @returns RUNJS node object with some required properties
+ * @returns RUNJS node object with required properties
  */
  const _parseRunjs = async function (command, isThisSubCmd) {
     const ret = {};
@@ -128,26 +128,26 @@ const _parseStrapi = async function (command) {
     ret["code"] = _subStrUsingLastIndex(command, "JS(", ")");
     ret["nodeName"] = "runjs";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into SNDAPIMSG node 
  * SNDAPIMSG : Send API Messages
  * @param command  apicl command for SNDAPIMSG
- * @returns SNDAPIMSG node object with some required properties
+ * @returns SNDAPIMSG node object with required properties
  */
  const _parseSndapimsg = async function (command) {
     const ret = {};
     ret["listbox"] = command.match(/\(([^)]+)\)/) ? JSON.stringify(command.match(/\(([^)]+)\)/)[1].split(" ").filter(Boolean)) : JSON.stringify(['']);
     ret["nodeName"] = "sndapimsg";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into CHGVAR node 
  * CHGVAR : Change the Variable
  * @param command  apicl command for CHGVAR
- * @returns CHGVAR node object with some required properties
+ * @returns CHGVAR node object with required properties
  */
  const _parseChgvar = async function (command) {
     const ret = {};
@@ -155,7 +155,7 @@ const _parseStrapi = async function (command) {
     ret["value"] = _findBetweenParenthesis(command, "VALUE");
     ret["nodeName"] = "chgvar"
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into  IF COND  node 
@@ -197,15 +197,11 @@ const _parseStrapi = async function (command) {
         flagNOthenYESelse = afterTrueCmd.id;
     }
     return {};
-};
+}
 
-const _parseIfTrue = async function () {
-    return { "nodeName": "iftrue" }
-};
+const _parseIfTrue = async function () { return { "nodeName": "iftrue" } }
 
-const _parseIfFalse = async function () {
-    return { "nodeName": "iffalse" }
-};
+const _parseIfFalse = async function () { return { "nodeName": "iffalse" } }
 
 /**
  * Convert the apicl command into  GOTO node 
@@ -232,14 +228,14 @@ const _parseGoto = async function (command) {
             }
         } while (apicl[i] && apicl[i++] != 'ENDAPI');
     }
-};
+}
 
 
 /**
  * Convert the apicl command into CHGDTAARA node 
  * CHGDTAARA : Change Data Area
  * @param command  apicl command for CHGDTAARA
- * @returns CHGDTAARA node object with some required properties
+ * @returns CHGDTAARA node object with required properties
  */
  const _parseChgdtaara = async function (command) {
     const ret = {}, dataAreaName = _findBetweenParenthesis(command, "DTAARA").split("/");
@@ -249,15 +245,14 @@ const _parseGoto = async function (command) {
     ret["value"] = _findBetweenParenthesis(command, "VALUE");
     ret["nodeName"] = "chgdtaara"
     return ret;
-
-};
+}
 
 
 /**
  * Convert the apicl command into RTVDTAARA node 
  * RTVDTAARA : Retrieve Data Area
  * @param command  apicl command for RTVDTAARA
- * @returns RTVDTAARA node object  with some required properties
+ * @returns RTVDTAARA node object  with required properties
  */
 const _parseRtvdtaara = async function (command) {
     const ret = {}, dataAreaName = _findBetweenParenthesis(command, "DTAARA").split("/");
@@ -267,13 +262,13 @@ const _parseRtvdtaara = async function (command) {
     ret["value"] = _findBetweenParenthesis(command, "RTNVAR");
     ret["nodeName"] = "rtvdtaara";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into QRCVDTAQ node 
  * QRCVDTAQ : Recieve Data Queue 
  * @param command  apicl command for QRCVDTAQ
- * @returns QRCVDTAQ node object with some required properties
+ * @returns QRCVDTAQ node object with required properties
  */
 const _parseQrcvdtaq = async function (command) {
     const ret = {}, qrcvdtaqParm = _findBetweenParenthesis(command, "PARM").split(/\s+/).filter(Boolean);
@@ -284,13 +279,13 @@ const _parseQrcvdtaq = async function (command) {
     ret["data"] = qrcvdtaqParm[3].includes("&") ? qrcvdtaqParm[3] : qrcvdtaqParm.slice(3).join(" ");
     ret["nodeName"] = "qrcvdtaq";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into QSNDDTAQ node 
  * QSNDDTAQ : Send Data Queue
  * @param command  apicl command for QSNDDTAQ
- * @returns QSNDDTAQ node object with some required properties
+ * @returns QSNDDTAQ node object with required properties
  */
 const _parseQsnddtaq = async function (command) {
     const ret = {}, qsnddtaqParm = _findBetweenParenthesis(command, "PARM").split(/\s+/).filter(Boolean);
@@ -299,14 +294,14 @@ const _parseQsnddtaq = async function (command) {
     ret["value"] = qsnddtaqParm[1].includes("&") ? qsnddtaqParm[1] : qsnddtaqParm.slice(1).join(" ");
     ret["nodeName"] = "qsnddtaq";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into DSPPFM node 
  * DSPPFM : Display Physical File Member
  * @param command  apicl command for DSPPFM
  * @param isThisSubCmd Contains true or false to check wheather a sub command or not
- * @returns DSPPFM node object with some required properties
+ * @returns DSPPFM node object with required properties
  */
 const _parseDsppfm = async function (command, isThisSubCmd) {
     const ret = {};
@@ -314,32 +309,32 @@ const _parseDsppfm = async function (command, isThisSubCmd) {
         ret["result"] = _subStrUsingNextIndex(command, "VAR(", ")");
         command = _subStrUsingLastIndex(command, "VALUE(", ")");
     }
-    const file = _subStrUsingNextIndex(command, "FILE(", ")").split('/');
-    ret["libraryname"] = file[0];
-    ret["physicalfile"] = file[1];
+    const physicalFile = _subStrUsingNextIndex(command, "FILE(", ")").split('/');
+    ret["libraryname"] = physicalFile[0];
+    ret["physicalfile"] = physicalFile[1];
     ret["member"] = _subStrUsingLastIndex(command, "MBR(", ")") ? _subStrUsingLastIndex(command, "MBR(", ")") : "";
     ret["nodeName"] = "dsppfm";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into LOG node 
  * LOG : Log out particular message or variable
  * @param command  apicl command for LOG
- * @returns LOG node object with some required properties
+ * @returns LOG node object with required properties
  */
  const _parseLog = async function (command) {
     const ret = {};
     ret["log"] = _findBetweenParenthesis(command, "MSG");
     ret["nodeName"] = "log";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into CALL node 
  * CALL : To Call the Program
  * @param command  apicl command for CALL
- * @returns CALL node object with some required properties
+ * @returns CALL node object with required properties
  */
 const _parseCall = async function (command) {
     const ret = {}, programName = _findBetweenParenthesis(command, "PGM").split("/");
@@ -348,13 +343,13 @@ const _parseCall = async function (command) {
     ret["listbox"] = JSON.stringify(_findBetweenParenthesis(command, "PARM").split(" ").filter(Boolean));
     ret["nodeName"] = "call";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into RUNSQLPRC node 
  * RUNSQLPRC : Execute the Stored Procedure
  * @param command  apicl command for RUNSQLPRC
- * @returns RUNSQLPRC node object with some required properties
+ * @returns RUNSQLPRC node object with required properties
  */
 const _parseRunsqlprc = async function (command) {
     const ret = {}, finalValues = [], procedureName = _findBetweenParenthesis(command, "PRC").split("/"),
@@ -378,14 +373,14 @@ const _parseRunsqlprc = async function (command) {
     ret["listbox"] = JSON.stringify(finalValues);
     ret["nodeName"] = "runsqlprc";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into REST node 
  * REST : To Call the REST URL
  * @param command  apicl command for REST
  * @param isThisSubCmd Contains true or false to check wheather a sub command or not  
- * @returns REST node object with some required properties
+ * @returns REST node object with required properties
  */
 const _parseRest = async function (command, isThisSubCmd) {
     const ret = {};
@@ -399,14 +394,14 @@ const _parseRest = async function (command, isThisSubCmd) {
     ret["headers"] = _findBetweenParenthesis(command, "HEADERS");
     ret["nodeName"] = "rest";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into JSONATA node 
  * JSONATA : To execute the JSONATA expression
  * @param command  apicl command for JSONATA
  * @param isThisSubCmd Contains true or false to check wheather a sub command or not
- * @returns JSONATA node object with some required properties
+ * @returns JSONATA node object with required properties
  */
 const _parseJsonata = async function (command, isThisSubCmd) {
     const ret = {};
@@ -418,14 +413,14 @@ const _parseJsonata = async function (command, isThisSubCmd) {
     ret["jsonata"] = _subStrUsingNextIndex(command, "EXPRESSION(", ")");
     ret["nodeName"] = "jsonata";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into MAP node 
  * MAP : To Extract the particular String
  * @param command  apicl command for MAP
  * @param isThisSubCmd Contains true or false to check wheather a sub command or not
- * @returns MAP node oject with some required properties
+ * @returns MAP node object with required properties
  */
  const _parseMap = async function (command, isThisSubCmd) {
     const ret = {};
@@ -449,13 +444,13 @@ const _parseJsonata = async function (command, isThisSubCmd) {
     ret["listbox"] = JSON.stringify(mapArr);
     ret["nodeName"] = "map";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into RUNJS MOD node 
  * RUNJS MOD : Execute the Javascript Code
  * @param command  apicl command for RUNJS MOD
- * @returns RUNJS MOD node object with some required properties
+ * @returns RUNJS MOD node object with required properties
  */
 async function _parseMod(command) {
     const ret = {};
@@ -464,7 +459,7 @@ async function _parseMod(command) {
     ret["code"] = jsData.mod;
     ret["nodeName"] = "mod";
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into the SCR READ node or SCR KEYS or SCR OPS
@@ -474,7 +469,7 @@ async function _parseMod(command) {
  * @param command  apicl command for SCR READ OR SCR KEYS or SCR OPS
  * @param isThisSubCmd Contains true or false to check wheather a sub command or not
  * @param key index number of this command
- * @returns SCR READ or SCR KEYS or SCR OPS node object with some required properties
+ * @returns SCR READ or SCR KEYS or SCR OPS node object with required properties
  */
 const _parseScr = async function (command, isThisSubCmd, key) {
     const ret = {};
@@ -506,9 +501,7 @@ const _parseScr = async function (command, isThisSubCmd, key) {
         const readParams = _subStrUsingLastIndex(command, "READ(", ")"), allReads = [];
         readParams.split(':').forEach(function (value) {
             values = value.trim().split(',');
-            for (let j = 0; j < 3; j++) {
-                values[j] = values[j] ? values[j].trim() : '';
-            }
+            for (let j = 0; j < 3; j++) { values[j] = values[j] ? values[j].trim() : ''; }
             allReads.push(values);
         });
         ret["nodeName"] = "scrread";
@@ -518,23 +511,21 @@ const _parseScr = async function (command, isThisSubCmd, key) {
         let values;
         keysParams.split(':').forEach(function (value) {
             values = value.trim().split(',');
-            for (let j = 0; j < 3; j++) {
-                values[j] = values[j] ? values[j].trim() : '';
-            }
+            for (let j = 0; j < 3; j++) { values[j] = values[j] ? values[j].trim() : ''; }
             allKeys.push(values);
         });
         ret["nodeName"] = "scrkeys";
         ret["listbox"] = JSON.stringify(allKeys);
     }
     return ret;
-};
+}
 
 /**
  * Convert the apicl command into SUBSTR node 
  * SUBSTR : To Extract out the Substring from a String
  * @param command  apicl command for SUBSTR
  * @param isThisSubCmd Contains true or false to check wheather a sub command or not
- * @returns SUBSTR node with all required properties
+ * @returns SUBSTR node with required properties
  */
 const _parseSubstr = async function (command, isThisSubCmd) {
     const ret = {};
@@ -555,11 +546,9 @@ const _parseSubstr = async function (command, isThisSubCmd) {
  * Convert the apicl command into ENDAPI node 
  * ENDAPI : To End the API
  * @param command  apicl command for ENDAPI
- * @returns ENDAPI node object with some required properties
+ * @returns ENDAPI node object with required properties
  */
-const _parseEndapi = async function () {
-    return { "nodeName": "endapi" };
-};
+const _parseEndapi = async function () { return { "nodeName": "endapi" }; }
 
 /**
  * Sets the attributes such as dependencies, X-coordinates, Y-coordinates, Unique ID to the node.
@@ -570,9 +559,8 @@ const _parseEndapi = async function () {
 const _setAttribute = async function (nodeName, key) {
     const attribute = {}, description = nodeName.charAt(0).toUpperCase() + nodeName.slice(1).toLowerCase();
     attribute["id"] = _getUniqueID();
-    if (description == 'Iftrue' || description == 'Iffalse') {
-        attribute["description"] = description;
-    } else { attribute["description"] = `${description}${_addCommandCount(description)}`; }
+    if (description == 'Iftrue' || description == 'Iffalse') { attribute["description"] = description; } 
+    else { attribute["description"] = `${description}${_addCommandCount(description)}`; }
     storeIDS[key] = attribute.id
     dependencies.push(attribute.id);
 
@@ -602,10 +590,7 @@ const _addCommandCount = function (description) {
  * @param initApicl  is an apicl 
  * @returns an object, { "index": false }
  */
-const _initializeAPICLIndex = function (initApicl) {
-    for (const key in initApicl) { initApicl[key] = false; }
-    return initApicl;
-}
+const _initializeAPICLIndex = function (initApicl) { for (const key in initApicl) { initApicl[key] = false; } return initApicl; }
 
 /**
  * removes {} in the finalCommands object
@@ -620,10 +605,10 @@ const _correctAPICL = function (result) {
 }
 
 /**
- * To store the id's of the each node in an array and which then used to add the dependencies to the model object of the next node 
+ * To store the IDs of the each node in an array and which then used to add the dependencies to the model object of the next node 
  * @param nodeid id of that node 
  * @param nodeName node name of that node
- * @returns an array of ID's
+ * @returns an array of IDs
  */
 const _putDependency = function (nodeid, nodeName) { 
 
@@ -639,26 +624,21 @@ const _putDependency = function (nodeid, nodeName) {
 /**
  * Used to check wheather the command is sub command or not
  * @param command  apicl command for that node
- * @returns an node name 
+ * @returns node name 
  */
 const _checkChgvarSubCommand = async function (command) { 
     const subCommands = ['SCR', 'REST', 'JSONATA', 'DSPPFM', 'MAP', 'SUBSTR', 'RUNSQL', 'RUNJS'];
     let nodeName = "";
-    subCommands.forEach((subCommand) => {
-        if (command.includes(subCommand)) { nodeName = subCommand; }
-    })
+    subCommands.forEach((subCommand) => { if (command.includes(subCommand)) { nodeName = subCommand; } })
     return nodeName;
 };
 
 /**
  * Used to find the index of the node in result array 
  * @param id  id of the node we need to find.
- * @returns an position of the node 
+ * @returns position of the node 
  */
-const _findPosition = async function (id) { 
-    let pos = 0;
-    for (pos in result)  if (result[pos].id == id) return pos; 
-}
+const _findPosition = async function (id) { let pos = 0; for (pos in result)  if (result[pos].id == id) return pos; }
 
 /**
  * Used to get the substring which is in between the startStr and last match of endStr in str
@@ -685,10 +665,7 @@ const _subStrUsingNextIndex = function (str, startStr, endStr) {
 const _getUniqueID = _ => `${Date.now()}${Math.random() * 100}`; // return an unique ID
 
 const _findBetweenParenthesis = function (string, fromWord) { 
-
     return string.match(new RegExp(`${fromWord}\\(([^)]+)\\)`)) ? string.match(new RegExp(`${fromWord}\\(([^)]+)\\)`))[1] : "";
 }
-
-
 
 export const apiclparser = { apiclParser }
