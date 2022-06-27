@@ -60,7 +60,7 @@ CSS
     outline: none;
     padding: 10px;
     resize: none;
-    height:10px;
+    height:11px;
     margin-bottom:10px; 
     font-family: inherit;
     margin-left:20px;

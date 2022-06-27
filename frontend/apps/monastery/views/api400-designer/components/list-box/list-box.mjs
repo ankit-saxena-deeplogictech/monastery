@@ -21,15 +21,8 @@ async function elementRendered(element) {
   const noOfElements = parentContainer.children.length;
 
   if (element.getAttribute("value")) {
-    
-    let values;
-    if (element.getAttribute("value")) values = JSON.parse(element.getAttribute("value"));
-    if (values && values.length && element.getAttribute("type") == "Parameter") _setValue(values, element.getAttribute("type"));
-    else if (values && values.length && element.getAttribute("type") == "Message") _setValue(values, element.getAttribute("type"));
-    else if (values && values.length && element.getAttribute("type") == "Map") _setValue(values, element.getAttribute("type"));
-    else if (values && values.length && element.getAttribute("type") == "Keys") _setValue(values, element.getAttribute("type"));
-    else if (values && values.length && element.getAttribute("type") == "Read") _setValue(values, element.getAttribute("type"));
-    else if (values && values.length && element.getAttribute("type") == "runsqlprc") _setValue(values, element.getAttribute("type"));
+    let values = JSON.parse(element.getAttribute("value"));
+    if (values && values.length) _setValue(values, element.getAttribute("type"));
   }
   else {
     if (element.getAttribute("type") == "Parameter" && noOfElements < 1) window.monkshu_env.components['text-box'].addTextBox(element.getAttribute('type'));
@@ -48,39 +41,16 @@ function _getValue(host, type) {
 }
 
 function _setValue(values, type) {
-
-  if (type == "Map") {
-    for (const textBoxValue of values) {
-      if (textBoxValue.some(value => value != ""))
-        window.monkshu_env.components['text-box'].addTextBoxesForMap(textBoxValue[0], textBoxValue[1], textBoxValue[2], textBoxValue[3], textBoxValue[4]);
-    }
-  }
-  else if (type == "Keys") {
-    for (const textBoxValue of values) {
-      if (textBoxValue.some(value => value != ""))
-        window.monkshu_env.components['text-box'].addTextBoxesForScrKeys(textBoxValue[0], textBoxValue[1], textBoxValue[2]);
-    }
-  }
-  else if (type == "Read") {
-    for (const textBoxValue of values) {
-      if (textBoxValue.some(value => value != ""))
-        window.monkshu_env.components['text-box'].addTextBoxesForScrRead(textBoxValue[0], textBoxValue[1], textBoxValue[2], textBoxValue[3]);
-    }
-  }
-  else if (type == "runsqlprc") {
-    for (const textBoxValue of values) {
-      if (textBoxValue.some(value => value != ""))
-        window.monkshu_env.components['text-box'].addContainerForRunsqlprc(textBoxValue[0], textBoxValue[1], textBoxValue[2]);
-    }
-  }
-  else {
-    for (const textBoxValue of values) {
-      if (textBoxValue != '')
+  if (type == "Map"){  for (const textBoxValue of values)  if (textBoxValue.some(value => value != ""))
+        window.monkshu_env.components['text-box'].addTextBoxesForMap(textBoxValue[0], textBoxValue[1], textBoxValue[2], textBoxValue[3], textBoxValue[4]);}
+  else if (type == "Keys"){  for (const textBoxValue of values)  if (textBoxValue.some(value => value != ""))
+        window.monkshu_env.components['text-box'].addTextBoxesForScrKeys(textBoxValue[0], textBoxValue[1], textBoxValue[2]);}
+  else if (type == "Read"){ for (const textBoxValue of values) if (textBoxValue.some(value => value != ""))
+        window.monkshu_env.components['text-box'].addTextBoxesForScrRead(textBoxValue[0], textBoxValue[1], textBoxValue[2], textBoxValue[3]);}
+  else if (type == "runsqlprc") {for (const textBoxValue of values) if (textBoxValue.some(value => value != ""))
+        window.monkshu_env.components['text-box'].addContainerForRunsqlprc(textBoxValue[0], textBoxValue[1], textBoxValue[2]);}
+  else for (const textBoxValue of values)  if (textBoxValue != '')
         window.monkshu_env.components['text-box'].addTextBox(type, textBoxValue);
-    }
-  }
-
-
 }
 
 function _getTextBoxValues(textBoxContainer, shadowRoot, type) {

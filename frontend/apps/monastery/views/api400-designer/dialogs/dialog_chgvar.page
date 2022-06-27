@@ -48,7 +48,7 @@ CSS
     border-radius: 4px;
     border: 0px;
     outline: none;
-    padding: 10px;
+    padding: 11px;
     resize: none;
     height:10px;
     font-family: inherit;
