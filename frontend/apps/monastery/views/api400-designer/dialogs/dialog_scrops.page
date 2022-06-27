@@ -2,7 +2,8 @@ SCHEMA
 ======
 {
     "session": {"html":"input", "type":"text", "placeholder":"{{i18n.SessionName}}","spellcheck":"false"},
-    "scrops":{"html":"radio-button","style":"width:100%; height:100%;"}
+    "scrops":{"html":"radio-button","style":"width:100%; height:100%;"},
+    "pool": {"html":"input", "type":"text", "placeholder":"{{i18n.pool}}","spellcheck":"false"}
 }
 ======
 
@@ -11,13 +12,17 @@ LAYOUT
 =================
 
 
-------------------------------
-|   session   |     scrops   |
-------------------------------
+----------------
+|   session    |
+----------------
+|   scrops     |
+----------------
+|   pool       |
+----------------
  
 =================
-Row Heights = 4em
-Col Widths = 40%,60%
+Row Heights = 3.5em,3.5em,3em
+Col Widths = 100%
 =================
 
 
@@ -36,11 +41,11 @@ CSS
 
 .grid-item-extension {
     background-color: var(--dialog-background, white);
-    padding: 10px 20px 10px 20px;
+    padding: 0px 20px 0px 20px;
     display: flex;
     flex-flow: row;
     box-sizing: border-box;
-    margin-top:10px;
+    margin-top:15px;
 
 }
 
@@ -49,7 +54,7 @@ CSS
     border-radius: 4px;
     border: 0px;
     outline: none;
-    padding: 10px;
+    padding: 11px;
     resize: none;
     height:9px;
     font-family: inherit;

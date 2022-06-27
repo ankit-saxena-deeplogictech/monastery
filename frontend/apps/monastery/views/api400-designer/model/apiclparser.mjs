@@ -481,13 +481,14 @@ const _parseScr = async function (command, isThisSubCmd, key) {
     if (command.includes("START")) {
         ret["nodeName"] = "scrops";
         ret["scrops"] = "start";
-        if (command.includes("KEYS")) {
+        if (command.includes("KEYS") && command.includes("POOL")) {
             let attr;
+            ret["pool"] = _subStrUsingLastIndex(command, "POOL(", ")");
             if (ret && ret.nodeName) { attr = await _setAttribute(ret.nodeName, key); }
             result.push({ ...ret, ...attr });
             initAPICL[key] = attr.id;
             const cmdAfterRemoveScrStart = command.replace('START', '');
-            result.push(await _parseCommand(cmdAfterRemoveScrStart, counter++, dependencies));
+            result.push(await _parseCommand(cmdAfterRemoveScrStart.replace(cmdAfterRemoveScrStart.match(/POOL\(.+\)/i)[0],''), counter++, dependencies));
             return {};
         }
     } else if (command.includes("STOP")) {
