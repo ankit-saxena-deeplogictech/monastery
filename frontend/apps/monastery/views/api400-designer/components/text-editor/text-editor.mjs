@@ -48,7 +48,10 @@ async function elementConnected(element) {
       text_editor.datas[element.id] = data;
     } else text_editor.data = data;
 }
-
+/**
+ * Element was rendered
+ * @param element Host element
+ */
 async function elementRendered(element) {
   const MODE = element.getAttribute("mode");
   if (MODE == "javascript") {
@@ -72,13 +75,13 @@ async function elementRendered(element) {
           lint: { selfContain: true },
           gutters: ["CodeMirror-lint-markers"],
           matchBrackets: true,
-          
+
         }
       );
       text_editor.getMemoryByHost(element).editor = cm;
       cm.setSize("100%", "100%");
-     if (!element.getAttribute("mod"))   cm.setValue("// JS script");
-     else cm.setValue("exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n");
+      if (!element.getAttribute("mod")) cm.setValue("// JS script");
+      else cm.setValue("exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n");
       if (element.getAttribute("value"))
         _setValue(element.getAttribute("value"), element);
     }, 10);

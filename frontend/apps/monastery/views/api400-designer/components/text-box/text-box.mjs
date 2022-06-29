@@ -10,38 +10,39 @@ import { dialog_box } from "../../../shared/components/dialog-box/dialog-box.mjs
 const DIALOG_HOST_ID = "__org_monkshu_dialog_box";
 
 function addTextBox(id, value) {
-  const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
-  const parentContainer = dialogShadowRoot.querySelector("div#page-contents");
-  const placeHolder = id;
-  const inputElement = _createElement(parentContainer, id, value, placeHolder);
+  const parentContainer = _getParentContainer(), placeHolder = id, inputElement = _createElement(parentContainer, id, value, placeHolder);
   parentContainer.appendChild(inputElement);
 }
 
-function addTextBoxesForMap(stringVariableValue, startPositionValue, noOfCharValue, repitionValue, stringFunctionValue) {
-  const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
-  const parentContainer = dialogShadowRoot.querySelector("div#page-contents");
-  const divElement = _createDivElementForMap(parentContainer, stringVariableValue, startPositionValue, noOfCharValue, repitionValue, stringFunctionValue);
+function addTextBoxesForMap(textBoxValues) {
+  const parentContainer = _getParentContainer(), idArray = ["string", "start", "count", "repetition", "function"],
+    placeHolderArray = ["String Variable", "Start Pos", "Num of Char", "Repetition No", "String Function"],
+    classNameArray = ["stringbox", "startbox", "countbox", "repetitionbox", "functionbox"],
+    placeHolderTypeArray = ["dynamic", "static", "static", "static", "static"],
+    divElement = _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, "map");
   parentContainer.appendChild(divElement);
 };
 
-function addTextBoxesForScrKeys(y_coordinateValue, x_coordinateValue, keyValue) {
-  const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
-  const parentContainer = dialogShadowRoot.querySelector("div#page-contents");
-  const divElement = _createDivElementForScrKeys(parentContainer, y_coordinateValue, x_coordinateValue, keyValue);
+function addTextBoxesForScrKeys(textBoxValues) {
+  const parentContainer = _getParentContainer(), idArray = ["y", "x", "key"],
+    placeHolderArray = ["y-cordinate", "x-cordinate", "Key"],
+    classNameArray = ["y-cordinates", "x-cordinates", "Keys"],
+    placeHolderTypeArray = ["static", "static", "dynamic"],
+    divElement = _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, "scr-keys");
   parentContainer.appendChild(divElement);
 };
 
-function addTextBoxesForScrRead(rowFromValue, columnFromValue, rowToValue, columnToValue) {
-  const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
-  const parentContainer = dialogShadowRoot.querySelector("div#page-contents");
-  const divElement = _createDivElementForScrRead(parentContainer, rowFromValue, columnFromValue, rowToValue, columnToValue);
+function addTextBoxesForScrRead(textBoxValues) {
+  const parentContainer = _getParentContainer(), idArray = ["screen-row-from", "screen-col-from", "screen-row-to", "screen-col-to"],
+    placeHolderArray = ["Screen Row From", "Screen Col From", "Screen Row To", "Screen Col To"],
+    classNameArray = ["rows-from", "cols-from", "rows-to", "cols-to"],
+    placeHolderTypeArray = ["dynamic", "dynamic", "dynamic", "dynamic"],
+    divElement = _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, "scr-read");
   parentContainer.appendChild(divElement);
 };
 
-function addContainerForRunsqlprc(typeOfParam, variable, type) {
-  const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
-  const parentContainer = dialogShadowRoot.querySelector("div#page-contents");
-  const divElement = _createDivElementForRunsqlPrc(parentContainer, typeOfParam, variable, type);
+function addContainerForRunsqlprc(natureOfParm, variable, typeOfParam) {
+  const parentContainer = _getParentContainer(), divElement = _createDivElementForRunsqlPrc(parentContainer, natureOfParm, variable, typeOfParam);
   parentContainer.appendChild(divElement);
 };
 
@@ -58,72 +59,52 @@ function _createElement(parentContainer, id, value, placeHolder, className, plac
   return inputElement
 };
 
+function _getParentContainer() {
+  const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
+  const parentContainer = dialogShadowRoot.querySelector("div#page-contents");
+  return parentContainer
+}
 
-function _createDivElementForMap(parentContainer, stringVariableValue, startPositionValue, noOfCharValue, repitionValue, stringFunctionValue) {
+function _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, classNameForDiv) {
   const divElement = document.createElement("div");
-  divElement.setAttribute("class", "map");
-  const inputElement1 = _createElement(parentContainer, "string", stringVariableValue, "String Variable", "stringbox");
-  const inputElement2 = _createElement(parentContainer, "start", startPositionValue, "Start Pos", "startbox", "static");
-  const inputElement3 = _createElement(parentContainer, "count", noOfCharValue, "Num of Char", "countbox", "static");
-  const inputElement4 = _createElement(parentContainer, "repetition", repitionValue, "Repetition No", "repitionbox", "static");
-  const inputElement5 = _createElement(parentContainer, "function", stringFunctionValue, "String Function", "functionbox", "static");
-  divElement.append(inputElement1, inputElement2, inputElement3, inputElement4, inputElement5);
+  divElement.setAttribute("class", classNameForDiv);
+  for (let i = 0; i < idArray.length; i++) {
+    let inputElement;
+    if (textBoxValues != undefined) inputElement = _createElement(parentContainer, idArray[i], textBoxValues[i], placeHolderArray[i], classNameArray[i], placeHolderTypeArray[i]);
+    else inputElement = _createElement(parentContainer, idArray[i], textBoxValues, placeHolderArray[i], classNameArray[i], placeHolderTypeArray[i]);
+    divElement.append(inputElement);
+  }
   return divElement
 }
 
-function _createDivElementForScrKeys(parentContainer, y_coordinateValue, x_coordinateValue, keyValue) {
-  const divElement = document.createElement("div");
-  divElement.setAttribute("class", "scr-keys");
-  const inputElement1 = _createElement(parentContainer, "y", y_coordinateValue, "y-cordinate", "y-coordinates", "static");
-  const inputElement2 = _createElement(parentContainer, "x", x_coordinateValue, "x-cordinate", "x-coordinates", "static");
-  const inputElement3 = _createElement(parentContainer, "key", keyValue, "Key", "Keys");
-  divElement.append(inputElement1, inputElement2, inputElement3);
-  return divElement
-}
-
-function _createDivElementForScrRead(parentContainer, rowFromValue, columnFromValue, rowToValue, columnToValue) {
-  const divElement = document.createElement("div");
-  divElement.setAttribute("class", "scr-read");
-  const inputElement1 = _createElement(parentContainer, "screen-row-from", rowFromValue, "Screen Row From", "rows-from", "dynamic");
-  const inputElement2 = _createElement(parentContainer, "screen-col-from", columnFromValue, "Screen Col From", "cols-from", "dynamic");
-  const inputElement3 = _createElement(parentContainer, "screen-row-to", rowToValue, "Screen Row To", "rows-to", "dynamic");
-  const inputElement4 = _createElement(parentContainer, "screen-col-to", columnToValue, "Screen Col To", "cols-to", "dynamic");
-  divElement.append(inputElement1, inputElement2, inputElement3, inputElement4);
-  return divElement
-}
-
-function _createDivElementForRunsqlPrc(parentContainer, typeOfParam, variable, type) {
+function _createDivElementForRunsqlPrc(parentContainer, natureOfParm, variable, typeOfParam) {
   const divElement = document.createElement("div");
   divElement.setAttribute("class", 'runsqlprc');
-  const inputElement1 = _createElement(parentContainer, "variable", variable, "Variable", "variablebox");
-  const selectElement1 = _createDropDownElementForParam(parentContainer);
-  const selectElement2 = _createDropDownElementFortype(parentContainer);
+  const inputElement1 = _createElement(parentContainer, "variable", variable, "Variable", "variablebox"),
+  selectElement1 = _createDropDownElement(parentContainer, "nature"),
+  selectElement2 = _createDropDownElement(parentContainer, "type");
   divElement.append(selectElement1, inputElement1, selectElement2);
 
-  if (typeOfParam != undefined) {
-    for (let i = 0; i < selectElement1.options.length; ++i)  if (selectElement1.options[i].text == typeOfParam.slice(1))
+  if (natureOfParm != undefined) {
+    for (let i = 0; i < selectElement1.options.length; ++i)  if (selectElement1.options[i].text == natureOfParm.slice(1))
       selectElement1.options[i].selected = true;
   }
-  if (type != undefined) {
-    for (let i = 0; i < selectElement2.options.length; ++i) if (selectElement2.options[i].text == type.slice(1))
+  if (typeOfParam != undefined) {
+    for (let i = 0; i < selectElement2.options.length; ++i) if (selectElement2.options[i].text == typeOfParam.slice(1))
       selectElement2.options[i].selected = true;
   }
   return divElement
 }
-function _createDropDownElementForParam(parentContainer) {
+
+function _createDropDownElement(parentContainer, type) {
   const selectElement = document.createElement("select");
-  selectElement.innerHTML = ' <option value="" selected   >Nature Of Param</option> <option value="&IN">IN</option><option value="&OUT">OUT</option><option value="&INOUT">INOUT</option>';
-  selectElement.setAttribute("id", `param-${parentContainer.children.length + 1}`);
-  selectElement.setAttribute("class", 'param');
+  if (type == "nature") selectElement.innerHTML = ' <option value="" selected   >Nature Of Param</option> <option value="&IN">IN</option><option value="&OUT">OUT</option><option value="&INOUT">INOUT</option>';
+  else selectElement.innerHTML = ' <option value="" selected  >Type Of Param </option> <option value=":NUM">NUM</option><option value=":CHAR">CHAR</option>';
+  selectElement.setAttribute("id", `${type}-${parentContainer.children.length + 1}`);
+  selectElement.setAttribute("class", type);
   return selectElement;
 }
-function _createDropDownElementFortype(parentContainer) {
-  const selectElement = document.createElement("select");
-  selectElement.innerHTML = ' <option value="" selected  >Type Of Param </option> <option value=":NUM">NUM</option><option value=":CHAR">CHAR</option>';
-  selectElement.setAttribute("id", `type-${parentContainer.children.length + 1}`);
-  selectElement.setAttribute("class", 'type');
-  return selectElement;
-}
+
 export const text_box = {
   trueWebComponentMode: true,
   addTextBox,

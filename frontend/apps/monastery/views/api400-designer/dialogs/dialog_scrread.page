@@ -71,46 +71,12 @@ body {
     width: 100%;
 }
 
-div#page-contents{
-    width: 100%; 
-}
-
 div.scr-read{
   background: #C9E5FF;
   border-radius:7px;
   margin:12px 20px 20px 18px;
   display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
-  grid-template-rows: auto;
-  grid-template-areas:  "rows-from cols-from rows-to cols-to";
-    
+  grid-template-columns: 25% 25% 25% 25%;  
 }
-
-
-div.scr-read>.rows-from{
-  grid-area: rows-from;
-}
-
-div.scr-read>.cols-from {
-  grid-area: cols-from;
-}
-
-div.scr-read>.rows-to {
-  grid-area: rows-to;
-}
-
-div.scr-read>.cols-to {
-  grid-area: cols-to;
-}
-
-input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type=number] {
-  -moz-appearance: textfield;
-}
-
    
 =======

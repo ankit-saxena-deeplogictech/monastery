@@ -20,7 +20,11 @@
  
  };
  
- async function elementRendered(element) {
+ /**
+ * Element was rendered
+ * @param element Host element
+ */
+ const elementRendered  = async (element) =>{
    if (element.getAttribute("value")) _setValue(element.getAttribute("value"), element);
  }
  
