@@ -1,6 +1,6 @@
 /** 
- * Manages all communication with Rules server.
- * (C) 2020 TekMonks. All rights reserved.
+ * Manages all communication with api400 server.
+ * (C) 2022 TekMonks. All rights reserved.
  * License: See enclosed LICENSE file.
  */
 import { apimanager as apiman } from "/framework/js/apimanager.mjs";
@@ -9,95 +9,146 @@ import { openserverhelper } from "./openserverhelper.mjs";
 import {apiclparser} from "../model/apiclparser.mjs"
 
 /**
- * Returns the list of models present on the server
+ * Returns the list of apicls present on the server
  * @param {string} server Server IP or Hostname
  * @param {string||number} port Server port
- * @param {string} adminid Server admin login ID
- * @param {string} adminpassword Server admin password
- * @returns {result: true|false, models: [array of model names on success], err: Error text on failure, raw_err: Raw error, key: Error i18n key}
+ * @param {string} user Server admin login ID
+ * @param {string} password Server admin password
+ * @returns {result: true|false, apicls: [array of apicl names on success], err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
+// 
 async function getApiclList(server, port, user, password) {
     try {   // try to get the list now
-        const result = JSON.parse(await apiman.rest(`http://${server}:${port}/admin/listAPIs`, "POST",
-        { user, password }, true));
+
+        let result = await apiman.rest(`http://${server}:${port}/admin/listAPIs`, "POST",
+        { user, password }, true);
+        if(typeof result == "string") result = JSON.parse(result);
         const list = [];
         result.list.forEach(function (el) { list.push(el.substring(1)); });
         result.list = list;
         return {
-            result: result.result, models: result.result ? result.list : null, err: "List fetch failed at the server",
+            result: result.result, apicls: result.result ? result.list : null, err: "List fetch failed at the server",
             raw_err: "Apicl list fetch failed at the server", key: "ApiclListServerIssue"
         };
     } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
 }
 
 /**
- * Returns the given model as an object
- * @param {string} name The model name
+ * Returns the given apicl as an object
+ * @param {string} name The apicl name
  * @param {string} server Server IP or Hostname
  * @param {string||number} port Server port
- * @param {string} adminid Server admin login ID
- * @param {string} adminpassword Server admin password
- * @returns {result: true|false, model: Model object on success, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
+ * @param {string} user Server admin login ID
+ * @param {string} password Server admin password
+ * @returns {result: true|false, apicl: apicl object on success, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
 async function getApicl(name, server, port, user, password) {
 
     try {   // try to read the apicl now
-        const result = JSON.parse(await apiman.rest(`http://${server}:${port}/admin/getAPI`, "POST", { user, password, name }, true));
-        let data = await apiclparser.apiclParser(atob(result.data).toString());
+        let result = await apiman.rest(`http://${server}:${port}/admin/getAPI`, "POST", { user, password, name }, true);
+        if(typeof result == "string") result = JSON.parse(result);
+        const data = await apiclparser.apiclParser(atob(result.data).toString());
+        console.log(data);
         return {
-            result: result.result, model: result.result ? JSON.stringify(data) : null, err: "Apicl read failed at the server",
+            result: result.result, apicl: result.result ? JSON.stringify(data) : null, err: "Apicl read failed at the server",
             name: result.result ? name : null, raw_err: "Apicl read failed at the server", key: "ApiclReadServerIssue"
         };
     } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
 
 }
 
+
 /**
- * Unpublishes the given model at the server (deletes it)
+ * Publishes the given apicl to the server
+ * @param {object} apicl The apicl to publish or update
+ * @param {string} name The name for the apicl
+ * @param {string} server Server IP or Hostname
+ * @param {string||number} port Server port
+ * @param {string} user Server admin login ID
+ * @param {string} password Server admin password
+ * @returns {result: true|false, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
+ */
+async function publishApicl(apicl, name, server, port, user, password) {
+    const b64Data = btoa(JSON.stringify(apicl, null, ' '));
+    let result = await apiman.rest(`http://${server}:${port}/admin/publishAPI`, "POST", { user, password, name, type: "apicl", src: b64Data }, true);
+    if(typeof result == "string") result = JSON.parse(result);
+    try {   // try to publish now
+        return {
+            result: result.result, err: "Publishing failed at the server", raw_err: "Publishing failed at the server", key: "PublishServerIssue"
+        };
+    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
+
+}
+
+/**
+ * Publishes the given module to the server before publishing the apicl
+ * @param {string} server Server IP or Hostname
+ * @param {string||number} port Server port
+ * @param {string} user Server admin login ID
+ * @param {string} password Server admin password
+ */
+ async function publishModule( server, port, user, password) {
+    try {
+        let count = 0, result;
+        const runJsModArray = api400model.getModules();
+        if (runJsModArray.length != 0) {
+            for (let runJsMod of runJsModArray) {
+                if (runJsMod[0] == "")  return { result: false, key: "FailedModule" };
+                if (runJsMod[1] == "") runJsMod[1] = "exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n";
+                const b64Data = btoa(runJsMod[1]);
+                result = await apiman.rest(`http://${server}:${port}/admin/publishModule`, "POST", { user, password, name: runJsMod[0], type: "js", src: b64Data }, true);
+                if(typeof result == "string") result = JSON.parse(result);
+                count = result.result ? ++count : count;
+            }
+        }
+        if (count == runJsModArray.length) return { result: true };
+        if (!result.result) return { result: result.result, key: "PublishModFailed" };
+        return { result: false, key: "PublishModFailed" }
+    }
+    catch (err) {
+        return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" }
+    }
+}
+
+/**
+ * Returns the  module data as an object
+ * @param {string} name The module name
+ * @returns {result: true|false, mod: JS data on success, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
+ */
+async function getModule(name) {
+    let serverDetails = await openserverhelper.serverDetails();
+    try {   // try to read the module now
+        let result = await apiman.rest(`http://${serverDetails.server}:${serverDetails.port}/admin/getMOD`, "POST", { "user": serverDetails.adminid, "password": serverDetails.adminpassword, name }, true);
+        if(typeof result == "string") result = JSON.parse(result);
+        let data = atob(result.data).toString();
+        return {
+            result: result.result, mod: result.result ? data : null, err: "Module read failed at the server or Not Found", key: "ModuleNotFound",
+        };
+    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue", mod: "exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n" } }
+
+}
+
+/**
+ * Unpublishes the given apicl at the server (deletes it)
  * @param {string} name The model name
  * @param {string} server Server IP or Hostname
  * @param {string||number} port Server port
- * @param {string} adminid Server admin login ID
- * @param {string} adminpassword Server admin password
+ * @param {string} user Server admin login ID
+ * @param {string} password Server admin password
  * @returns {result: true|false, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
-async function unpublishModel(name, server, port, adminid, adminpassword) {
-    const API_ADMIN_URL_FRAGMENT = `://${server}:${port}/apps/api400/admin`;
-
-    const loginResult = await _loginToServer(server, port, adminid, adminpassword);
-    if (!loginResult.result) return loginResult;    // failed to connect or login
+ async function unpublishApicl(name, server, port, user, password) {
 
     try {   // try to delete
-        const result = await apiman.rest(loginResult.scheme + API_ADMIN_URL_FRAGMENT, "POST",
-            { op: "delete", name }, true);
+        let result = await apiman.rest(`http://${server}:${port}/admin/deleteAPI`, "POST", { user, password, name}, true);
+        if(typeof result == "string") result = JSON.parse(result);
         return {
-            result: result.result, err: "Mode unpublish failed at the server",
-            raw_err: "Model unpublish failed at the server", key: "ModelUnpublishServerIssue"
+            result: result.result, err: "apicl unpublish failed at the server",
+            raw_err: "apicl unpublish failed at the server", key: "apiclUnpublishServerIssue"
         };
     } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
 }
 
-/**
- * Publishes the given model to the server
- * @param {object} model The model to publish or update
- * @param {string} name The name for the model
- * @param {string} server Server IP or Hostname
- * @param {string||number} port Server port
- * @param {string} adminid Server admin login ID
- * @param {string} adminpassword Server admin password
- * @returns {result: true|false, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
- */
-async function publishApicl(model, name, server, port, user, password) {
-    const b64Data = btoa(JSON.stringify(model, null, ' '));
-    try {   // try to publish now
-        return {
-            result: (JSON.parse(await apiman.rest(`http://${server}:${port}/admin/publishAPI`, "POST", { user, password, name, type: "apicl", src: b64Data }, true))).result, err: "Publishing failed at the server",
-            raw_err: "Publishing failed at the server", key: "PublishServerIssue"
-        
-        };
-    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
-
-}
 
 async function _loginToServer(server, port, adminid, adminpassword) {
     const API_LOGIN_SECURE = `https://${server}:${port}/apps/monastery/login`;
@@ -116,39 +167,4 @@ async function _loginToServer(server, port, adminid, adminpassword) {
     }
 }
 
-async function getModule(name) {
-    let serverDetails = await openserverhelper.serverDetails();
-    try {   // try to read the module now
-        const result = JSON.parse(await apiman.rest(`http://${serverDetails.server}:${serverDetails.port}/admin/getMOD`, "POST", { "user": serverDetails.adminid, "password": serverDetails.adminpassword, name }, true));
-        let data = atob(result.data).toString();
-        return {
-            result: result.result, mod: result.result ? data : null, err: "Module read failed at the server or Not Found", key: "ModuleNotFound",
-
-        };
-    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue", mod: "exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n" } }
-
-}
-async function publishModule(name, server, port, user, password) {
-    try {
-        let count = 0;
-        let result;
-        const runJsModArray = api400model.getModules();
-        if (runJsModArray.length != 0) {
-            for (let runJsMod of runJsModArray) {
-                if (runJsMod[0] == "")  return { result: false, key: "FailedModule" };
-                if (runJsMod[1] == "") runJsMod[1] = "exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n";
-                let b64Data = btoa(runJsMod[1]);
-                result = JSON.parse(await apiman.rest(`http://${server}:${port}/admin/publishModule`, "POST", { user, password, name: runJsMod[0], type: "js", src: b64Data }, true))
-                count = result.result ? ++count : count;
-            }
-        }
-        if (count == runJsModArray.length) return { result: true };
-        if (!result.result) return { result: result.result, key: "PublishModFailed" };
-        return { result: false, key: "PublishModFailed" }
-    }
-    catch (err) {
-        return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" }
-    }
-}
-
-export const serverManager = { publishApicl, unpublishModel, getApiclList, getApicl, getModule, publishModule };
+export const serverManager = { publishApicl, unpublishApicl, getApiclList, getApicl, getModule, publishModule };

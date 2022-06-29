@@ -81,5 +81,8 @@ export const i18n = {
 "String":"String",
 "StringIndex":"String Index",
 "NoOfChar":"Num Of Char",
-"pool":"Session START POOL Count"
+"pool":"Session START POOL Count",
+"Unpublish":"Unpublish",
+"UnPublishSuccess":"UnPublished Successfully",
+"apiclUnpublishServerIssue":"UnPublishing failed at the server or apicl not found"
 }
