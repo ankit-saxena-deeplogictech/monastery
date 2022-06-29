@@ -15,15 +15,17 @@
    });
    const data = {};
    data.values = JSON.parse(element.getAttribute("list").replace(/'/g, '\"'));
-   data.text = element.getAttribute("text")
+   data.text = element.getAttribute("text");
    drop_down.setData(element.id, data);
  
  };
  
- async function elementRendered(element) {
-
+ /**
+ * Element was rendered
+ * @param element Host element
+ */
+ const elementRendered  = async (element) =>{
    if (element.getAttribute("value")) _setValue(element.getAttribute("value"), element);
-   
  }
  
  

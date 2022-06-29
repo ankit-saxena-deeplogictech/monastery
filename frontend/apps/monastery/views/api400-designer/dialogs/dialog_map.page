@@ -70,9 +70,6 @@ body {
     display: inline-block;
     width: 100%;
 }
-div#page-contents{
-    width: 100%;
-}
 
 div.map{
   background: #C9E5FF;
@@ -80,30 +77,6 @@ div.map{
   margin:12px 20px 20px 18px;
   display: grid;
   grid-template-columns: 23% 13% 16% 16% 32%;
-  grid-template-rows: auto;
-  grid-template-areas:  " stringbox startbox  countbox  repitionbox functionbox";
-    
-}
-
-
-div.map>.stringbox {
-  grid-area: stringbox;
-}
-
-div.map>.startbox {
-  grid-area: startbox;
-}
-
-div.map>.countbox {
-  grid-area: countbox;
-}
-
-div.map>.functionbox {
-  grid-area: functionbox;
-}
-
-div.map>.repitionbox {
-  grid-area: repitionbox;
 }
 
    

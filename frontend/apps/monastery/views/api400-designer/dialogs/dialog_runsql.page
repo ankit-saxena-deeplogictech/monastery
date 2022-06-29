@@ -14,7 +14,7 @@ LAYOUT
 |    sql       |
 ----------------
 =================
-Row Heights = 3em,calc(100vh - 152px - 3em )
+Row Heights = 4em,calc(100vh - 152px - 4em )
 Col Widths = 100%
 =================
 
@@ -51,8 +51,8 @@ body {
 }
 
 input[type=text]#result {
-    width: 15%;
-    margin: 0px 0px 20px 13px;
+    width: 97%;
+   margin: 13px 0px 20px 0px;
     outline: none;
     padding: 6px;
     resize: none;
@@ -62,11 +62,5 @@ input[type=text]#result {
 }
 
 text-editor#sql{position: relative;}
-
-.item1{
-    margin-left:13px;
-}
-
-
 
 =======

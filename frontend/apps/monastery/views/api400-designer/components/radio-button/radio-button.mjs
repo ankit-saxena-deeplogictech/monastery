@@ -23,6 +23,7 @@ function _getValue(host) {
   if(shadowRoot.querySelector('input[name="scr"]:checked'))  value = shadowRoot.querySelector('input[name="scr"]:checked').value;
   return value;
 }
+
 function _setValue(value, host) {
   const data = {};
   if (value == "start") data.start = "checked";

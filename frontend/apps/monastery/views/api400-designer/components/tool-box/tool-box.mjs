@@ -5,14 +5,12 @@
  */
 import { util } from "/framework/js/util.mjs";
 import { monkshu_component } from "/framework/js/monkshu_component.mjs";
-
 import { dialog_box } from "../../../shared/components/dialog-box/dialog-box.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta);
 const DIALOG_HOST_ID = "__org_monkshu_dialog_box";
 
 const elementConnected = async (element) => {
-
   const data = {
     text: element.getAttribute("text"),
     onclick: element.getAttribute("onclickHandler"),
@@ -22,13 +20,12 @@ const elementConnected = async (element) => {
       ? `<style>${element.getAttribute("styleBody")}</style>`
       : undefined
   };
-
   tool_box.setData(element.id, data);
 };
 
 async function removeElement() {
   const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
-  const parent = dialogShadowRoot .querySelector("div#page-contents");
+  const parent = dialogShadowRoot.querySelector("div#page-contents");
   parent.removeChild(parent.lastChild);
 }
 

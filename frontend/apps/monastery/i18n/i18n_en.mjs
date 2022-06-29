@@ -80,5 +80,9 @@ export const i18n = {
 "FailedAllModule":"All Modules not published",
 "String":"String",
 "StringIndex":"String Index",
-"NoOfChar":"Num Of Char"
+"NoOfChar":"Num Of Char",
+"pool":"Session START POOL Count",
+"Unpublish":"Unpublish",
+"UnPublishSuccess":"UnPublished Successfully",
+"apiclUnpublishServerIssue":"UnPublishing failed at the server or apicl not found"
 }

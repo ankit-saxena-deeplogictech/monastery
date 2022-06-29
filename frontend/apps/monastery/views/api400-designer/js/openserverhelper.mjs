@@ -22,7 +22,7 @@ async function connectServerClicked() {
     const listResult = await serverManager.getApiclList(server, port, adminid, adminpassword);
     if (!listResult.result) {DIALOG.showError(null, await i18n.get(listResult.key)); LOG.error("Apicl list fetch failed"); return;}
     else DIALOG.hideError();
-    const items = []; for (const modelName of listResult.models) items.push({id: modelName, 
+    const items = []; for (const modelName of listResult.apicls) items.push({id: modelName, 
         img: util.resolveURL(`${MODULE_PATH}/../dialogs/model.svg`), label: modelName});
     DIALOG.getElement("packages").value = (JSON.stringify(items));
 }
@@ -34,7 +34,7 @@ async function openClicked(_elementSendingTheEvent, idOfPackageToOpen) {
         if (!modelResult.result) {DIALOG.showError(null, await i18n.get(modelResult.key)); LOG.error("Apicl fetch failed"); return;}
         else {
             DIALOG.hideError();
-            blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: modelResult.name, data: modelResult.model});
+            blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: modelResult.name, data: modelResult.apicl});
             DIALOG.hideDialog();
         }
 
@@ -43,7 +43,7 @@ async function serverDetails() {
     try{
     const server = DIALOG.getElementValue("server"), port = DIALOG.getElementValue("port"),
     adminid = DIALOG.getElementValue("adminid"), adminpassword = DIALOG.getElementValue("adminpassword");
-    return {server,port,adminid,adminpassword}
+    return {server,port,adminid,adminpassword};
     }
     catch{
         return false

@@ -17,7 +17,7 @@ LAYOUT
 
 
 =================
-Row Heights = 4em
+Row Heights = 3em
 Col Widths = 32%,32%,18%,18%
 =================
 
@@ -37,7 +37,7 @@ CSS
 
 .grid-item-extension {
     background-color: var(--dialog-background, white);
-    padding: 10px 20px 10px 20px;
+    padding: 0px 20px 0px 20px;
     display: flex;
     flex-flow: row;
     box-sizing: border-box;
@@ -51,11 +51,9 @@ CSS
     outline: none;
     padding: 10px;
     resize: none;
-    height:10px;
+    height:11px;
     font-family: inherit;
-    
 }
-
 
 ::placeholder {opacity: 0.8;}
 
