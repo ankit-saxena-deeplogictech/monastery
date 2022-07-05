@@ -47,15 +47,13 @@ CSS
 .grid-item-extension {
     background-color: var(--dialog-background, white);
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     flex-flow: row;
     box-sizing: border-box;
     margin-top:0.5em;
 }
 
 .grid-item-extension > input, .grid-item-extension > input:focus {
-    width: 80%;
+    width: 100%;
     border-radius: 3px;
     border: 0px;
     outline: none;
@@ -63,21 +61,9 @@ CSS
     resize: none;
     height:10px;
     margin-bottom:10px; 
+    margin-left:1.5em ;
     font-family: inherit;
-    margin-left:20px;
-    margin-right:1.2em;
-}
-
-.item0{
-    display:flex;
-    justify-content: flex-start;  
-    width:97%;
-}  
-
-.item1{
-    display:flex;
-    justify-content: flex-end;
-    width:100%;
+   
 }
 
 ::placeholder {opacity: 0.8;}
@@ -97,6 +83,6 @@ div#page-contents{
 
 div#page-contents>input{
     flex: 1 1 220px;
-    margin-right:2em; 
+    margin-right:1.5em; 
 }
 =======

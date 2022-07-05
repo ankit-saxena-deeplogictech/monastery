@@ -46,7 +46,6 @@ CSS
     flex-flow: row;
     box-sizing: border-box;
     margin-top:15px;
-
 }
 
 .grid-item-extension > input, .grid-item-extension > input:focus{

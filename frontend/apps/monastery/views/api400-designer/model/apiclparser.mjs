@@ -368,7 +368,7 @@ const _parseRunsqlprc = async function (command) {
             paramNature = `&${otherParams[0]}`
         }
         else parameter = param;
-        finalValues.push([paramNature, parameter, paramType]);
+        finalValues.push([parameter,paramNature,  paramType]);
     }
     ret["listbox"] = JSON.stringify(finalValues);
     ret["nodeName"] = "runsqlprc";

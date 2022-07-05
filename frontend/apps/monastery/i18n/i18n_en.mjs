@@ -32,7 +32,7 @@ export const i18n = {
 "AdminPassword":"AdminPassword",
 "Publish":"Publish",
 "Variables":"Variables",
-"Variable":"Variable",
+"Variable":"Result Variable",
 "Result":"Query Result Variable",
 "Condition":"Condition Statement",
 "iftrue":"True Statement",
@@ -79,10 +79,11 @@ export const i18n = {
 "PublishModFailed":"Publishing Mod Failed at the server",
 "FailedAllModule":"All Modules not published",
 "String":"String",
-"StringIndex":"String Index",
+"StringIndex":"Sub String Index",
 "NoOfChar":"Num Of Char",
 "pool":"Session START POOL Count",
 "Unpublish":"Unpublish",
 "UnPublishSuccess":"UnPublished Successfully",
-"apiclUnpublishServerIssue":"UnPublishing failed at the server or apicl not found"
+"apiclUnpublishServerIssue":"UnPublishing failed at the server or apicl not found",
+"output":"Test Output"
 }
