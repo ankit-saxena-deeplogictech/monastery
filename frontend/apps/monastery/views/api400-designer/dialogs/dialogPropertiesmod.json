@@ -11,6 +11,7 @@
     "var--dialog-background": "#DFF0FE",
     "var--dialog-left": "90px",
     "var--dialog-width": "calc(100% - 172px)",
+    "var--dialog-height": "calc(100vh - 150px)",
     "var--animation-name": "flyinbottom",
     "var--animation-duration": "0.18s",
     "var--animation-left-transform": "0%",
@@ -21,5 +22,6 @@
     "var--dialog-position": "absolute",
     "var--box-shadow": "none",
     "var--dialog-border": "1px solid #98CCFD",
-    "var--dialog-border-radius": "10px 0px 0px 0px"
+    "var--dialog-border-radius": "10px 0px 0px 0px",
+    "var--dialog-max-height": "calc(100vh - 70px)"
 }

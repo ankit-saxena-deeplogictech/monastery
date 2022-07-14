@@ -41,8 +41,8 @@ function addTextBoxesForScrRead(textBoxValues) {
   parentContainer.appendChild(divElement);
 };
 
-function addContainerForRunsqlprc(natureOfParm, variable, typeOfParam) {
-  const parentContainer = _getParentContainer(), divElement = _createDivElementForRunsqlPrc(parentContainer, natureOfParm, variable, typeOfParam);
+function addContainerForRunsqlprc(variable, natureOfParm, typeOfParam) {
+  const parentContainer = _getParentContainer(), divElement = _createDivElementForRunsqlPrc(parentContainer,variable, natureOfParm, typeOfParam);
   parentContainer.appendChild(divElement);
 };
 
@@ -77,13 +77,13 @@ function _createDivElement(parentContainer, idArray, placeHolderArray, className
   return divElement
 }
 
-function _createDivElementForRunsqlPrc(parentContainer, natureOfParm, variable, typeOfParam) {
+function _createDivElementForRunsqlPrc(parentContainer, variable, natureOfParm, typeOfParam) {
   const divElement = document.createElement("div");
   divElement.setAttribute("class", 'runsqlprc');
   const inputElement1 = _createElement(parentContainer, "variable", variable, "Variable", "variablebox"),
   selectElement1 = _createDropDownElement(parentContainer, "nature"),
   selectElement2 = _createDropDownElement(parentContainer, "type");
-  divElement.append(selectElement1, inputElement1, selectElement2);
+  divElement.append( inputElement1,selectElement1, selectElement2);
 
   if (natureOfParm != undefined) {
     for (let i = 0; i < selectElement1.options.length; ++i)  if (selectElement1.options[i].text == natureOfParm.slice(1))

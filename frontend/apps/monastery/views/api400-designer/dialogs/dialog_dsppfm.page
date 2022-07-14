@@ -56,17 +56,9 @@ CSS
     padding: 10px;
     resize: none;
     height:11px;
-    font-family: inherit;
-    
+    font-family: inherit;   
 }
 
-.item1>input{
-    margin-right:1.5em;
-}
-
-.item2>input{
-    margin-left:1.5em;
-}
 
 ::placeholder {opacity: 0.8;}
 

@@ -18,7 +18,7 @@ LAYOUT
 ------------------------------ 
 
 =================
-Row Heights = 4em,4em
+Row Heights = 4em,3em
 Col Widths = 50%,50%
 =================
 
@@ -54,16 +54,8 @@ CSS
     resize: none;
     height:10px;
     font-family: inherit;
-    
-}
-.item0>input{
-     margin-right:1.5em;
-     margin-left:0.2em
 }
 
-.item1>input{
-    margin-left:1.5em;
-}
 
 ::placeholder {opacity: 0.8;}
 

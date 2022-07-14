@@ -41,8 +41,6 @@ CSS
 .grid-item-extension {
     background-color: var(--dialog-background, white);
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     flex-flow: row;
     box-sizing: border-box;
 }

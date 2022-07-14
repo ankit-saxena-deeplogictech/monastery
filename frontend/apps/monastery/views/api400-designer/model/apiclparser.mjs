@@ -20,7 +20,7 @@ async function apiclParser(data) {
 
     for (const key in apicl) {
         if (!initAPICL[key]) {
-            const modelObject = await _parseCommand(apicl[key], counter++, dependencies, key);
+            const modelObject = await _parseCommand(apicl[key],key);
             if (Object.keys(modelObject).length > 0) { result.push(modelObject); initAPICL[key] = modelObject.id; }
         }
     }
@@ -38,8 +38,8 @@ async function apiclParser(data) {
 * @param key index number of the command 
 * @returns modelobject, which contains nodeName, description, id, x-coordinates, y-coordinates, and other required properties for that command
 */
-const _parseCommand = async function (command, counter, dependencies, key) {
-
+const _parseCommand = async function (command, key) {
+     counter++;
     let ret = {}, nodeNameAsSubCmd = '', attr, cmd = command.split(' '), nodeName = cmd[0].toLowerCase();
     if (nodeName == "runjs" && _findBetweenParenthesis(command, "MOD") != "") nodeName = "mod";
     if (nodeName == "if") nodeName = "condition";
@@ -75,7 +75,7 @@ const _parseCommand = async function (command, counter, dependencies, key) {
     else if (nodeName == 'substr')     { ret = await _parseSubstr(command, isThisSubCmd) }
     else if (nodeName == 'endapi')     { ret = await _parseEndapi() }
 
-    if (ret && ret.nodeName) { attr = await _setAttribute(ret.nodeName, key,counter,dependencies); }
+    if (ret && ret.nodeName) { attr = await _setAttribute(ret.nodeName, key); }
     return { ...ret, ...attr };
 }
 
@@ -177,18 +177,18 @@ const _parseStrapi = async function (command) {
     }
     else iftrue = _subStrUsingLastIndex(command, "THEN(", ")");
     if (iftrue != '') {
-        result.push(await _parseCommand("iftrue", counter++, dependencies));
-        afterTrueCmd = await _parseCommand(iftrue.trim(), counter++, dependencies);
+        result.push(await _parseCommand("iftrue"));
+        afterTrueCmd = await _parseCommand(iftrue.trim());
         result.push(afterTrueCmd);
     }
     xCounter = attr.x;
     yCounter = attr.y + 80;
-    let ModelObjectOfIffalse = await _parseCommand("iffalse", counter++, dependencies);
+    let ModelObjectOfIffalse = await _parseCommand("iffalse");
     ModelObjectOfIffalse.dependencies = [attr.id];
 
     result.push(ModelObjectOfIffalse);
     if (iffalse.trim() != '') {
-        result.push(await _parseCommand(iffalse.trim(), counter++, dependencies));
+        result.push(await _parseCommand(iffalse.trim()));
     } else {
         nextElseDependency.push(ModelObjectOfIffalse.id);
     }
@@ -222,7 +222,7 @@ const _parseGoto = async function (command) {
         result.push({ ...ret, ...attr });
         let i = gotoIndex;
         do {
-            const object = await _parseCommand(apicl[i], counter++, dependencies);
+            const object = await _parseCommand(apicl[i]);
             if (object && object.nodeName) {
                 result.push(object); initAPICL[i] = object.id;
             }
@@ -368,7 +368,7 @@ const _parseRunsqlprc = async function (command) {
             paramNature = `&${otherParams[0]}`
         }
         else parameter = param;
-        finalValues.push([paramNature, parameter, paramType]);
+        finalValues.push([parameter,paramNature,  paramType]);
     }
     ret["listbox"] = JSON.stringify(finalValues);
     ret["nodeName"] = "runsqlprc";
@@ -488,7 +488,7 @@ const _parseScr = async function (command, isThisSubCmd, key) {
             result.push({ ...ret, ...attr });
             initAPICL[key] = attr.id;
             const cmdAfterRemoveScrStart = command.replace('START', '');
-            result.push(await _parseCommand(cmdAfterRemoveScrStart.replace(cmdAfterRemoveScrStart.match(/POOL\(.+\)/i)[0],''), counter++, dependencies));
+            result.push(await _parseCommand(cmdAfterRemoveScrStart.replace(cmdAfterRemoveScrStart.match(/POOL\(.+\)/i)[0],'')));
             return {};
         }
     } else if (command.includes("STOP")) {

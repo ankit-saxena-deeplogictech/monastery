@@ -40,8 +40,6 @@ CSS
 .grid-item-extension {
     background-color: var(--dialog-background, white);
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     flex-flow: row;
     box-sizing: border-box;
 }
@@ -56,7 +54,7 @@ body {
 
 div#page-contents{
     width: 100%;
-     display: flex;
+    display: flex;
     flex-wrap: wrap;
     margin-left:9px;
 }

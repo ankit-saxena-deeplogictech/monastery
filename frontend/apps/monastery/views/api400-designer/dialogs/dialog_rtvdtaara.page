@@ -20,7 +20,7 @@ LAYOUT
 ----------------------------
 
 =================
-Row Heights = 4em,5em
+Row Heights = 4em,4em
 Col Widths = 50%, 50%
 =================
 
@@ -40,14 +40,14 @@ CSS
 
 .grid-item-extension {
     background-color: var(--dialog-background, white);
-    padding: 10px 20px 10px 20px;
+    padding: 10px 20px 0px 20px;
     display: flex;
     flex-flow: row;
     box-sizing: border-box;
-   margin-top: 0.8em;
 }
+
 .grid-item-extension > input, .grid-item-extension > input:focus{
-    width: 90%;
+    width: 100%;
     border-radius: 4px;
     border: 0px;
     outline: none;
@@ -55,37 +55,12 @@ CSS
     resize: none;
     height:8px;
     font-family: inherit;
+ 
+}
+.class-datatype{
+     padding: 3px 25px 0px 11px;
 }
  
-.item0{
-    display:flex;
-    justify-content: flex-end;
-    margin-top:1em;
-    margin-right:1.5em;
-    margin-left:0.2em
-}
-
-.item1{
-     display:flex;
-    justify-content: flex-start;
-    margin-top:1em;
-    margin-left:1.5em;
-}
-
-.item2{
-     display:flex;
-    justify-content: flex-end;
-    margin-top:0.5em;
-    margin-right:2em;
-}
-
-.item3{
-    display:flex;
-    justify-content: flex-start;
-    margin-top:1em;
-    margin-left:1.5em;
-}
-
 
 ::placeholder {opacity: 0.8;}
 
@@ -93,6 +68,5 @@ body {
     margin: 0%;
     display: inline-block;
     width: 100%;
-}
 
 =======
