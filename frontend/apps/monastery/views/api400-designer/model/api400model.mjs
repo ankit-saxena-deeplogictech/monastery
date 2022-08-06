@@ -163,12 +163,12 @@ function _nodeAdded(nodeName, id, properties) {
 }
 
 function _nodeRemoved(nodeName, id) {
-
+    if(idCache  && Object.keys(idCache).length === 0) api400modelObj = { apicl: [] };
     if (!idCache[id]) return;   // we don't know of this node
     const node = idCache[id];
+
     const nextTargetNode =  algos.checkNodeInAllNodes(node,api400modelObj.apicl[0].commands);
     if (nextTargetNode)  modelConnectorsModified(api400model.REMOVED,nodeName,nextTargetNode.nodeName,id,nextTargetNode.id);
-
     if (nodeName == "strapi"||nodeName == "runsql"||nodeName == "runjs"||nodeName == "goto"||nodeName == "chgvar"||
         nodeName == "sndapimsg"||nodeName == "iftrue"||nodeName == "iffalse"||nodeName == "chgdtaara"||nodeName == "rtvdtaara"||
         nodeName == "call"||nodeName == "runsqlprc"||nodeName == "rest"||nodeName == "map"||nodeName == "scrread"||
