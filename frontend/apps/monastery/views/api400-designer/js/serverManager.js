@@ -19,13 +19,14 @@ import {apiclparser} from "../model/apiclparser.mjs"
 // 
 async function getApiclList(server, port, user, password) {
     try {   // try to get the list now
-
         let result = await apiman.rest(`http://${server}:${port}/admin/listAPIs`, "POST",
         { user, password }, true);
         if(typeof result == "string") result = JSON.parse(result);
         const list = [];
+        if(result.result && result.list){
         result.list.forEach(function (el) { list.push(el.substring(1)); });
         result.list = list;
+        }
         return {
             result: result.result, apicls: result.result ? result.list : null, err: "List fetch failed at the server",
             raw_err: "Apicl list fetch failed at the server", key: "ApiclListServerIssue"
@@ -45,10 +46,9 @@ async function getApiclList(server, port, user, password) {
 async function getApicl(name, server, port, user, password) {
 
     try {   // try to read the apicl now
-        let result = await apiman.rest(`http://${server}:${port}/admin/getAPI`, "POST", { user, password, name }, true);
+        let data,result = await apiman.rest(`http://${server}:${port}/admin/getAPI`, "POST", { user, password, name }, true);
         if(typeof result == "string") result = JSON.parse(result);
-        const data = await apiclparser.apiclParser(atob(result.data).toString());
-        console.log(data);
+        if(result.result && result.data) data = await apiclparser.apiclParser(atob(result.data).toString());
         return {
             result: result.result, apicl: result.result ? JSON.stringify(data) : null, err: "Apicl read failed at the server",
             name: result.result ? name : null, raw_err: "Apicl read failed at the server", key: "ApiclReadServerIssue"

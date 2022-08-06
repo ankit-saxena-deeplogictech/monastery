@@ -481,9 +481,10 @@ const _convertForScrops = function (node, nodes) {
     const nextNode = checkNodeInAllNodes(node, nodes);
     if (node && node.scrops == "start" && node.pool != "" && nextNode.nodeName == "scrkeys") {
             let keys = _convertForScrkeys(nextNode).match(/KEYS\(.+\)/i)[0];
-             nodes.splice(nodes.indexOf(nextNode), 1);   
+             nodes.splice(nodes.indexOf(nextNode), 1);  
              const nextNodeafterkeysnode = checkNodeInAllNodes(nextNode , nodes);  
-             nextNodeafterkeysnode.dependencies=[node.id];
+
+            if(nextNodeafterkeysnode) nextNodeafterkeysnode.dependencies=[node.id];
             return `SCR NAME(${node.session ? node.session : ''}) START ${keys} POOL(${node.pool})`;;   
     }
 
