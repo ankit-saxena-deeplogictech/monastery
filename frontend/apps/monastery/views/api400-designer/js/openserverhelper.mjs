@@ -46,7 +46,7 @@ async function serverDetails() {
     return {server,port,adminid,adminpassword};
     }
     catch{
-        return false
+        return false;
     }
 }
 

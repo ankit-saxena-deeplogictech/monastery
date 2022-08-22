@@ -41,7 +41,7 @@ async function openDialog() {
            const pubResult = await serverManager.publishApicl(model, result.name, result.server, result.port, result.adminid, result.adminpassword);
             blackboard.broadcastMessage(MSG_RENAME_MODEL, {name: result.name});
             if (!pubResult.result) DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); 
-            else {DIALOG.showMessage(await i18n.get("PublishSuccess"), null, null, messageTheme, "MSG_DIALOG");  return true;}
+            else {DIALOG.showMessage(await i18n.get("PublishSuccess"), "ok", null, messageTheme, "MSG_DIALOG");  return true;}
         } });
 }
 

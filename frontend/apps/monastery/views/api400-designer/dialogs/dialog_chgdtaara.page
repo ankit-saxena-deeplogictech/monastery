@@ -55,13 +55,12 @@ CSS
     resize: none;
     height:8px;
     font-family: inherit;
- 
 }
+
 .class-datatype{
      padding: 3px 25px 0px 11px;
 }
  
-
 ::placeholder {opacity: 0.8;}
 
 body {

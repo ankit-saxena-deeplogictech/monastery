@@ -52,7 +52,6 @@ CSS
     resize: none;
     height:10px;
     font-family: inherit;
-    
 }
 
 ::placeholder {opacity: 0.8;}

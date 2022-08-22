@@ -1,7 +1,6 @@
 /**
  * A floating window Monkshu web component. 
- *  
- * (C) 2020 TekMonks. All rights reserved.
+ * (C) 2022 TekMonks. All rights reserved.
  * License: See enclosed LICENSE file.
  */
 import {util} from "/framework/js/util.mjs";

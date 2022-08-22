@@ -1,5 +1,5 @@
 /** 
- * (C) 2021 TekMonks. All rights reserved.
+ * (C) 2022 TekMonks. All rights reserved.
  * License: See enclosed LICENSE file.
  */
 import {i18n} from "/framework/js/i18n.mjs";
