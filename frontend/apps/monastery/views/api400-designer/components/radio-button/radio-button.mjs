@@ -1,5 +1,4 @@
 /**
- *
  * (C) 2022 TekMonks. All rights reserved.
  * License: See enclosed LICENSE file.
  */

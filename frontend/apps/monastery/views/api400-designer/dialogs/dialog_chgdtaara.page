@@ -1,6 +1,4 @@
-
-  
-SCHEMA
+ SCHEMA
 ======
 {
     "libraryname": {"html":"input", "type":"text", "placeholder":"{{i18n.LibraryName}}", "spellcheck":"false"},
