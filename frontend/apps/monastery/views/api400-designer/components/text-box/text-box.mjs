@@ -1,5 +1,4 @@
 /**
- *
  * (C) 2022 TekMonks. All rights reserved.
  * License: See enclosed LICENSE file.
  */
@@ -47,7 +46,6 @@ function addContainerForRunsqlprc(variable, natureOfParm, typeOfParam) {
 };
 
 function _createElement(parentContainer, id, value, placeHolder, className, placeHolderType, type) {
-
   const inputElement = document.createElement("input");
   if (type != undefined) inputElement.setAttribute("type", "number");
   else inputElement.setAttribute("type", "text");
@@ -56,13 +54,13 @@ function _createElement(parentContainer, id, value, placeHolder, className, plac
   else inputElement.setAttribute("placeholder", `${placeHolder}-${parentContainer.children.length + 1}`);
   if (value != undefined) inputElement.setAttribute("value", `${value}`);
   if (className != undefined) inputElement.setAttribute("class", `${className}`);
-  return inputElement
+  return inputElement;
 };
 
 function _getParentContainer() {
   const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
   const parentContainer = dialogShadowRoot.querySelector("div#page-contents");
-  return parentContainer
+  return parentContainer;
 }
 
 function _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, classNameForDiv) {
@@ -74,7 +72,7 @@ function _createDivElement(parentContainer, idArray, placeHolderArray, className
     else inputElement = _createElement(parentContainer, idArray[i], textBoxValues, placeHolderArray[i], classNameArray[i], placeHolderTypeArray[i]);
     divElement.append(inputElement);
   }
-  return divElement
+  return divElement;
 }
 
 function _createDivElementForRunsqlPrc(parentContainer, variable, natureOfParm, typeOfParam) {
@@ -93,7 +91,7 @@ function _createDivElementForRunsqlPrc(parentContainer, variable, natureOfParm, 
     for (let i = 0; i < selectElement2.options.length; ++i) if (selectElement2.options[i].text == typeOfParam.slice(1))
       selectElement2.options[i].selected = true;
   }
-  return divElement
+  return divElement;
 }
 
 function _createDropDownElement(parentContainer, type) {

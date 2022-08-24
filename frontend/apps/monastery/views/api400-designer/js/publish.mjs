@@ -1,6 +1,6 @@
 /** 
- * Publish rules to the rules engine.
- * (C) 2020 TekMonks. All rights reserved.
+ * Publish apicl to the api400.
+ * (C) 2022 TekMonks. All rights reserved.
  * License: See enclosed LICENSE file.
  */
 import {i18n} from "/framework/js/i18n.mjs";

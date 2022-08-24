@@ -116,7 +116,6 @@ function getModel() {
     const NOPparams = saveCordinates(sortedCommands);
     let APICL = algos.convertIntoAPICL(sortedCommands); // converting into the final APICL
     const NOPcommand = `NOP PARAMS(${JSON.stringify({ "CORDINATES": NOPparams })})`;
-    
     const lastCommand = APICL[Object.keys(APICL).length ]
     if(lastCommand.includes("ENDAPI")){
     APICL[Object.keys(APICL).length ] = NOPcommand;

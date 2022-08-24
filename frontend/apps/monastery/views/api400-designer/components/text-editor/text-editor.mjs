@@ -1,6 +1,6 @@
 /**
  * Text editor component
- * (C) 2019 TekMonks. All rights reserved.
+ * (C) 2022 TekMonks. All rights reserved.
  * License: See enclosed LICENSE file.
  */
 import { util } from "/framework/js/util.mjs";
@@ -21,9 +21,7 @@ const P3_LIBS_JAVASCRPT = [
   `${COMPONENT_PATH}/3p/codemirror/addon/lint/lint.js`,
 ];
 
-const P3_LIBS_SQL = [
-  `${COMPONENT_PATH}/3p/codemirror/mode/sql/sql.js`
-];
+const P3_LIBS_SQL = [`${COMPONENT_PATH}/3p/codemirror/mode/sql/sql.js`];
 
 async function elementConnected(element) {
   Object.defineProperty(element, "value", {
@@ -75,13 +73,15 @@ async function elementRendered(element) {
           lint: { selfContain: true },
           gutters: ["CodeMirror-lint-markers"],
           matchBrackets: true,
-
         }
       );
       text_editor.getMemoryByHost(element).editor = cm;
       cm.setSize("100%", "100%");
       if (!element.getAttribute("mod")) cm.setValue("// JS script");
-      else cm.setValue("exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n");
+      else
+        cm.setValue(
+          "exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n"
+        );
       if (element.getAttribute("value"))
         _setValue(element.getAttribute("value"), element);
     }, 10);
@@ -114,7 +114,6 @@ async function elementRendered(element) {
         _setValue(element.getAttribute("value"), element);
     }, 10);
   }
-
 }
 
 async function open(element) {
@@ -132,7 +131,7 @@ async function save(element) {
   util.downloadFile(
     jsContents,
     "text/javascript",
-    decodeURIComponent(DIALOG.getElementValue("result")) || "code.js"
+    decodeURIComponent(`${DIALOG.getElementValue("result")}.js`) || "code.js"
   );
 }
 
@@ -153,7 +152,7 @@ export const text_editor = {
   elementConnected,
   elementRendered,
   open,
-  save,
+  save
 };
 monkshu_component.register(
   "text-editor",
