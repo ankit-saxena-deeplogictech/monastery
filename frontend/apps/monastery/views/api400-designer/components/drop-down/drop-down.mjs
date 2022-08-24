@@ -1,5 +1,4 @@
 /**
- *
  * (C) 2022 TekMonks. All rights reserved.
  * License: See enclosed LICENSE file.
  */
@@ -45,7 +44,6 @@
    trueWebComponentMode: true,
    elementConnected,
    elementRendered
- 
  };
  
  monkshu_component.register(

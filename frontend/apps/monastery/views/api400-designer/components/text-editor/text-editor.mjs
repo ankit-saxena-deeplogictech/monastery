@@ -1,6 +1,6 @@
 /**
  * Text editor component
- * (C) 2019 TekMonks. All rights reserved.
+ * (C) 2022 TekMonks. All rights reserved.
  * License: See enclosed LICENSE file.
  */
 import { util } from "/framework/js/util.mjs";
@@ -21,9 +21,7 @@ const P3_LIBS_JAVASCRPT = [
   `${COMPONENT_PATH}/3p/codemirror/addon/lint/lint.js`,
 ];
 
-const P3_LIBS_SQL = [
-  `${COMPONENT_PATH}/3p/codemirror/mode/sql/sql.js`
-];
+const P3_LIBS_SQL = [`${COMPONENT_PATH}/3p/codemirror/mode/sql/sql.js`];
 
 async function elementConnected(element) {
   Object.defineProperty(element, "value", {
@@ -33,13 +31,8 @@ async function elementConnected(element) {
 
   const data = {
     componentPath: COMPONENT_PATH,
-    styleBody: element.getAttribute("styleBody")
-      ? `<style>${element.getAttribute("styleBody")}</style>`
-      : undefined,
-    showToolbar:
-      element.getAttribute("showToolbar")?.toLowerCase() == "false"
-        ? undefined
-        : true,
+    styleBody: element.getAttribute("styleBody") ? `<style>${element.getAttribute("styleBody")}</style>` : undefined,
+    showToolbar: element.getAttribute("showToolbar")?.toLowerCase() == "false" ? undefined : true
   };
 
   if (element.id)
@@ -59,12 +52,8 @@ async function elementRendered(element) {
     for (const p3libJS of P3_LIBS_JAVASCRPT) await $$.require(p3libJS); // load all the JS related libs we need
     setTimeout((_) => {
       // apparently we need timeout for CM to load properly
-      const editorElement = text_editor
-        .getShadowRootByHost(element)
-        .querySelector("textarea#texteditor");
-      const cm = CodeMirror(
-        (cmElement) =>
-          editorElement.parentNode.replaceChild(cmElement, editorElement),
+      const editorElement = text_editor.getShadowRootByHost(element).querySelector("textarea#texteditor");
+      const cm = CodeMirror((cmElement) => editorElement.parentNode.replaceChild(cmElement, editorElement),
         {
           lineNumbers: true,
           gutter: true,
@@ -75,27 +64,22 @@ async function elementRendered(element) {
           lint: { selfContain: true },
           gutters: ["CodeMirror-lint-markers"],
           matchBrackets: true,
-
         }
       );
       text_editor.getMemoryByHost(element).editor = cm;
       cm.setSize("100%", "100%");
       if (!element.getAttribute("mod")) cm.setValue("// JS script");
       else cm.setValue("exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n");
-      if (element.getAttribute("value"))
-        _setValue(element.getAttribute("value"), element);
+      if (element.getAttribute("value")) _setValue(element.getAttribute("value"), element);
     }, 10);
+
   } else if (MODE == "sql") {
     for (const p3lib of P3_LIBS) await $$.require(p3lib); // load all the comman libs we need
     for (const p3libSQL of P3_LIBS_SQL) await $$.require(p3libSQL); // load all the SQL related libs we need
     setTimeout((_) => {
       // apparently we need timeout for CM to load properly
-      const editorElement = text_editor
-        .getShadowRootByHost(element)
-        .querySelector("textarea#texteditor");
-      const cm = CodeMirror(
-        (cmElement) =>
-          editorElement.parentNode.replaceChild(cmElement, editorElement),
+      const editorElement = text_editor.getShadowRootByHost(element).querySelector("textarea#texteditor");
+      const cm = CodeMirror((cmElement) => editorElement.parentNode.replaceChild(cmElement, editorElement),
         {
           lineNumbers: true,
           gutter: true,
@@ -109,12 +93,9 @@ async function elementRendered(element) {
       text_editor.getMemoryByHost(element).editor = cm;
       cm.setSize("100%", "100%");
       cm.setValue("--SQL");
-
-      if (element.getAttribute("value"))
-        _setValue(element.getAttribute("value"), element);
+      if (element.getAttribute("value")) _setValue(element.getAttribute("value"), element);
     }, 10);
   }
-
 }
 
 async function open(element) {
@@ -129,11 +110,7 @@ async function open(element) {
 async function save(element) {
   const host = text_editor.getHostElement(element);
   const jsContents = _getValue(host);
-  util.downloadFile(
-    jsContents,
-    "text/javascript",
-    decodeURIComponent(DIALOG.getElementValue("result")) || "code.js"
-  );
+  util.downloadFile(jsContents, "text/javascript", decodeURIComponent(`${DIALOG.getElementValue("result")}.js`) || "code.js");
 }
 
 function _getValue(host) {
@@ -153,7 +130,7 @@ export const text_editor = {
   elementConnected,
   elementRendered,
   open,
-  save,
+  save
 };
 monkshu_component.register(
   "text-editor",

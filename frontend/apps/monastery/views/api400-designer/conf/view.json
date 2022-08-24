@@ -14,10 +14,13 @@
         "tool-box":"components/tool-box",
         "text-box":"components/text-box",
         "drop-down":"components/drop-down",
-        "radio-button":"components/radio-button"
+        "radio-button":"components/radio-button",
+        "floating-window": "components/floating-window"
        
     },
     "initModules": { "api400model": "model/api400model.mjs", 
         "nodeRepository": "components/pluggable-ribbon/lib/nodeRepository.mjs",
-        "openserverhelper": "js/openserverhelper.mjs" }
+        "openserverhelper": "js/openserverhelper.mjs",
+        "testsql":"js/testSQL.mjs"
+     }
 }

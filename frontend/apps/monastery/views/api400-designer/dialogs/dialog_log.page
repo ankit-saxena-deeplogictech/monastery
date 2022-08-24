@@ -1,8 +1,7 @@
 SCHEMA
 ======
 {
-"log": {"html":"textarea", "placeholder":"{{i18n.Log}}", "wrap":"soft", "spellcheck":"false"}
-
+  "log": {"html":"textarea", "placeholder":"{{i18n.Log}}", "wrap":"soft", "spellcheck":"false"}
 }
 ======
 

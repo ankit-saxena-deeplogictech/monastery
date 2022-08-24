@@ -11,7 +11,7 @@ import {page_generator} from "/framework/components/page-generator/page-generato
 
 
 const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/..`, MSG_GET_MODEL_NAME = "GET_MODEL_NAME", 
-    MSG_RENAME_MODEL = "RENAME_MODEL", DIALOG_RET_PROPS = ["name", "server", "port", "adminid", "adminpassword"], 
+    DIALOG_RET_PROPS = ["name", "server", "port", "adminid", "adminpassword"], 
     DIALOG = window.monkshu_env.components["dialog-box"];
 
 let saved_props;
@@ -33,7 +33,7 @@ async function openDialog() {
             saved_props = util.clone(result, ["adminpassword"]); // don't save password, for security
            const unPubResult = await serverManager.unpublishApicl( result.name, result.server, result.port, result.adminid, result.adminpassword);
             if (!unPubResult.result) DIALOG.showError(dialogElement, await i18n.get(unPubResult.key)); 
-            else {DIALOG.showMessage(await i18n.get("UnPublishSuccess"), null, null, messageTheme, "MSG_DIALOG");  return true;}
+            else {DIALOG.showMessage(await i18n.get("UnPublishSuccess"), "ok", null, messageTheme, "MSG_DIALOG");  return true;}
         } });
 }
 

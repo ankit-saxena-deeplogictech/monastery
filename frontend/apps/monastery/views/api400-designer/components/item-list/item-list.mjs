@@ -5,7 +5,7 @@
  * Value attribute returns or expects an array of items in the format
  * listed above.
  *  
- * (C) 2020 TekMonks. All rights reserved.
+ * (C) 2022 TekMonks. All rights reserved.
  * License: See enclosed LICENSE file.
  */
 import {i18n} from "./item-list.i18n.mjs";

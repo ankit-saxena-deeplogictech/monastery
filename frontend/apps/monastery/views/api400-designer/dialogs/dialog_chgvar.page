@@ -3,7 +3,6 @@ SCHEMA
 {
     "variable": {"html":"input", "type":"text", "placeholder":"{{i18n.Variable}}", "spellcheck":"false"},
     "value": {"html":"input", "type":"text", "placeholder":"{{i18n.Value}}", "spellcheck":"false"}
-   
 }
 ======
 
@@ -52,7 +51,6 @@ CSS
     resize: none;
     height:10px;
     font-family: inherit;
-    
 }
 
 ::placeholder {opacity: 0.8;}
