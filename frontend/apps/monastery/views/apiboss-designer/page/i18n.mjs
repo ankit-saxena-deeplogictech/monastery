@@ -1,6 +1,6 @@
 export const i18n = {
     en: {
-        "Description": "APIBoss\nAPI Security "
+        "Description": "APIBoss\nAPI Security   "
     },
 
     hi: {
