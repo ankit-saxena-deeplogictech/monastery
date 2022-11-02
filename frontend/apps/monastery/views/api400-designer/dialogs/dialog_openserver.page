@@ -1,6 +1,8 @@
 SCHEMA
 ======
 {
+    "connhistory": {"html":"drop-down","style":"width:100%; height:100%;","text":"Select API400 Server",
+        "onclickHandler":"window.monkshu_env['OPEN_SERVER_HELPER'].populateServerDetails(this.value)"},
     "server": {"html":"input", "type":"text", "placeholder":"{{i18n.Server}}", "required":"true", "spellcheck":"false"},
     "port": {"html":"input", "type":"number", "placeholder":"{{i18n.Port}}", "required":"true"},
     "adminid": {"html":"input", "type":"text", "placeholder":"{{i18n.AdminID}}", "required":"true", "spellcheck":"false"},
@@ -18,6 +20,8 @@ LAYOUT
 =================
 
 ------------------------------------------------
+|                connhistory                   |
+------------------------------------------------
 |   server    |     port           |  connect  |
 ------------------------------------------------
 |   adminid   |    adminpassword   |  connect  |
@@ -25,7 +29,7 @@ LAYOUT
 |                    packages                  |
 ------------------------------------------------
 =================
-Row Heights = 4em, 4em, calc(100vh - 8em - 152px - 12px - 1em)
+Row Heights = 4em, 4em, 4em, calc(100vh - 12em - 152px - 12px - 1em)
 Col Widths = calc((100% - 10em) / 2), calc((100% - 10em) / 2), 10em
 =================
 
@@ -77,5 +81,12 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.class-connhistory{
+     padding: 3px 25px 0px 11px;
+     margin-bottom: 5px;
+     border-radius: 10px;
+
 }
 =======

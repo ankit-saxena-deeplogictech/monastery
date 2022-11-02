@@ -50,6 +50,25 @@ async function getApicl(name, server, port, user, password) {
     } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
 
 }
+/**
+ * Returns the given apicl as an object
+ * @param {string} name The apicl name
+ * @param {string} server Server IP or Hostname
+ * @param {string||number} port Server port
+ * @param {string} user Server admin login ID
+ * @param {string} password Server admin password
+ * @returns {result: true|false, apicl: apicl object on success, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
+ */
+async function callApi(name, server, port , headers , body) {
+
+    try {   // call the api
+        LOG.info(`http://${server}:${port}/${name}`);
+        let result = await apiman.rest(`http://${server}:${port}/${name}`, "POST", body||{}, false, true);
+        if (typeof result == "string") result = JSON.parse(result);
+        return result;
+    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
+
+}
 
 
 /**
@@ -161,4 +180,4 @@ async function _loginToServer(server, port, adminid, adminpassword) {
     }
 }
 
-export const serverManager = { publishApicl, unpublishApicl, getApiclList, getApicl, getModule, publishModule };
+export const serverManager = { publishApicl, unpublishApicl, getApiclList, getApicl, getModule, publishModule, callApi };

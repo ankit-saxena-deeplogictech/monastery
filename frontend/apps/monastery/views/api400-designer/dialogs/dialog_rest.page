@@ -4,8 +4,9 @@ SCHEMA
     "result": {"html":"input", "type":"text", "placeholder":"{{i18n.ResultVariable}}","spellcheck":"false"},
     "url": {"html":"input", "type":"text", "placeholder":"{{i18n.URL}}", "spellcheck":"false"},
     "method": {"html":"input", "type":"text", "placeholder":"{{i18n.Method}}", "spellcheck":"false"},
-    "parameter": {"html":"input", "type":"text", "placeholder":"{{i18n.Parameters}}", "spellcheck":"false"},
-    "headers": {"html":"input", "type":"text", "placeholder":"{{i18n.Headers}}","spellcheck":"false"}
+    "headers": {"html":"input", "type":"text", "placeholder":"{{i18n.Headers}}","spellcheck":"false"},
+    "parameter": {"html":"textarea", "wrap":"soft", "placeholder":"{{i18n.ParametersJSON}}", "spellcheck":"false"}
+    
 }
 ======
 
@@ -16,11 +17,13 @@ LAYOUT
 ----------------------------------------
 |  result    |  url                    |        
 ----------------------------------------
-|   method   |   parameter |  headers  |   
+|   method   |  headers                |   
 ---------------------------------------- 
+|                parameter             |   
+----------------------------------------
 =================
 Row Heights = 4em,3em
-Col Widths = 25%,25%,50%
+Col Widths = 25%,75%
 =================
 
 
@@ -58,7 +61,19 @@ CSS
     font-family: inherit;
 }
 
-::placeholder {opacity: 0.8;}
+.grid-item-extension > textarea, .grid-item-extension > textarea:focus {
+    width: 100%;
+    border-radius: 10px;
+    border: 0px;
+    outline: none;
+    padding: 10px;
+    resize: none;
+    margin-top:15px;
+    font-family: inherit;
+    height: 150px;
+}
+
+::placeholder {opacity: 0.5;}
 
 body {
     margin: 0%;
