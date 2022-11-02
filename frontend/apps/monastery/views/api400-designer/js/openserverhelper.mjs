@@ -6,6 +6,7 @@
 import { i18n } from "/framework/js/i18n.mjs";
 import { util } from "/framework/js/util.mjs";
 import { serverManager } from "./serverManager.js";
+import {session} from "/framework/js/session.mjs";
 import { blackboard } from "/framework/js/blackboard.mjs";
 
 
@@ -27,6 +28,11 @@ async function connectServerClicked() {
         img: util.resolveURL(`${MODULE_PATH}/../dialogs/model.svg`), label: modelName
     });
     DIALOG.getElement("packages").value = (JSON.stringify(items));
+    let sessionConArray = [];
+    sessionConArray = (session.get("__org_api400_server"))?session.get("__org_api400_server"):[];
+    if (!sessionConArray.includes(`${adminid}@${server}:${port}`))
+        sessionConArray.push(`${adminid}@${server}:${port}`);
+    session.set("__org_api400_server", sessionConArray);
 }
 
 async function openClicked(_elementSendingTheEvent, idOfPackageToOpen) {
@@ -41,6 +47,7 @@ async function openClicked(_elementSendingTheEvent, idOfPackageToOpen) {
     }
 
 }
+
 async function serverDetails() {
     try {
         const server = DIALOG.getElementValue("server"), port = DIALOG.getElementValue("port"),
@@ -53,4 +60,16 @@ async function serverDetails() {
     }
 }
 
-export const openserverhelper = { init, connectServerClicked, openClicked, serverDetails };
+async function populateServerDetails(value) {
+
+    let temp = value.split("@");
+    let admin = temp[0];
+    let server = temp[1];
+    DIALOG.getElement("server").value = server.split(":")[0];
+    DIALOG.getElement("port").value = server.split(":")[1];
+    DIALOG.getElement("adminid").value = admin;
+    
+}
+
+
+export const openserverhelper = { init, connectServerClicked, openClicked, serverDetails, populateServerDetails };

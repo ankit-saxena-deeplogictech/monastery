@@ -4,6 +4,7 @@
  */
  import { util } from "/framework/js/util.mjs";
  import { monkshu_component } from "/framework/js/monkshu_component.mjs";
+ import {session} from "/framework/js/session.mjs";
  
  const COMPONENT_PATH = util.getModulePath(import.meta);
  
@@ -12,8 +13,20 @@
      get: (_) => _getValue(element),
      set: (value) => _setValue(value, element)
    });
-   const data = {};
-   data.values = JSON.parse(element.getAttribute("list").replace(/'/g, '\"'));
+  const data =  { onclick: element.getAttribute("onclickHandler") };
+
+  if(session.get("__org_api400_server")) {
+    let serverConArray = await session.get("__org_api400_server");
+    let list = [];
+    for (let i = 0; i < serverConArray.length; i++) {
+      list.push({'value':serverConArray[i]});
+    }
+    data.values = list;
+
+   } else {
+    data.values = JSON.parse(element.getAttribute("list").replace(/'/g, '\"'));
+    element.remove();
+   }
    data.text = element.getAttribute("text");
    drop_down.setData(element.id, data);
  
