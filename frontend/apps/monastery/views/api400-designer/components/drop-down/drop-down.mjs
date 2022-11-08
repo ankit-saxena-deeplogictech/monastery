@@ -13,7 +13,7 @@
      get: (_) => _getValue(element),
      set: (value) => _setValue(value, element)
    });
-  const data =  { onclick: element.getAttribute("onclickHandler") };
+  const  data =  { onclick: element.getAttribute("onclickHandler") };
 
   if(session.get("__org_api400_server")) {
     let serverConArray = await session.get("__org_api400_server");
