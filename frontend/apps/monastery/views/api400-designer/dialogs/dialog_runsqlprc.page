@@ -1,7 +1,7 @@
 SCHEMA
 ======
 {
-  "libraryname": {"html":"input", "type":"text", "placeholder":"{{i18n.LibraryName}}"},
+  "libraryname": {"html":"input", "type":"text", "placeholder":"{{i18n.LibraryName}}","class":"validate","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true"},
   "procedurename": {"html":"input", "type":"text", "placeholder":"{{i18n.ProcedureName}}"},
   "toolbox":{"html":"tool-box",
             "onclickHandler":"window.monkshu_env.components['text-box'].addContainerForRunsqlprc()",
