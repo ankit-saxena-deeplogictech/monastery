@@ -7,6 +7,7 @@ import { monkshu_component } from "/framework/js/monkshu_component.mjs";
 import { dialog_box } from "../../../shared/components/dialog-box/dialog-box.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta);
+const DEFAULT_HOST_ID = "__org_monkshu_dialog_box";
 
 const elementConnected = async (element) => {
   Object.defineProperty(element, "value", {
@@ -31,9 +32,22 @@ function _setValue(value, host) {
   radio_button.setData(host.id, data);
 }
 
+function check(element){
+  const diloagBoxComponent = window.monkshu_env.components['dialog-box'];
+  const shadowRoot = element instanceof Element ? diloagBoxComponent.getShadowRootByContainedElement(element) :
+  diloagBoxComponent.getShadowRootByHostId(element || DEFAULT_HOST_ID);
+  console.log(shadowRoot);
+  console.log(shadowRoot.querySelector('#pool'));
+  console.log(element.getAttribute("id"));
+
+ if(element.getAttribute("id")!="start")  shadowRoot.querySelector('#pool').setAttribute("disabled","true");
+ else shadowRoot.querySelector('#pool').removeAttribute("disabled");
+
+}
+
 export const radio_button = {
   trueWebComponentMode: false,
-  elementConnected
+  elementConnected,check
 };
 
 monkshu_component.register(
