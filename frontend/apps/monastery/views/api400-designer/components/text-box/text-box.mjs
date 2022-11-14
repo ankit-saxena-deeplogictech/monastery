@@ -5,11 +5,12 @@
 
 import { monkshu_component } from "/framework/js/monkshu_component.mjs";
 import { dialog_box } from "../../../shared/components/dialog-box/dialog-box.mjs";
+import { i18n } from "/framework/js/i18n.mjs";
 
 const DIALOG_HOST_ID = "__org_monkshu_dialog_box";
 
-function addTextBox(id, value) {
-  const parentContainer = _getParentContainer(), placeHolder = id, inputElement = _createElement(parentContainer, id, value, placeHolder);
+function addTextBox(id, value) {  
+  const parentContainer = _getParentContainer(), placeHolder = id, inputElement = _createElement(parentContainer, id, value, placeHolder,"text-box","dynamic","text");
   parentContainer.appendChild(inputElement);
 }
 
@@ -18,7 +19,9 @@ function addTextBoxesForMap(textBoxValues) {
     placeHolderArray = ["String Variable", "Start Pos", "Num of Char", "Repetition No", "String Function"],
     classNameArray = ["stringbox", "startbox", "countbox", "repetitionbox", "functionbox"],
     placeHolderTypeArray = ["dynamic", "static", "static", "static", "static"],
-    divElement = _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, "map");
+    valueType=["text","number","number","number","text"],
+
+  divElement = _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, "map",valueType);
   parentContainer.appendChild(divElement);
 };
 
@@ -27,7 +30,9 @@ function addTextBoxesForScrKeys(textBoxValues) {
     placeHolderArray = ["y-cordinate", "x-cordinate", "Key"],
     classNameArray = ["y-cordinates", "x-cordinates", "Keys"],
     placeHolderTypeArray = ["static", "static", "dynamic"],
-    divElement = _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, "scr-keys");
+    valueType=["number","number","text"],
+
+    divElement = _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, "scr-keys",valueType);
   parentContainer.appendChild(divElement);
 };
 
@@ -36,7 +41,8 @@ function addTextBoxesForScrRead(textBoxValues) {
     placeHolderArray = ["Screen Row From", "Screen Col From", "Screen Row To", "Screen Col To"],
     classNameArray = ["rows-from", "cols-from", "rows-to", "cols-to"],
     placeHolderTypeArray = ["dynamic", "dynamic", "dynamic", "dynamic"],
-    divElement = _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, "scr-read");
+    valueType=["number","number","number","number"],
+    divElement = _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, "scr-read",valueType);
   parentContainer.appendChild(divElement);
 };
 
@@ -46,14 +52,24 @@ function addContainerForRunsqlprc(variable, natureOfParm, typeOfParam) {
 };
 
 function _createElement(parentContainer, id, value, placeHolder, className, placeHolderType, type) {
+  // "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"
   const inputElement = document.createElement("input");
-  if (type != undefined) inputElement.setAttribute("type", "number");
-  else inputElement.setAttribute("type", "text");
+   inputElement.setAttribute("type", `${type}`);
+  //  inputElement.setAttribute("required","true")
+
+  if(type=="text"){
+    inputElement.setAttribute("oninvalid","this.setCustomValidity('Please fill text')")
+    inputElement.setAttribute("oninput","setCustomValidity('')");
+
+  };
+  if(type=="number") {inputElement.setAttribute("oninvalid","this.setCustomValidity('Please enter number only')");
+  inputElement.setAttribute("oninput","setCustomValidity('')")
+  }
   inputElement.setAttribute("id", `${id}-${parentContainer.children.length + 1}`);
   if (placeHolderType == "static") inputElement.setAttribute("placeholder", placeHolder);
   else inputElement.setAttribute("placeholder", `${placeHolder}-${parentContainer.children.length + 1}`);
   if (value != undefined) inputElement.setAttribute("value", `${value}`);
-  if (className != undefined) inputElement.setAttribute("class", `${className}`);
+  if (className != undefined) inputElement.setAttribute("class", `${className} validate`);
   return inputElement;
 };
 
@@ -63,13 +79,13 @@ function _getParentContainer() {
   return parentContainer;
 }
 
-function _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, classNameForDiv) {
+function _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, classNameForDiv,valueType) {
   const divElement = document.createElement("div");
   divElement.setAttribute("class", classNameForDiv);
   for (let i = 0; i < idArray.length; i++) {
     let inputElement;
-    if (textBoxValues != undefined) inputElement = _createElement(parentContainer, idArray[i], textBoxValues[i], placeHolderArray[i], classNameArray[i], placeHolderTypeArray[i]);
-    else inputElement = _createElement(parentContainer, idArray[i], textBoxValues, placeHolderArray[i], classNameArray[i], placeHolderTypeArray[i]);
+    if (textBoxValues != undefined) inputElement = _createElement(parentContainer, idArray[i], textBoxValues[i], placeHolderArray[i], classNameArray[i], placeHolderTypeArray[i],valueType[i]);
+    else inputElement = _createElement(parentContainer, idArray[i], textBoxValues, placeHolderArray[i], classNameArray[i], placeHolderTypeArray[i],valueType[i]);
     divElement.append(inputElement);
   }
   return divElement;
@@ -78,7 +94,7 @@ function _createDivElement(parentContainer, idArray, placeHolderArray, className
 function _createDivElementForRunsqlPrc(parentContainer, variable, natureOfParm, typeOfParam) {
   const divElement = document.createElement("div");
   divElement.setAttribute("class", 'runsqlprc');
-  const inputElement1 = _createElement(parentContainer, "variable", variable, "Variable", "variablebox"),
+  const inputElement1 = _createElement(parentContainer, "variable", variable, "Variable", "variablebox","dynamic","text"),
   selectElement1 = _createDropDownElement(parentContainer, "nature"),
   selectElement2 = _createDropDownElement(parentContainer, "type");
   divElement.append( inputElement1,selectElement1, selectElement2);

@@ -26,6 +26,8 @@ const elementConnected = async (element) => {
 async function removeElement() {
   const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
   const parent = dialogShadowRoot.querySelector("div#page-contents");
+  const noOfElements = parent.children.length;
+  if(noOfElements<=1) return ;
   parent.removeChild(parent.lastChild);
 }
 
