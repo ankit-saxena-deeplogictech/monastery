@@ -1,7 +1,7 @@
 SCHEMA
 ======
 {
-  "result": {"html":"input", "type":"text", "placeholder":"{{i18n.ResultVariable}}"},
+  "result": {"html":"input", "type":"text", "placeholder":"{{i18n.ResultVariable}}","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
   "toolbox":{"html":"tool-box",
             "onclickHandler":"window.monkshu_env.components['text-box'].addTextBoxesForMap()",
             "onclickRemoveHandler":"window.monkshu_env.components['tool-box'].removeElement()",
