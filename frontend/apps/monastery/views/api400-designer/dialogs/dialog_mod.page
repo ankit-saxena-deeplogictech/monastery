@@ -1,7 +1,7 @@
 SCHEMA
 ======
 {
-     "modulename": {"html":"input", "type":"text", "placeholder":"{{i18n.module}}", "required":"true", "spellcheck":"false","required":"true"},
+     "modulename": {"html":"input", "type":"text", "placeholder":"{{i18n.module}}", "spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
      "code": {"html":"text-editor","showToolbar":"true","mode":"javascript","mod":"mod"}
 }
 ======

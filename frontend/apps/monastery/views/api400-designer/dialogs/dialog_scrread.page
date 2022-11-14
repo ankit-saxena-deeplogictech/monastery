@@ -1,8 +1,8 @@
 SCHEMA
 ======
 {
-  "result": {"html":"input", "type":"text", "placeholder":"{{i18n.ResultVariable}}","spellcheck":"false"},
-  "session": {"html":"input", "type":"text", "placeholder":"{{i18n.SessionName}}"},
+  "result": {"html":"input", "type":"text", "placeholder":"{{i18n.ResultVariable}}","spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+  "session": {"html":"input", "type":"text", "placeholder":"{{i18n.SessionName}}","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
   "toolbox":{"html":"tool-box",
             "onclickHandler":"window.monkshu_env.components['text-box'].addTextBoxesForScrRead()",
             "onclickRemoveHandler":"window.monkshu_env.components['tool-box'].removeElement()",

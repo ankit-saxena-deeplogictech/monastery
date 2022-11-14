@@ -1,10 +1,10 @@
 SCHEMA
 ======
 {
-    "result": {"html":"input", "type":"text", "placeholder":"{{i18n.ResultVariable}}","spellcheck":"false"},
-    "libraryname": {"html":"input", "type":"text", "placeholder":"{{i18n.LibraryName}}", "spellcheck":"false"},
+    "result": {"html":"input", "type":"text", "placeholder":"{{i18n.ResultVariable}}","spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "libraryname": {"html":"input", "type":"text", "placeholder":"{{i18n.LibraryName}}", "spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
     "physicalfile": {"html":"input", "type":"text", "placeholder":"{{i18n.PhysicalFile}}", "spellcheck":"false"},
-    "member": {"html":"input", "type":"text", "placeholder":"{{i18n.MemberName}}","spellcheck":"false"}
+    "member": {"html":"input", "type":"text", "placeholder":"{{i18n.MemberName}}","spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"}
     
 }
 ======

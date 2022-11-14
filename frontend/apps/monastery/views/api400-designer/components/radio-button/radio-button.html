@@ -135,9 +135,9 @@
 {{{styleBody}}}
 
 <div class="container">
-  <input type="radio" id="start" name="scr" value="start" {{start}}>
-  <input type="radio" id="stop" name="scr" value="stop" {{stop}}>
-  <input type="radio" id="release" name="scr" value="release" {{release}}>
+  <input type="radio" id="start" name="scr" value="start"  onchange="monkshu_env.components['radio-button'].check(this)" {{start}}>
+  <input type="radio" id="stop" name="scr" value="stop" onchange="monkshu_env.components['radio-button'].check(this)" {{stop}}>
+  <input type="radio" id="release" name="scr" value="release" onchange="monkshu_env.components['radio-button'].check(this)" {{release}}>
   <label for="start" class="scr-operations option-1">
     <div class="dot"></div>
     <span>START</span>

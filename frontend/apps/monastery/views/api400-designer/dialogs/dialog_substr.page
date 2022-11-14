@@ -1,10 +1,10 @@
 SCHEMA
 ======
 {
-    "variable": {"html":"input", "type":"text", "placeholder":"{{i18n.Variable}}", "spellcheck":"false"},
-    "string": {"html":"input", "type":"text", "placeholder":"{{i18n.String}}", "spellcheck":"false"},
-    "index": {"html":"input", "type":"text", "placeholder":"{{i18n.StringIndex}}", "spellcheck":"false"},
-    "noofchar": {"html":"input", "type":"text", "placeholder":"{{i18n.NoOfChar}}", "spellcheck":"false"}  
+    "variable": {"html":"input", "type":"text", "placeholder":"{{i18n.Variable}}", "spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "string": {"html":"input", "type":"text", "placeholder":"{{i18n.String}}", "spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "index": {"html":"input", "type":"text", "placeholder":"{{i18n.StringIndex}}", "spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "noofchar": {"html":"input", "type":"number", "placeholder":"{{i18n.NoOfChar}}", "spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillNum}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"}  
 }
 ======
 
@@ -63,5 +63,14 @@ body {
     margin: 0%;
     display: inline-block;
     width: 100%;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 =======

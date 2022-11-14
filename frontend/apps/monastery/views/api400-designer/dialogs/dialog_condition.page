@@ -1,7 +1,7 @@
 SCHEMA
 ======
 {
-"condition": {"html":"textarea", "placeholder":"{{i18n.Condition}}", "wrap":"soft", "spellcheck":"false"}
+"condition": {"html":"textarea", "placeholder":"{{i18n.Condition}}", "wrap":"soft", "spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"}
 }
 ======
 
