@@ -1,9 +1,9 @@
 SCHEMA
 ======
 {
-    "libraryname": {"html":"input", "type":"text", "placeholder":"{{i18n.LibraryName}}", "spellcheck":"false"},
+    "libraryname": {"html":"input", "type":"text", "placeholder":"{{i18n.LibraryName}}", "spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
     "dataqueue": {"html":"input", "type":"text", "placeholder":"{{i18n.DataQueueName}}", "spellcheck":"false"},
-    "value": {"html":"input", "type":"text", "placeholder":"{{i18n.Value}}","spellcheck":"false"}
+    "value": {"html":"input", "type":"text", "placeholder":"{{i18n.Value}}","spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"}
     
 }
 ======
