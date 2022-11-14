@@ -73,7 +73,13 @@ export const i18n = {
         "test":"Run SQL",
         "testApi":"TEST API",
         "FetchFailed":"Admin authentication failed or Invalid parameters",
-        "RunningFailed":"Error running sql query"
+        "RunningFailed":"Error running sql query",
+        "FillField":"Please fill out this field",
+        "Fillurl":"Please fill correct url",
+        "pattern":"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$",
+        "FillNum":"Please enter number only",
+        "SelectDropDown":"Please Select one"
+        
     },
 
     hi: {

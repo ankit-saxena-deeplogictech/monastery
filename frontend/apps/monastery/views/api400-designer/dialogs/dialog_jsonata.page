@@ -1,8 +1,8 @@
 SCHEMA
 ======
 {
-    "result": {"html":"input", "type":"text", "placeholder":"{{i18n.ResultVariable}}", "spellcheck":"false"},
-    "jsonata": {"html":"input", "type":"text", "placeholder":"{{i18n.JsonataExpression}}", "spellcheck":"false"}
+    "result": {"html":"input", "type":"text", "placeholder":"{{i18n.ResultVariable}}", "spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "jsonata": {"html":"input", "type":"text", "placeholder":"{{i18n.JsonataExpression}}", "spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"}
    
 }
 ======
