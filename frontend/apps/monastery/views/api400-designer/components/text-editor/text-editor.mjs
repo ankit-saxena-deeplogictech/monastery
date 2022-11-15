@@ -12,6 +12,7 @@ const P3_LIBS = [
   `${COMPONENT_PATH}/3p/codemirror/lib/codemirror.js`,
   `${COMPONENT_PATH}/3p/codemirror/addon/selection/active-line.js`,
   `${COMPONENT_PATH}/3p/codemirror/addon/edit/matchbrackets.js`,
+  `${COMPONENT_PATH}/3p/codemirror/addon/display/placeholder.js`,
 ];
 
 const P3_LIBS_JAVASCRPT = [
@@ -64,11 +65,12 @@ async function elementRendered(element) {
           lint: { selfContain: true },
           gutters: ["CodeMirror-lint-markers"],
           matchBrackets: true,
+          placeholder:"// JS script"
         }
       );
       text_editor.getMemoryByHost(element).editor = cm;
       cm.setSize("100%", "100%");
-      if (!element.getAttribute("mod")) cm.setValue("// JS script");
+      if (!element.getAttribute("mod"))editorElement.setAttribute('placeholder', '// JS script');
       else cm.setValue("exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n");
       if (element.getAttribute("value")) _setValue(element.getAttribute("value"), element);
     }, 10);
@@ -88,11 +90,13 @@ async function elementRendered(element) {
           styleActiveSelected: true,
           mode: "sql",
           matchBrackets: true,
+          placeholder:"--SQL"
         }
       );
       text_editor.getMemoryByHost(element).editor = cm;
       cm.setSize("100%", "100%");
-      cm.setValue("--SQL");
+      // cm.setValue("--SQL");
+      // editorElement.setAttribute("placeholder","--SQL");
       if (element.getAttribute("value")) _setValue(element.getAttribute("value"), element);
     }, 10);
   }

@@ -1,9 +1,9 @@
 SCHEMA
 ======
 {
-    "session": {"html":"input", "type":"text", "placeholder":"{{i18n.SessionName}}","spellcheck":"false"},
+    "session": {"html":"input", "type":"text", "placeholder":"{{i18n.SessionName}}","spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
     "scrops":{"html":"radio-button","style":"width:100%; height:100%;"},
-    "pool": {"html":"input", "type":"text", "placeholder":"{{i18n.pool}}","spellcheck":"false"}
+    "pool": {"html":"input", "type":"number", "placeholder":"{{i18n.pool}}","spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillNum}}')" , "oninput":"setCustomValidity('')","class":"validate"}
 }
 ======
 
@@ -65,5 +65,14 @@ body {
     margin: 0%;
     display: inline-block;
     width: 100%;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 =======
