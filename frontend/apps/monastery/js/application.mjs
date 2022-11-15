@@ -6,6 +6,7 @@ import {loginmanager} from "./loginmanager.mjs";
 import {router} from "/framework/js/router.mjs";
 import {session} from "/framework/js/session.mjs";
 import {securityguard} from "/framework/js/securityguard.mjs";
+import { APP_CONSTANTS } from "./constants.mjs";
 
 const APP_EXIT_FLAG = "__org_monkshu_app_exit";
 
@@ -21,7 +22,8 @@ async function main(page) {
 	await _addPageLoadInterceptors(); const requesetedLocation = page||window.location.href;
 
 	if (session.get(APP_EXIT_FLAG)) {	// exit check, once exited, can't reload
-		router.loadPage(APP_CONSTANTS.EXIT_HTML);	
+		router.loadPage(APP_CONSTANTS.LOGIN_HTML);
+		session.remove(APP_EXIT_FLAG);
 		return;
 	}
 
@@ -45,7 +47,8 @@ function loggedIn() {
 function exit() {
 	loginmanager.logout();
 	session.set(APP_EXIT_FLAG, true);
-	router.loadPage(APP_CONSTANTS.EXIT_HTML);
+	router.loadPage(APP_CONSTANTS.LOGIN_HTML);
+	session.remove(APP_EXIT_FLAG);
 }
 
 async function _addPageLoadInterceptors() {

@@ -104,7 +104,7 @@ async function elementRendered(element) {
 
 async function open(element) {
   try {
-    const jsContents = (await util.uploadAFile("text/javascript")).data;
+    const jsContents = (await util.uploadAFile("application/javascript")).data;
     if (jsContents) _setValue(jsContents, text_editor.getHostElement(element));
   } catch (err) {
     LOG.error(`Error uploading file, ${err}`);

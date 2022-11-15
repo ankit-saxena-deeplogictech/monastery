@@ -65,4 +65,3 @@
    `${COMPONENT_PATH}/drop-down.html`,
    drop_down
  );
- 
