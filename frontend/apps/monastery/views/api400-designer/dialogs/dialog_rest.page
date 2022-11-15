@@ -2,7 +2,7 @@ SCHEMA
 ======
 {
     "result": {"html":"input", "type":"text", "placeholder":"{{i18n.ResultVariable}}","spellcheck":"false"},
-    "url": {"html":"input", "type":"text", "placeholder":"{{i18n.URL}}", "spellcheck":"false"},
+    "url": {"html":"input", "type":"url", "placeholder":"{{i18n.URL}}", "spellcheck":"false","required":"true","pattern":" {{i18n.pattern}}","oninvalid":"this.setCustomValidity('{{i18n.Fillurl}}')" , "oninput":"setCustomValidity('')","class":"validate"},
     "method": {"html":"input", "type":"text", "placeholder":"{{i18n.Method}}", "spellcheck":"false"},
     "headers": {"html":"input", "type":"text", "placeholder":"{{i18n.Headers}}","spellcheck":"false"},
     "parameter": {"html":"textarea", "wrap":"soft", "placeholder":"{{i18n.ParametersJSON}}", "spellcheck":"false"}

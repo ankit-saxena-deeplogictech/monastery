@@ -25,7 +25,7 @@
 
 
 {{{styleBody}}}
-<select name="choices" id="choices">
+<select name="choices" id="choices" required="true" class="validate" oninvalid="this.setCustomValidity('{{i18n.SelectDropDown}}')"  oninput="setCustomValidity('')">
   <option value="" disabled selected hidden class="disabled">{{text}}</option>
   {{#values}}
   <option value="{{value}}" class="values" id="{{value}}" onclick="{{onclick}}">{{value}}</option>

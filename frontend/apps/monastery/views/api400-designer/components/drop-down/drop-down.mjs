@@ -13,9 +13,9 @@
      get: (_) => _getValue(element),
      set: (value) => _setValue(value, element)
    });
-  const  data =  { onclick: element.getAttribute("onclickHandler") };
+  const data =  { onclick: element.getAttribute("onclickHandler") };
 
-  if(session.get("__org_api400_server")) {
+  if(session.get("__org_api400_server" ) && !element.getAttribute("list")) {
     let serverConArray = await session.get("__org_api400_server");
     let list = [];
     for (let i = 0; i < serverConArray.length; i++) {
@@ -24,8 +24,8 @@
     data.values = list;
 
    } else {
-    data.values = JSON.parse(element.getAttribute("list").replace(/'/g, '\"'));
-    element.remove();
+    if(element.getAttribute("list")) data.values = JSON.parse(element.getAttribute("list").replace(/'/g, '\"'));
+    else  element.remove();
    }
    data.text = element.getAttribute("text");
    drop_down.setData(element.id, data);

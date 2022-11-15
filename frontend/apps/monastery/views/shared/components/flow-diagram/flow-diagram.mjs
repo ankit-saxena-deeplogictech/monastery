@@ -162,6 +162,7 @@ async function _getGraph(hostID) {
 	graph.addListener(mxEvent.CELLS_REMOVED, (sender, evt) => {	// shape deleted or edge deleted
 		const listOfCellsRemoved = evt.getProperty("cells");
 		for (const cell of listOfCellsRemoved) {
+			console.log(cell);
 			if (cell.vertex) blackboard.broadcastMessage(	// shape deleted
 				MSG_SHAPE_REMOVED, { name: cell.style, id: cell.id, graphID: _findGraphID(sender) });
 			else if (cell.edge) {
@@ -170,7 +171,7 @@ async function _getGraph(hostID) {
 						sourceID: cell.source.id, sourceName: cell.source.style,
 					targetName: cell.target.style, targetID: cell.target.id, graphID: _findGraphID(sender)
 				});
-				if (cell.source.style == "condition" && cell.target)  graph.removeCells([cell.target])				
+				if (cell.source.style == "condition" && cell.target) { graph.removeCells([cell.target]);graph.removeCells([cell.source])		}		
 			}
 		}
 	});

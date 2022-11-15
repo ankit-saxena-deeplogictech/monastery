@@ -32,7 +32,6 @@ function getNodeUniquePrefix(type) {
     if (!NODE_REPOSITORY[type]) NODE_REPOSITORY[type] = {names:[]};
     const counter = NODE_REPOSITORY[type].names.length+1;
     while (_arrayContainsCaseInsensitive(NODE_REPOSITORY[type].names, type+counter)) counter++;
-    console.log(counter)
     return counter;
 }
 
