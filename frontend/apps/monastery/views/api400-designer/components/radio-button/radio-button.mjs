@@ -8,6 +8,7 @@ import { dialog_box } from "../../../shared/components/dialog-box/dialog-box.mjs
 
 const COMPONENT_PATH = util.getModulePath(import.meta);
 const DEFAULT_HOST_ID = "__org_monkshu_dialog_box";
+const diloagBoxComponent = window.monkshu_env.components['dialog-box'];
 
 const elementConnected = async (element) => {
   Object.defineProperty(element, "value", {
@@ -30,15 +31,19 @@ function _setValue(value, host) {
   else if (value == "stop") data.stop = "checked";
   else if (value  == "release") data.release = "checked";
   radio_button.setData(host.id, data);
+  const shadowRoot = host instanceof Element ? diloagBoxComponent.getShadowRootByContainedElement(host) :
+  diloagBoxComponent.getShadowRootByHostId(host || DEFAULT_HOST_ID);
+  if(value!="start"){  
+    shadowRoot.querySelector('#pool').setAttribute("disabled","true");
+    shadowRoot.querySelector('#pool').setAttribute("value","");
+  
+  }
+  else shadowRoot.querySelector('#pool').removeAttribute("disabled");
 }
 
 function check(element){
-  const diloagBoxComponent = window.monkshu_env.components['dialog-box'];
   const shadowRoot = element instanceof Element ? diloagBoxComponent.getShadowRootByContainedElement(element) :
   diloagBoxComponent.getShadowRootByHostId(element || DEFAULT_HOST_ID);
-  console.log(shadowRoot);
-  console.log(shadowRoot.querySelector('#pool'));
-  console.log(element.getAttribute("id"));
 
  if(element.getAttribute("id")!="start")  shadowRoot.querySelector('#pool').setAttribute("disabled","true");
  else shadowRoot.querySelector('#pool').removeAttribute("disabled");
