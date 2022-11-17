@@ -23,4 +23,7 @@ export const i18n = {
 "Password": "Password",
 "NotAuthorized": "Not Authorized",
 "LoginError": "Login error",
+"FillField":"Please fill out this field",
+"FillQuote":"Please fill with single quotes"
+
 }

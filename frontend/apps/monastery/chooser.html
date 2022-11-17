@@ -12,7 +12,7 @@
 			background-color: #DFF0FE;
 			display: flex;
 			flex-direction: row;
-			font-family: Raleway;
+			font-family: 'Red Hat Text';
 			margin: 0px;
 			padding: 10vh 5vw;
 			justify-content: center;
@@ -93,7 +93,11 @@
 			right: 1%;
 		}
 	</style>
-
+   <script type="text/javascript">history.pushState(null, document.title, location.href);
+	window.addEventListener('popstate', function (event)
+	{
+	  history.pushState(null, document.title, location.href);
+	});</script>
 	<title>{{i18n.Title}}</title>
 </head>
 
