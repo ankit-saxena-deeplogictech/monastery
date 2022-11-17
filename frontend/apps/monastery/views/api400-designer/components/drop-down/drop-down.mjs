@@ -38,6 +38,7 @@
  * @param element Host element
  */
  const elementRendered  = async (element) =>{
+  _attachFormValidationControls(element)
    if (element.getAttribute("value")) _setValue(element.getAttribute("value"), element);
  }
  
@@ -52,6 +53,19 @@
    const shadowRoot = drop_down.getShadowRootByHostId(element.getAttribute("id"));
    shadowRoot.querySelector(`#${value}`).setAttribute("selected", "selected");
  };
+
+ function _attachFormValidationControls(element) {
+	const selectElement = drop_down.getShadowRootByHostId(element.getAttribute("id")).querySelector("select#choices");
+
+	element.getValue = _ => selectElement.value;
+	element.setValue = v => selectElement.value = v;
+	element.getValidity = _=> selectElement.validity;
+	element.getWillValidate = _=> selectElement.willValidate;
+	element.checkValidity = _=> selectElement.checkValidity();
+	element.reportValidity = _=> selectElement.reportValidity();
+	element.getValidationMessage = _=> selectElement.validationMessage;
+}
+
  
  
  export const drop_down = {
