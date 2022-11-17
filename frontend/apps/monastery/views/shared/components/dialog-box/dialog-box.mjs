@@ -9,7 +9,7 @@ import { util } from "/framework/js/util.mjs";
 import { router } from "/framework/js/router.mjs";
 import { i18n as frameworki18n } from "/framework/js/i18n.mjs";
 import { monkshu_component } from "/framework/js/monkshu_component.mjs";
-
+import { loader } from "../../../../js/loader.mjs";
 const DEFAULT_HOST_ID = "__org_monkshu_dialog_box", COMPONENT_PATH = util.getModulePath(import.meta),
     LANG = frameworki18n.getSessionLang();
 const DEFAULT_THEME = { showOKIcon: true, showCancelIcon: true, showOKButton: true, showCancelButton: true };
@@ -113,6 +113,7 @@ function showChoice(message, callback, theme, hostID) {
  * @param element The element inside the dialog or ID of the dialog host element (if custom hostID was used in showDialog), else null
  */
 function cancel(element) {
+    if(document.querySelector('.spinner')) loader.afterLoading();
     const memory = element instanceof Element ? dialog_box.getMemoryByContainedElement(element) :
         dialog_box.getMemory(element || DEFAULT_HOST_ID);
     const retVals = _getRetVals(memory, dialog_box.getShadowRootByContainedElement(element));
@@ -141,7 +142,7 @@ async function submit(element) {
     const memory = element instanceof Element ? dialog_box.getMemoryByContainedElement(element) :
         dialog_box.getMemory(element || DEFAULT_HOST_ID);
     const retVals = _getRetVals(memory, dialog_box.getShadowRootByContainedElement(element));
-    console.log(retVals);
+
     if (!_validate(element)) return false;
     if (memory.callback && await memory.callback("submit", retVals, element)) hideDialog(element);
     else if (!memory.callback) hideDialog(element);
@@ -240,11 +241,6 @@ function _validate(element) {
     const toValidateList = shadowRoot.querySelectorAll('.validate'); 
     for (const validate of toValidateList) {
         if (!validate.checkValidity()) { validate.reportValidity(); return false; }
-    }
-    const dropDownElementList = shadowRoot.querySelectorAll('drop-down');
-    for (const dropDownElement of  dropDownElementList) {
-        const selectElement = window.monkshu_env.components['drop-down'].getShadowRootByHostId(dropDownElement.getAttribute("id")).querySelector("select");
-        if (!selectElement.checkValidity()) { selectElement.reportValidity(); return false; }
     }
     return true;
 }
