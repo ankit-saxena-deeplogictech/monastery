@@ -25,7 +25,7 @@
     input {
         margin: 2em 4em 0em 0em;
         border-radius: 10px;
-        padding: 1em 1em 1em 4em;
+        padding: 1em 1em 1em 3em;
         font: inherit;
         border: none;
         outline: none;
@@ -68,7 +68,7 @@
         transform: translateX(-50%);
         font-size: x-small;
         display: inline;
-        font-family: sans-serif;
+        font-family: 'Red Hat Text';
     }
     div#langchooser > span {
         margin-right: 2em;
@@ -88,19 +88,22 @@
     import {login} from "./js/login.mjs"; window.monkshu_env.__login = login;
     import {i18n} from "/framework/js/i18n.mjs"; window.monkshu_env.__i18n = i18n;
     import {router} from "/framework/js/router.mjs"; window.monkshu_env.__router = router;
+    import { password_box } from "./components/password-box/password-box.mjs"; 
 </script>
 
 <body style="margin:0px" onload="document.querySelector('input#id').focus()">
 <div>
 <img id="logo" src="./img/monastery.svg">
 <span id="error">{{i18n.LoginError}}</span>
-<span class="input"><input id="id" type="text" placeholder="{{i18n.UserID}}"
-        onkeyup="if (event.keyCode == 13) {event.preventDefault(); document.querySelector('input#pw').focus();}">
+<span class="input"><input id="id" type="text" placeholder="{{i18n.UserID}}" oninvalid="this.setCustomValidity('{{i18n.FillField}}')"  oninput="setCustomValidity('')" required="true"  onkeyup="if (event.keyCode == 13) {event.preventDefault(); document.querySelector('input#pw').focus();}"  >
     <img class="inputimg" src="./img/user.svg"></span>
-<span class="input"><input id="pw" type="password" placeholder="{{i18n.Password}}" 
+<!-- <span class="input"><input id="pw" type="password" placeholder="{{i18n.Password}}" 
         onkeyup="if (event.keyCode == 13) {event.preventDefault(); document.querySelector('span#login').click();}">
-    <img class="inputimg" src="./img/lock.svg"></span>
-<span id="login" class="button" onclick="window.monkshu_env.__login.signin(this.parentNode.querySelector('input#id').value, this.parentNode.querySelector('input#pw').value)">{{i18n.Login}}</span>
+    <img class="inputimg" src="./img/lock.svg"></span> -->
+    <password-box style="width:100%; padding-top: 20px;" id="pass" placeholder="{{i18n.Password}}" required="true"
+    minlength="{{minlength}}" customValidity="{{i18n.FillField}}"
+    styleBody="span#container{width: 100%;} input#pwinput{padding:1em 1em 1em 3em;}"></password-box>
+<span id="login" class="button" onclick="window.monkshu_env.__login.signin(this.parentNode.querySelector('input#id').value, this.parentNode.querySelector('#pass').getValue(),this.parentNode.querySelector('#pass'))">{{i18n.Login}}</span>
 </div>
 
 <div id="langchooser">

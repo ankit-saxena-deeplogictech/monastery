@@ -9,6 +9,7 @@ import {serverManager} from "./serverManager.js";
 import {api400model} from "../model/api400model.mjs";
 import {blackboard} from "/framework/js/blackboard.mjs";
 import {page_generator} from "/framework/components/page-generator/page-generator.mjs";
+import { password_box } from "../../../components/password-box/password-box.mjs";
 
 
 const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/..`, MSG_GET_MODEL_NAME = "GET_MODEL_NAME", 
@@ -47,6 +48,8 @@ async function openDialog() {
                 DIALOG.getElement("ok").value = 'Testing...'
 
                 saved_props = util.clone(result, ["adminpassword"]); // don't save password, for security
+                result.adminpassword=password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value;
+
                 const api400mod = api400model.getModel();
                 const jsModule = api400model.getModules();
                 console.log(jsModule);
@@ -54,18 +57,18 @@ async function openDialog() {
                     LOG.info(JSON.stringify(jsModule));
                     // check same module JS name is exists on api400 server
                     // throw error based on check , and show warning box
-                    const pubModResult = await serverManager.publishModule(result.server, result.port, result.adminid, result.adminpassword);
+                    const pubModResult = await serverManager.publishModule(result.server, result.port, result.adminid, result.adminpassword,dialogElement);
                     if (!pubModResult.result) {DIALOG.showError(dialogElement, await i18n.get(pubModResult.key));  return null;} 
                 }
                 let tempApiName = `ID${Date.now()}`;
                 const header = DIALOG.getElementValue("header"), body = DIALOG.getElementValue("body");
                 
-                const pubResult = await serverManager.publishApicl(api400mod, tempApiName, result.server, result.port, result.adminid, result.adminpassword);
-                const apiResult = await serverManager.callApi(tempApiName, result.server, result.port, header, body);
+                const pubResult = await serverManager.publishApicl(api400mod, tempApiName, result.server, result.port, result.adminid, result.adminpassword,dialogElement);
+                const apiResult = await serverManager.callApi(tempApiName, result.server, result.port, header, body,dialogElement);
                 
                 await FLOATING_WINDOW.showWindow(CONSOLE_THEME, Mustache.render(floatingWindowHTML, { message: `${JSON.stringify(apiResult, null, 2)}`, error: undefined }));
 
-                const unPubResult = await serverManager.unpublishApicl( tempApiName, result.server, result.port, result.adminid, result.adminpassword);
+                const unPubResult = await serverManager.unpublishApicl( tempApiName, result.server, result.port, result.adminid, result.adminpassword,dialogElement);
                 if (!unPubResult.result) DIALOG.showError(dialogElement, await i18n.get(unPubResult.key)); 
                 // else {DIALOG.showMessage(await i18n.get("ApiTestSuccess"), "ok", null, messageTheme, "MSG_DIALOG");  return true;}
 
