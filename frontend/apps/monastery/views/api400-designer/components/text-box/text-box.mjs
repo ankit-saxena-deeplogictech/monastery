@@ -19,7 +19,7 @@ function addTextBoxesForMap(textBoxValues) {
     placeHolderArray = ["String Variable", "Start Pos", "Num of Char", "Repetition No", "String Function"],
     classNameArray = ["stringbox", "startbox", "countbox", "repetitionbox", "functionbox"],
     placeHolderTypeArray = ["dynamic", "static", "static", "static", "static"],
-    valueType=["text","number","number","number","text"],
+    valueType=["text","text","text","text","text"],
     required = ["true","true","true","true","false"],
 
 
@@ -32,7 +32,7 @@ function addTextBoxesForScrKeys(textBoxValues) {
     placeHolderArray = ["y-cordinate", "x-cordinate", "Key"],
     classNameArray = ["y-cordinates", "x-cordinates", "Keys"],
     placeHolderTypeArray = ["static", "static", "dynamic"],
-    valueType=["number","number","text"],
+    valueType=["text","text","text"],
     required = ["true","true","true"],
 
 
@@ -45,7 +45,7 @@ function addTextBoxesForScrRead(textBoxValues) {
     placeHolderArray = ["Screen Row From", "Screen Col From", "Screen Row To", "Screen Col To"],
     classNameArray = ["rows-from", "cols-from", "rows-to", "cols-to"],
     placeHolderTypeArray = ["dynamic", "dynamic", "dynamic", "dynamic"],
-    valueType=["number","number","number","number"],
+    valueType=["text","text","text","text"],
     required = ["true","true","true","true"],
     divElement = _createDivElement(parentContainer, idArray, placeHolderArray, classNameArray, placeHolderTypeArray, textBoxValues, "scr-read",valueType,required);
   parentContainer.appendChild(divElement);
