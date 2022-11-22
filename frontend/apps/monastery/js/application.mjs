@@ -51,6 +51,10 @@ function exit() {
 	session.remove(APP_EXIT_FLAG);
 }
 
+function exitToChooser(){
+	router.loadPage(APP_CONSTANTS.CHOOSER_HTML);
+}
+
 async function _addPageLoadInterceptors() {
 	const interceptors = await $$.requireJSON(`${APP_CONSTANTS.APP_PATH}/conf/pageLoadInterceptors.json`);
 	for (const interceptor of interceptors) {
@@ -60,4 +64,4 @@ async function _addPageLoadInterceptors() {
 	}
 }
 
-export const application = {init, main, exit, loggedIn};
+export const application = {init, main, exit, exitToChooser, loggedIn};
