@@ -47,7 +47,9 @@ async function testSQL(element) {
     try {
       await loader.beforeLoading();_disableButton(element)
 
-    const  result = JSON.parse(await apiman.rest(`http://${server}:${port}/admin/testSQL`, "POST", { user, password, value }, true));
+    const  result = await apiman.rest(`http://${server}:${port}/admin/testSQL`, "POST", { user, password, value }, true);
+      if (typeof result == "string") result = JSON.parse(result);
+
       
       if (!result){ DIALOG.showError(null, await i18n.get("ConnectIssue"));      await loader.afterLoading();_enableButton(element);  return }
       else if (result.hasOwnProperty("cause")) throw `RunningFailed`;
