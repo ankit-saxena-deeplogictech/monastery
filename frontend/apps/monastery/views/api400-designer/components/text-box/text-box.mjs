@@ -9,8 +9,8 @@ import { i18n } from "/framework/js/i18n.mjs";
 
 const DIALOG_HOST_ID = "__org_monkshu_dialog_box";
 
-function addTextBox(id, value) {  
-  const parentContainer = _getParentContainer(), placeHolder = id, inputElement = _createElement(parentContainer, id, value, placeHolder,"text-box","dynamic","text");
+function addTextBox(id,required, value) {  
+  const parentContainer = _getParentContainer(), placeHolder = id, inputElement = _createElement(parentContainer, id, value, placeHolder,"text-box","dynamic","text",required);
   parentContainer.appendChild(inputElement);
 }
 
@@ -63,8 +63,7 @@ function _createElement(parentContainer, id, value, placeHolder, className, plac
   //  inputElement.setAttribute("required","true")
 
   if(type=="text"){
-    inputElement.setAttribute("oninvalid",`this.setCustomValidity(${i18n.get('FillField')}
-    )`)
+    inputElement.setAttribute("oninvalid",`this.setCustomValidity(${i18n.get('FillField')}  )`)
     inputElement.setAttribute("oninput","setCustomValidity('')");
 
   };

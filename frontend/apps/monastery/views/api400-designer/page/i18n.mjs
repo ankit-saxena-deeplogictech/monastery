@@ -78,7 +78,10 @@ export const i18n = {
         "Fillurl":"Please fill correct url",
         "pattern":"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$",
         "FillNum":"Please enter number only",
-        "SelectDropDown":"Please Select one"
+        "SelectDropDown":"Please Select one",
+        "SelectOperation":"Please Select one operation",
+        "FillField":"Please fill out this field",
+        "FillQuote":"Please fill with single quotes"
         
     },
 
