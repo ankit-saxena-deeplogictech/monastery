@@ -26,8 +26,9 @@ async function elementRendered(element) {
     if (values && values.length) _setValue(values, element.getAttribute("type"), element);
   }
   else {
-    if (element.getAttribute("type") == "Parameter" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'));
-    else if (element.getAttribute("type") == "Message" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'));
+    if (element.getAttribute("type") == "Parameter" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'),"false");
+    else if (element.getAttribute("type") == "callParam" && noOfElements < 1) textBoxComponent.addTextBox("Parameter","true");
+    else if (element.getAttribute("type") == "Message" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'),"false");
     else if (element.getAttribute("type") == "Map" && noOfElements < 1) textBoxComponent.addTextBoxesForMap();
     else if (element.getAttribute("type") == "Keys" && noOfElements < 1) textBoxComponent.addTextBoxesForScrKeys();
     else if (element.getAttribute("type") == "Read" && noOfElements < 1) textBoxComponent.addTextBoxesForScrRead();
@@ -59,15 +60,15 @@ function _setValue(values, type, element) {
     for (const textBoxValue of values) if (textBoxValue.some(value => value != ""))
       textBoxComponent.addContainerForRunsqlprc(textBoxValue[0], textBoxValue[1], textBoxValue[2]);
   }
-  else for (const textBoxValue of values) if (textBoxValue != '')
-    textBoxComponent.addTextBox(type, textBoxValue);
+  else for (const textBoxValue of values) if (textBoxValue != '') textBoxComponent.addTextBox(type,"false", textBoxValue);
 
 
   const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
   const parentContainer = dialogShadowRoot.querySelector("div#page-contents");
   const noOfElements = parentContainer.children.length;
-  if (element.getAttribute("type") == "Parameter" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'));
-  else if (element.getAttribute("type") == "Message" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'));
+  if (element.getAttribute("type") == "Parameter" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'),"false");
+  else if (element.getAttribute("type") == "callParam" && noOfElements < 1) textBoxComponent.addTextBox("Parameter","true");
+  else if (element.getAttribute("type") == "Message" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'),"false");
   else if (element.getAttribute("type") == "Map" && noOfElements < 1) textBoxComponent.addTextBoxesForMap();
   else if (element.getAttribute("type") == "Keys" && noOfElements < 1) textBoxComponent.addTextBoxesForScrKeys();
   else if (element.getAttribute("type") == "Read" && noOfElements < 1) textBoxComponent.addTextBoxesForScrRead();

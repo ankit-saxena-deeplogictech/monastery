@@ -4,11 +4,11 @@ SCHEMA
   "libraryname": {"html":"input", "type":"text", "placeholder":"{{i18n.LibraryName}}","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
   "programname": {"html":"input", "type":"text", "placeholder":"{{i18n.ProgramName}}"},
   "toolbox":{"html":"tool-box",
-            "onclickHandler":"window.monkshu_env.components['text-box'].addTextBox('Parameter')",
+            "onclickHandler":"window.monkshu_env.components['text-box'].addTextBox('Parameter','true')",
             "onclickRemoveHandler":"window.monkshu_env.components['tool-box'].removeElement()",
             "text":"{{i18n.Parameters}}",
             "style":"width:100%; height: 100%;"},
-  "listbox":{"html":"list-box","style":"width:100%; height: 100%;","type":"Parameter"}
+  "listbox":{"html":"list-box","style":"width:100%; height: 100%;","type":"callParam"}
  
 }
 ======
@@ -62,7 +62,7 @@ CSS
     height:10px;
     margin-bottom:10px; 
     margin-left:1.5em ;
-    font-family: inherit;
+    font-family: 'Red Hat Text';
    
 }
 
