@@ -4,6 +4,7 @@
  * License: See enclosed LICENSE file.
  */
 import { util } from "/framework/js/util.mjs";
+import { utilMonastery } from "../../../../js/util.mjs";
 import { monkshu_component } from "/framework/js/monkshu_component.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta);
@@ -95,8 +96,6 @@ async function elementRendered(element) {
       );
       text_editor.getMemoryByHost(element).editor = cm;
       cm.setSize("100%", "100%");
-      // cm.setValue("--SQL");
-      // editorElement.setAttribute("placeholder","--SQL");
       if (element.getAttribute("value")) _setValue(element.getAttribute("value"), element);
     }, 10);
   }
@@ -104,10 +103,16 @@ async function elementRendered(element) {
 
 async function open(element) {
   try {
-    const jsContents = (await util.uploadAFile("application/javascript")).data;
+    const jsContents = (await utilMonastery.uploadAFile("application/javascript")).data;
     if (jsContents) _setValue(jsContents, text_editor.getHostElement(element));
   } catch (err) {
     LOG.error(`Error uploading file, ${err}`);
+    text_editor.getHostElement(element).shadowRoot.querySelector('#error').innerText = err;
+    text_editor.getHostElement(element).shadowRoot.querySelector('#error').style.display = 'block';
+    setTimeout(()=>{
+      text_editor.getHostElement(element).shadowRoot.querySelector('#error').innerText = '';
+      text_editor.getHostElement(element).shadowRoot.querySelector('#error').style.display = 'none';
+    },4000);
   }
 }
 
