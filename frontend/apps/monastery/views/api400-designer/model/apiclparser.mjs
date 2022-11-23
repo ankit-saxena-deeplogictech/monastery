@@ -347,7 +347,7 @@ const _parseCall = async function (command) {
     const ret = {}, programName = _findBetweenParenthesis(command, "PGM").split("/");
     ret["libraryname"] = programName[0];
     ret["programname"] = programName[1];
-    ret["listbox"] = JSON.stringify(_findBetweenParenthesis(command, "PARM").split(" ").filter(Boolean));
+    ret["listbox"] = JSON.stringify(_findBetweenParenthesis(command, "PARM").replace(/\'/gi,'').split(" ").filter(Boolean));
     ret["nodeName"] = "call";
     return ret;
 }

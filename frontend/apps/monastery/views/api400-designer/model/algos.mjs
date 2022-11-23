@@ -346,9 +346,10 @@ const _convertForCall = function (node) {
     else cmdString = `CALL PGM(${node.libraryname ? node.libraryname.trim() : ''})`;
     // to fetch and process the params , which were added dynamically
     if (node.listbox) {
+        
         let listBoxValues = JSON.parse(node.listbox);
         if (listBoxValues && listBoxValues.length > 0)
-            cmdString += ` PARM(${listBoxValues.filter(Boolean).join(" ")})`;
+            cmdString += ` PARM(${listBoxValues.filter(Boolean).map(n=>`'${n}'`).join(" ")})`;
     }
     else cmdString += ` PARM()`
     return cmdString;
