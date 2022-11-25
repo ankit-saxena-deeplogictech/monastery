@@ -47,7 +47,7 @@ async function testSQL(element) {
     try {
       await loader.beforeLoading();_disableButton(element)
 
-    const  result = await apiman.rest(`http://${server}:${port}/admin/testSQL`, "POST", { user, password, value }, true);
+    let  result = await apiman.rest(`http://${server}:${port}/admin/testSQL`, "POST", { user, password, value }, true);
       if (typeof result == "string") result = JSON.parse(result);
 
       
