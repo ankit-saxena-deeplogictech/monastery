@@ -7,33 +7,22 @@ import { monkshu_component } from "/framework/js/monkshu_component.mjs";
 import { util } from "/framework/js/util.mjs";
 import { dialog_box } from "../../../shared/components/dialog-box/dialog-box.mjs";
 
-const COMPONENT_PATH = util.getModulePath(import.meta);
-const DIALOG_HOST_ID = "__org_monkshu_dialog_box";
+const COMPONENT_PATH = util.getModulePath(import.meta), DIALOG_HOST_ID = "__org_monkshu_dialog_box",
+      textBoxComponent = window.monkshu_env.components['text-box'];
 
 /**
  * Element was rendered
  * @param element Host element
  */
 async function elementRendered(element) {
-  Object.defineProperty(element, "value", { get: (_) => _getValue(element, element.getAttribute("type")), set: (value) => _setValue(value, element.getAttribute("type"), element) });
-  const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
-  const parentContainer = dialogShadowRoot.querySelector("div#page-contents");
-  const noOfElements = parentContainer.children.length;
-  const textBoxComponent = window.monkshu_env.components['text-box'];
+  const elementType = element.getAttribute("type");
+  Object.defineProperty(element, "value", { get: (_) => _getValue(element, elementType), 
+                    set: (value) => _setValue(value, elementType) });
   if (element.getAttribute("value")) {
-    console.log(element.getAttribute("value"));
     const values = JSON.parse(element.getAttribute("value"));
-    if (values && values.length) _setValue(values, element.getAttribute("type"), element);
-  }
-  else {
-    if (element.getAttribute("type") == "Parameter" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'),"false");
-    else if (element.getAttribute("type") == "callParam" && noOfElements < 1) textBoxComponent.addTextBox("Parameter","true");
-    else if (element.getAttribute("type") == "Message" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'),"false");
-    else if (element.getAttribute("type") == "Map" && noOfElements < 1) textBoxComponent.addTextBoxesForMap();
-    else if (element.getAttribute("type") == "Keys" && noOfElements < 1) textBoxComponent.addTextBoxesForScrKeys();
-    else if (element.getAttribute("type") == "Read" && noOfElements < 1) textBoxComponent.addTextBoxesForScrRead();
-    else if (element.getAttribute("type") == "runsqlprc" && noOfElements < 1) textBoxComponent.addContainerForRunsqlprc();
-  }
+    if (values && values.length) _setValue(values, elementType);
+  } 
+  else _setUpDefaultBoxOrContainerBox(elementType); 
 }
 
 function _getValue(host, type) {
@@ -42,37 +31,15 @@ function _getValue(host, type) {
   return _getTextBoxValues(textBoxContainer, shadowRoot, type);
 }
 
-function _setValue(values, type, element) {
-  const textBoxComponent = window.monkshu_env.components['text-box'];
-  if (type == "Map") {
-    for (const textBoxValues of values) if (textBoxValues.some(value => value != ""))
-      textBoxComponent.addTextBoxesForMap(textBoxValues);
-  }
-  else if (type == "Keys") {
-    for (const textBoxValues of values) if (textBoxValues.some(value => value != ""))
-      textBoxComponent.addTextBoxesForScrKeys(textBoxValues);
-  }
-  else if (type == "Read") {
-    for (const textBoxValues of values) if (textBoxValues.some(value => value != ""))
-      textBoxComponent.addTextBoxesForScrRead(textBoxValues);
-  }
-  else if (type == "runsqlprc") {
-    for (const textBoxValue of values) if (textBoxValue.some(value => value != ""))
-      textBoxComponent.addContainerForRunsqlprc(textBoxValue[0], textBoxValue[1], textBoxValue[2]);
-  }
+function _setValue(values, type) {
+  
+  if (type == "Map") for (const textBoxValues of values) textBoxComponent.addTextBoxesForMap(textBoxValues);
+  else if (type == "Keys") for (const textBoxValues of values) textBoxComponent.addTextBoxesForScrKeys(textBoxValues);
+  else if (type == "Read") for (const textBoxValues of values) textBoxComponent.addTextBoxesForScrRead(textBoxValues);
+  else if (type == "runsqlprc") for (const textBoxValue of values) textBoxComponent.addContainerForRunsqlprc(textBoxValue[0], textBoxValue[1], textBoxValue[2]);
   else for (const textBoxValue of values) if (textBoxValue != '') textBoxComponent.addTextBox(type,"false", textBoxValue);
 
-
-  const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
-  const parentContainer = dialogShadowRoot.querySelector("div#page-contents");
-  const noOfElements = parentContainer.children.length;
-  if (element.getAttribute("type") == "Parameter" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'),"false");
-  else if (element.getAttribute("type") == "callParam" && noOfElements < 1) textBoxComponent.addTextBox("Parameter","true");
-  else if (element.getAttribute("type") == "Message" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'),"false");
-  else if (element.getAttribute("type") == "Map" && noOfElements < 1) textBoxComponent.addTextBoxesForMap();
-  else if (element.getAttribute("type") == "Keys" && noOfElements < 1) textBoxComponent.addTextBoxesForScrKeys();
-  else if (element.getAttribute("type") == "Read" && noOfElements < 1) textBoxComponent.addTextBoxesForScrRead();
-  else if (element.getAttribute("type") == "runsqlprc" && noOfElements < 1) textBoxComponent.addContainerForRunsqlprc();
+  _setUpDefaultBoxOrContainerBox(elementType); 
 }
 
 function _getTextBoxValues(textBoxContainer, shadowRoot, type) {
@@ -83,19 +50,25 @@ function _getTextBoxValues(textBoxContainer, shadowRoot, type) {
       for (const textBox of divBox.children) Values.push(shadowRoot.querySelector(`#${textBox.getAttribute("id")}`).value.trim());
       textBoxValues.push(Values);
     }
-    return JSON.stringify(textBoxValues);
   }
-
-  for (const textBox of textBoxContainer.children) textBoxValues.push(shadowRoot.querySelector(`#${textBox.getAttribute("id")}`).value.trim());
+  else for (const textBox of textBoxContainer.children) textBoxValues.push(shadowRoot.querySelector(`#${textBox.getAttribute("id")}`).value.trim());
   return JSON.stringify(textBoxValues);
 }
-export const list_box = {
-  trueWebComponentMode: false,
-  elementRendered
-};
 
-monkshu_component.register(
-  "list-box",
-  `${COMPONENT_PATH}/list-box.html`,
-  list_box
-);
+function _setUpDefaultBoxOrContainerBox(elementType) {
+  const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID),
+        parentContainer = dialogShadowRoot.querySelector("div#page-contents"),
+        noOfElements = parentContainer.children.length;
+  if (noOfElements < 1) {
+    if (elementType == "Parameter") textBoxComponent.addTextBox(elementType,"false");
+    else if (elementType == "callParam") textBoxComponent.addTextBox("Parameter","true");
+    else if (elementType == "Message") textBoxComponent.addTextBox(elementType,"false");
+    else if (elementType == "Map") textBoxComponent.addTextBoxesForMap();
+    else if (elementType == "Keys") textBoxComponent.addTextBoxesForScrKeys();
+    else if (elementType == "Read") textBoxComponent.addTextBoxesForScrRead();
+    else if (elementType == "runsqlprc") textBoxComponent.addContainerForRunsqlprc();  
+  }
+}
+
+export const list_box = { trueWebComponentMode: false, elementRendered };
+monkshu_component.register("list-box",`${COMPONENT_PATH}/list-box.html`,list_box);

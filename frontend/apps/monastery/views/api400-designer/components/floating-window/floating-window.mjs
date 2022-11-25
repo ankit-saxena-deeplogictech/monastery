@@ -19,13 +19,10 @@ let _pendingRenderResolves, hostIDNum = 0;
  * @param hostID Optional: The ID to host the custom component inside the main HTML, only needed if default ID clashes
  */
 async function showWindow(themeOrThemePath, templateOrTemplateURL, templateData, hostID=_generateNewHostID()) {
-	console.log(themeOrThemePath);
-	console.log(templateOrTemplateURL);
-	console.log(templateData);
-	console.log(hostID);
+	
 	await _initWindowFramework(hostID); 
 	await floating_window.bindData(await _processTheme((typeof themeOrThemePath == "string" || themeOrThemePath instanceof URL) ?
-		await $$.requireJSON(themeOrThemePath) : themeOrThemePath||DEFAULT_THEME), hostID );   // bind the theme data
+	await $$.requireJSON(themeOrThemePath) : themeOrThemePath||DEFAULT_THEME), hostID );   // bind the theme data
 
 	const shadowRoot = floating_window.getShadowRootByHostId(hostID);
 	const templateHTML = typeof templateOrTemplateURL == "string" ? (templateData ? await router.expandPageData(
