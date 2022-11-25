@@ -7,7 +7,7 @@ import { apimanager as apiman } from "/framework/js/apimanager.mjs";
 import { api400model } from "../model/api400model.mjs";
 import { openserverhelper } from "./openserverhelper.mjs";
 import { apiclparser } from "../model/apiclparser.mjs"
-
+import {loader} from "../../../js/loader.mjs";
 /**
  * Returns the list of published apicls present on the server
  * @param {string} server Server IP or Hostname
@@ -16,16 +16,20 @@ import { apiclparser } from "../model/apiclparser.mjs"
  * @param {string} password Server admin password
  * @returns {result: true|false, apicls: [array of apicl names on success], err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
-async function getApiclList(server, port, user, password) {
+async function getApiclList(server, port, user, password,element) {
     try {   // try to get the list now
+        await loader.beforeLoading();_disableButton(element);
         let result = await apiman.rest(`http://${server}:${port}/admin/listAPIs`, "POST",{ user, password }, true);
+        if(result) await loader.afterLoading();  _enableButton(element);
         if (typeof result == "string") result = JSON.parse(result);
         if (result.result && result.list) result.list = result.list.map(item => item.substring(1));
         return {
             result: result.result, apicls: result.result ? result.list : null, err: "List fetch failed at the server",
             raw_err: "Apicl list fetch failed at the server", key: "ApiclListServerIssue"
         };
-    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
+    } catch (err) { 
+        await loader.afterLoading(); _enableButton(element);
+        return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
 }
 
 /**
@@ -37,17 +41,23 @@ async function getApiclList(server, port, user, password) {
  * @param {string} password Server admin password
  * @returns {result: true|false, apicl: apicl object on success, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
-async function getApicl(name, server, port, user, password) {
+async function getApicl(name, server, port, user, password,element) {
 
     try {   // try to read the apicl now
+        await loader.beforeLoading();_disableButton(element.parentElement);
+
         let data, result = await apiman.rest(`http://${server}:${port}/admin/getAPI`, "POST", { user, password, name }, true);
+        if(result) await loader.afterLoading();  _enableButton(element.parentElement);
+    
         if (typeof result == "string") result = JSON.parse(result);
         if (result.result && result.data) data = await apiclparser.apiclParser(atob(result.data).toString());
         return {
             result: result.result, apicl: result.result ? JSON.stringify(data) : null, err: "Apicl read failed at the server",
             name: result.result ? name : null, raw_err: "Apicl read failed at the server", key: "ApiclReadServerIssue"
         };
-    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
+    } catch (err) {
+        await loader.afterLoading(); _enableButton(element.parentElement);
+        return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
 
 }
 /**
@@ -59,14 +69,21 @@ async function getApicl(name, server, port, user, password) {
  * @param {string} password Server admin password
  * @returns {result: true|false, apicl: apicl object on success, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
-async function callApi(name, server, port , headers , body) {
+async function callApi(name, server, port , headers , body,element) {
 
     try {   // call the api
         LOG.info(`http://${server}:${port}/${name}`);
+        await loader.beforeLoading();_disableButton(element);
+
         let result = await apiman.rest(`http://${server}:${port}/${name}`, "POST", body||{}, false, true);
+        if(result) await loader.afterLoading();  _enableButton(element);
+
         if (typeof result == "string") result = JSON.parse(result);
         return result;
-    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
+    } catch (err) { 
+        await loader.afterLoading(); _enableButton(element);
+        return {
+         result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
 
 }
 
@@ -81,15 +98,22 @@ async function callApi(name, server, port , headers , body) {
  * @param {string} password Server admin password
  * @returns {result: true|false, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
-async function publishApicl(apicl, name, server, port, user, password) {
-    const b64Data = btoa(JSON.stringify(apicl, null, ' '));
-    let result = await apiman.rest(`http://${server}:${port}/admin/publishAPI`, "POST", { user, password, name, type: "apicl", src: b64Data }, true);
-    if (typeof result == "string") result = JSON.parse(result);
+async function publishApicl(apicl, name, server, port, user, password,element) {
+   console.log(name,server,port,user,password,element);
     try {   // try to publish now
+        await loader.beforeLoading();_disableButton(element);
+      
+        const b64Data = btoa(JSON.stringify(apicl, null, ' '));
+        let result = await apiman.rest(`http://${server}:${port}/admin/publishAPI`, "POST", { user, password, name, type: "apicl", src: b64Data }, true);
+        if(result) await loader.afterLoading();  _enableButton(element);
+
+        if ( typeof result == "string") result = JSON.parse(result);
         return {
             result: result.result, err: "Publishing failed at the server", raw_err: "Publishing failed at the server", key: "PublishServerIssue"
         };
-    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
+    } catch (err) {
+        await loader.afterLoading(); _enableButton(element);
+         return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
 
 }
 
@@ -100,16 +124,19 @@ async function publishApicl(apicl, name, server, port, user, password) {
  * @param {string} user Server admin login ID
  * @param {string} password Server admin password
  */
-async function publishModule(server, port, user, password) {
+async function publishModule(server, port, user, password,element) {
     try {
         let count = 0, result;
         const runJsModArray = api400model.getModules();
         if (runJsModArray.length != 0) {
             for (let runJsMod of runJsModArray) {
-                if (runJsMod[0] == "") return { result: false, key: "FailedModule" };
                 if (runJsMod[1] == "") runJsMod[1] = "exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n";
                 const b64Data = btoa(runJsMod[1]);
+                await loader.beforeLoading();_disableButton(element);
+
                 result = await apiman.rest(`http://${server}:${port}/admin/publishModule`, "POST", { user, password, name: runJsMod[0], type: "js", src: b64Data }, true);
+                if(result) await loader.afterLoading();  _enableButton(element);
+
                 if (typeof result == "string") result = JSON.parse(result);
                 count = result.result ? ++count : count;
             }
@@ -119,6 +146,7 @@ async function publishModule(server, port, user, password) {
         return { result: false, key: "PublishModFailed" }
     }
     catch (err) {
+        await loader.afterLoading(); _enableButton(element);
         return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" }
     }
 }
@@ -150,16 +178,23 @@ async function getModule(name) {
  * @param {string} password Server admin password
  * @returns {result: true|false, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
-async function unpublishApicl(name, server, port, user, password) {
+async function unpublishApicl(name, server, port, user, password,element) {
 
     try {   // try to delete
+        await loader.beforeLoading();_disableButton(element);
+
         let result = await apiman.rest(`http://${server}:${port}/admin/deleteAPI`, "POST", { user, password, name }, true);
+        if(result) await loader.afterLoading();  _enableButton(element);
+
         if (typeof result == "string") result = JSON.parse(result);
         return {
             result: result.result, err: "apicl unpublish failed at the server",
             raw_err: "apicl unpublish failed at the server", key: "apiclUnpublishServerIssue"
         };
-    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
+    } catch (err) { 
+        await loader.afterLoading(); _enableButton(element);
+
+        return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
 }
 
 
@@ -179,5 +214,19 @@ async function _loginToServer(server, port, adminid, adminpassword) {
         } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
     }
 }
+
+function _disableButton(element){
+    console.log(element);
+    element.style["pointer-events"]="none";
+    element.style["opacity"]=0.4;
+}
+
+
+function _enableButton(element){console.log(element);
+
+    element.style["pointer-events"]="";
+    element.style["opacity"]="";
+}
+
 
 export const serverManager = { publishApicl, unpublishApicl, getApiclList, getApicl, getModule, publishModule, callApi };

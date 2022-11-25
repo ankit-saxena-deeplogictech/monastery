@@ -9,6 +9,7 @@ import {serverManager} from "./serverManager.js";
 import {blackboard} from "/framework/js/blackboard.mjs";
 import {api400model} from "../model/api400model.mjs";
 import {page_generator} from "/framework/components/page-generator/page-generator.mjs";
+import { password_box } from "../../../components/password-box/password-box.mjs";
 
 
 const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/..`, MSG_GET_MODEL_NAME = "GET_MODEL_NAME", 
@@ -34,12 +35,15 @@ async function openDialog() {
             saved_props = util.clone(result, ["adminpassword"]); // don't save password, for security
             const model = api400model.getModel();
             const jsModule = api400model.getModules();
+            result.adminpassword=password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value;
             if(jsModule.length!=0){
-                const pubModResult = await serverManager.publishModule(result.server, result.port, result.adminid, result.adminpassword);
+                const pubModResult = await serverManager.publishModule(result.server, result.port, result.adminid, result.adminpassword,dialogElement);
                 if (!pubModResult.result) {DIALOG.showError(dialogElement, await i18n.get(pubModResult.key));  return null;} 
             }
-           const pubResult = await serverManager.publishApicl(model, result.name, result.server, result.port, result.adminid, result.adminpassword);
+           const pubResult = await serverManager.publishApicl(model, result.name, result.server, result.port, result.adminid, result.adminpassword,dialogElement);
             blackboard.broadcastMessage(MSG_RENAME_MODEL, {name: result.name});
+          
+     
             if (!pubResult.result) DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); 
             else {DIALOG.showMessage(await i18n.get("PublishSuccess"), "ok", null, messageTheme, "MSG_DIALOG");  return true;}
         } });

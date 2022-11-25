@@ -8,6 +8,7 @@ import {util} from "/framework/js/util.mjs";
 import {serverManager} from "./serverManager.js";
 import {blackboard} from "/framework/js/blackboard.mjs";
 import {page_generator} from "/framework/components/page-generator/page-generator.mjs";
+import { password_box } from "../../../components/password-box/password-box.mjs";
 
 
 const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/..`, MSG_GET_MODEL_NAME = "GET_MODEL_NAME", 
@@ -31,7 +32,9 @@ async function openDialog() {
     DIALOG.showDialog(dialogPropertiesPath, html, null, DIALOG_RET_PROPS, 
         async (typeOfClose, result, dialogElement) => { if (typeOfClose == "submit") {
             saved_props = util.clone(result, ["adminpassword"]); // don't save password, for security
-           const unPubResult = await serverManager.unpublishApicl( result.name, result.server, result.port, result.adminid, result.adminpassword);
+            result.adminpassword=password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value;
+
+           const unPubResult = await serverManager.unpublishApicl( result.name, result.server, result.port, result.adminid, result.adminpassword,dialogElement);
             if (!unPubResult.result) DIALOG.showError(dialogElement, await i18n.get(unPubResult.key)); 
             else {DIALOG.showMessage(await i18n.get("UnPublishSuccess"), "ok", null, messageTheme, "MSG_DIALOG");  return true;}
         } });

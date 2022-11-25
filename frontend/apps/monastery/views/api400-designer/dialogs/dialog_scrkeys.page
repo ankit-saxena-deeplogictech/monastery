@@ -1,7 +1,7 @@
 SCHEMA
 ======
 {
-  "session": {"html":"input", "type":"text", "placeholder":"{{i18n.SessionName}}"},
+  "session": {"html":"input", "type":"text", "placeholder":"{{i18n.SessionName}}","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
   "toolbox":{"html":"tool-box",
             "onclickHandler":"window.monkshu_env.components['text-box'].addTextBoxesForScrKeys()",
             "onclickRemoveHandler":"window.monkshu_env.components['tool-box'].removeElement()",

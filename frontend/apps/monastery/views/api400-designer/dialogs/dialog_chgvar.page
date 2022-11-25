@@ -1,8 +1,8 @@
 SCHEMA
 ======
 {
-    "variable": {"html":"input", "type":"text", "placeholder":"{{i18n.Variable}}", "spellcheck":"false"},
-    "value": {"html":"input", "type":"text", "placeholder":"{{i18n.Value}}", "spellcheck":"false"}
+    "variable": {"html":"input", "type":"text", "placeholder":"{{i18n.Variable}}", "spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "value": {"html":"input", "type":"text", "placeholder":"{{i18n.Value}}", "spellcheck":"false","oninvalid":"this.setCustomValidity('{{i18n.FillQuote}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate", "pattern":"^'.*'"}
 }
 ======
 

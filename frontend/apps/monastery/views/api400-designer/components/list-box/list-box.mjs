@@ -15,19 +15,20 @@ const DIALOG_HOST_ID = "__org_monkshu_dialog_box";
  * @param element Host element
  */
 async function elementRendered(element) {
-  Object.defineProperty(element, "value", { get: (_) => _getValue(element, element.getAttribute("type")), set: (value) => _setValue(value, element.getAttribute("type")) });
+  Object.defineProperty(element, "value", { get: (_) => _getValue(element, element.getAttribute("type")), set: (value) => _setValue(value, element.getAttribute("type"), element) });
   const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
   const parentContainer = dialogShadowRoot.querySelector("div#page-contents");
   const noOfElements = parentContainer.children.length;
-  const textBoxComponent =  window.monkshu_env.components['text-box'];
-
+  const textBoxComponent = window.monkshu_env.components['text-box'];
   if (element.getAttribute("value")) {
+    console.log(element.getAttribute("value"));
     const values = JSON.parse(element.getAttribute("value"));
-    if (values && values.length) _setValue(values, element.getAttribute("type"));
+    if (values && values.length) _setValue(values, element.getAttribute("type"), element);
   }
   else {
-    if (element.getAttribute("type") == "Parameter" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'));
-    else if (element.getAttribute("type") == "Message" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'));
+    if (element.getAttribute("type") == "Parameter" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'),"false");
+    else if (element.getAttribute("type") == "callParam" && noOfElements < 1) textBoxComponent.addTextBox("Parameter","true");
+    else if (element.getAttribute("type") == "Message" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'),"false");
     else if (element.getAttribute("type") == "Map" && noOfElements < 1) textBoxComponent.addTextBoxesForMap();
     else if (element.getAttribute("type") == "Keys" && noOfElements < 1) textBoxComponent.addTextBoxesForScrKeys();
     else if (element.getAttribute("type") == "Read" && noOfElements < 1) textBoxComponent.addTextBoxesForScrRead();
@@ -41,26 +42,45 @@ function _getValue(host, type) {
   return _getTextBoxValues(textBoxContainer, shadowRoot, type);
 }
 
-function _setValue(values, type) {
-  const textBoxComponent =  window.monkshu_env.components['text-box'];
-  if (type == "Map"){  for (const textBoxValues of values)  if (textBoxValues.some(value => value != ""))
-        textBoxComponent.addTextBoxesForMap(textBoxValues);}
-  else if (type == "Keys"){  for (const textBoxValues of values)  if (textBoxValues.some(value => value != ""))
-        textBoxComponent.addTextBoxesForScrKeys(textBoxValues);}
-  else if (type == "Read"){ for (const textBoxValues of values) if (textBoxValues.some(value => value != ""))
-        textBoxComponent.addTextBoxesForScrRead(textBoxValues);}
-  else if (type == "runsqlprc") {for (const textBoxValue of values) if (textBoxValue.some(value => value != ""))
-        textBoxComponent.addContainerForRunsqlprc(textBoxValue[0], textBoxValue[1], textBoxValue[2]);}
-  else for (const textBoxValue of values)  if (textBoxValue != '')
-        textBoxComponent.addTextBox(type, textBoxValue);
+function _setValue(values, type, element) {
+  const textBoxComponent = window.monkshu_env.components['text-box'];
+  if (type == "Map") {
+    for (const textBoxValues of values) if (textBoxValues.some(value => value != ""))
+      textBoxComponent.addTextBoxesForMap(textBoxValues);
+  }
+  else if (type == "Keys") {
+    for (const textBoxValues of values) if (textBoxValues.some(value => value != ""))
+      textBoxComponent.addTextBoxesForScrKeys(textBoxValues);
+  }
+  else if (type == "Read") {
+    for (const textBoxValues of values) if (textBoxValues.some(value => value != ""))
+      textBoxComponent.addTextBoxesForScrRead(textBoxValues);
+  }
+  else if (type == "runsqlprc") {
+    for (const textBoxValue of values) if (textBoxValue.some(value => value != ""))
+      textBoxComponent.addContainerForRunsqlprc(textBoxValue[0], textBoxValue[1], textBoxValue[2]);
+  }
+  else for (const textBoxValue of values) if (textBoxValue != '') textBoxComponent.addTextBox(type,"false", textBoxValue);
+
+
+  const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID);
+  const parentContainer = dialogShadowRoot.querySelector("div#page-contents");
+  const noOfElements = parentContainer.children.length;
+  if (element.getAttribute("type") == "Parameter" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'),"false");
+  else if (element.getAttribute("type") == "callParam" && noOfElements < 1) textBoxComponent.addTextBox("Parameter","true");
+  else if (element.getAttribute("type") == "Message" && noOfElements < 1) textBoxComponent.addTextBox(element.getAttribute('type'),"false");
+  else if (element.getAttribute("type") == "Map" && noOfElements < 1) textBoxComponent.addTextBoxesForMap();
+  else if (element.getAttribute("type") == "Keys" && noOfElements < 1) textBoxComponent.addTextBoxesForScrKeys();
+  else if (element.getAttribute("type") == "Read" && noOfElements < 1) textBoxComponent.addTextBoxesForScrRead();
+  else if (element.getAttribute("type") == "runsqlprc" && noOfElements < 1) textBoxComponent.addContainerForRunsqlprc();
 }
 
 function _getTextBoxValues(textBoxContainer, shadowRoot, type) {
   const textBoxValues = [];
-  if ( type == "Map" || type == "Keys" || type == "Read" || type =="runsqlprc") {
+  if (type == "Map" || type == "Keys" || type == "Read" || type == "runsqlprc") {
     for (const divBox of textBoxContainer.children) {
       const Values = [];
-      for (const textBox of divBox.children)  Values.push(shadowRoot.querySelector(`#${textBox.getAttribute("id")}`).value.trim());
+      for (const textBox of divBox.children) Values.push(shadowRoot.querySelector(`#${textBox.getAttribute("id")}`).value.trim());
       textBoxValues.push(Values);
     }
     return JSON.stringify(textBoxValues);

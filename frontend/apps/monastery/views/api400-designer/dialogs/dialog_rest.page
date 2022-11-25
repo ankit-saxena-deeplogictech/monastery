@@ -2,8 +2,8 @@ SCHEMA
 ======
 {
     "result": {"html":"input", "type":"text", "placeholder":"{{i18n.ResultVariable}}","spellcheck":"false"},
-    "url": {"html":"input", "type":"text", "placeholder":"{{i18n.URL}}", "spellcheck":"false"},
-    "method": {"html":"input", "type":"text", "placeholder":"{{i18n.Method}}", "spellcheck":"false"},
+    "url": {"html":"input", "type":"url", "placeholder":"{{i18n.URL}}", "spellcheck":"false","required":"true","pattern":" {{i18n.pattern}}","oninvalid":"this.setCustomValidity('{{i18n.Fillurl}}')" , "oninput":"setCustomValidity('')","class":"validate"},
+    "method": {"html":"drop-down","style":"width:100%; height:100%;","list":"[{'value':'GET'},{'value':'POST'}]","text":"Select Method","class":"validate"},
     "headers": {"html":"input", "type":"text", "placeholder":"{{i18n.Headers}}","spellcheck":"false"},
     "parameter": {"html":"textarea", "wrap":"soft", "placeholder":"{{i18n.ParametersJSON}}", "spellcheck":"false"}
     
@@ -22,7 +22,7 @@ LAYOUT
 |                parameter             |   
 ----------------------------------------
 =================
-Row Heights = 4em,3em
+Row Heights = 3.5em,3.5em,15em
 Col Widths = 25%,75%
 =================
 
@@ -42,7 +42,7 @@ CSS
 
 .grid-item-extension {
     background-color: var(--dialog-background, white);
-    padding: 0px 20px 0px 20px;
+    padding: 10px 20px 0px 20px;
     display: flex;
     flex-flow: row;
     box-sizing: border-box;
@@ -55,7 +55,7 @@ CSS
     border-radius: 4px;
     border: 0px;
     outline: none;
-    padding: 11px;
+    padding: 12px;
     resize: none;
     height:8px;
     font-family: inherit;
@@ -68,9 +68,12 @@ CSS
     outline: none;
     padding: 10px;
     resize: none;
-    margin-top:15px;
     font-family: inherit;
-    height: 150px;
+}
+
+.class-method{
+     padding: 6px 25px 0px 11px;
+     margin-top:10px;
 }
 
 ::placeholder {opacity: 0.5;}

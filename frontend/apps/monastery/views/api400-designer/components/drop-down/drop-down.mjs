@@ -13,9 +13,10 @@
      get: (_) => _getValue(element),
      set: (value) => _setValue(value, element)
    });
-  const data =  { onclick: element.getAttribute("onclickHandler") };
+  let data =  { };
+  if( element.getAttribute("onclickHandler") ) data =  { onclick: element.getAttribute("onclickHandler") };
 
-  if(session.get("__org_api400_server")) {
+  if(session.get("__org_api400_server" ) && !element.getAttribute("list")) {
     let serverConArray = await session.get("__org_api400_server");
     let list = [];
     for (let i = 0; i < serverConArray.length; i++) {
@@ -24,8 +25,8 @@
     data.values = list;
 
    } else {
-    data.values = JSON.parse(element.getAttribute("list").replace(/'/g, '\"'));
-    element.remove();
+    if(element.getAttribute("list")) data.values = JSON.parse(element.getAttribute("list").replace(/'/g, '\"'));
+    else  element.remove();
    }
    data.text = element.getAttribute("text");
    drop_down.setData(element.id, data);
@@ -37,6 +38,7 @@
  * @param element Host element
  */
  const elementRendered  = async (element) =>{
+  _attachFormValidationControls(element)
    if (element.getAttribute("value")) _setValue(element.getAttribute("value"), element);
  }
  
@@ -51,6 +53,19 @@
    const shadowRoot = drop_down.getShadowRootByHostId(element.getAttribute("id"));
    shadowRoot.querySelector(`#${value}`).setAttribute("selected", "selected");
  };
+
+ function _attachFormValidationControls(element) {
+	const selectElement = drop_down.getShadowRootByHostId(element.getAttribute("id")).querySelector("select#choices");
+
+	element.getValue = _ => selectElement.value;
+	element.setValue = v => selectElement.value = v;
+	element.getValidity = _=> selectElement.validity;
+	element.getWillValidate = _=> selectElement.willValidate;
+	element.checkValidity = _=> selectElement.checkValidity();
+	element.reportValidity = _=> selectElement.reportValidity();
+	element.getValidationMessage = _=> selectElement.validationMessage;
+}
+
  
  
  export const drop_down = {
@@ -64,4 +79,3 @@
    `${COMPONENT_PATH}/drop-down.html`,
    drop_down
  );
- 
