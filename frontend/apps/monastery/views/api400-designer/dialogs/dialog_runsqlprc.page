@@ -3,12 +3,9 @@ SCHEMA
 {
   "libraryname": {"html":"input", "type":"text", "placeholder":"{{i18n.LibraryName}}","class":"validate","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true"},
   "procedurename": {"html":"input", "type":"text", "placeholder":"{{i18n.ProcedureName}}"},
-  "toolbox":{"html":"tool-box",
-            "onclickHandler":"window.monkshu_env.components['text-box'].addContainerForRunsqlprc()",
-            "onclickRemoveHandler":"window.monkshu_env.components['tool-box'].removeElement()",
-            "text":"{{i18n.Parameters}}",
-            "style":"width:100%; height: 100%;"},
-  "listbox":{"html":"list-box","style":"width:100%; height: 100%;","type":"runsqlprc"}
+  "listbox":{"html":"list-box","onclickHandler":"window.monkshu_env.components['list-box'].addContainerForRunsqlprc()",
+            "onclickRemoveHandler":"window.monkshu_env.components['list-box'].removeElement()",
+            "text":"{{i18n.Parameters}}","style":"width:100%; height: 100%;","type":"runsqlprc"}
  
 }
 ======
@@ -19,13 +16,11 @@ LAYOUT
 ------------------------------------------
 |   libraryname     |  procedurename     |
 ------------------------------------------
-|                toolbox                 |      
-------------------------------------------
 |                listbox                 |      
 ------------------------------------------
 
 =================
-Row Heights = 4em,1.8em,calc(100% - 1.8em - 4em)
+Row Heights = 4em,calc(100% - 4em)
 Col Widths = 50%, 50%
 =================
 

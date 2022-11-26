@@ -347,7 +347,7 @@ const _parseCall = async function (command) {
     const ret = {}, programName = _findBetweenParenthesis(command, "PGM").split("/");
     ret["libraryname"] = programName[0];
     ret["programname"] = programName[1];
-    ret["listbox"] = JSON.stringify(_findBetweenParenthesis(command, "PARM").replace(/\'/gi,'').split(" ").filter(Boolean));
+    ret["listbox"] = JSON.stringify(_findBetweenParenthesis(command, "PARM").replace(/\'/gi,'').replace(/\&/gi,'').split(" ").filter(Boolean));
     ret["nodeName"] = "call";
     return ret;
 }
@@ -598,7 +598,11 @@ const _addCommandCount = function (description) {
  * @param initApicl  is an apicl 
  * @returns an object, { "index": false }
  */
-const _initializeAPICLIndex = function (initApicl) { for (const key in initApicl) { initApicl[key] = false; } return initApicl; }
+const _initializeAPICLIndex = function (initApicl) { 
+    for (const key in initApicl) { 
+        initApicl[key] = false; 
+    }
+     return initApicl; }
 
 /**
  * removes {} in the finalCommands object
