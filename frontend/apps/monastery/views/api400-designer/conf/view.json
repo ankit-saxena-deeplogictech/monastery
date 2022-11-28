@@ -19,6 +19,6 @@
     "initModules": { "api400model": "model/api400model.mjs", 
         "nodeRepository": "components/pluggable-ribbon/lib/nodeRepository.mjs",
         "openserverhelper": "js/openserverhelper.mjs",
-        "testsql":"js/testSQL.mjs"
+        "testsql":"test/testsql.mjs"
      }
 }
