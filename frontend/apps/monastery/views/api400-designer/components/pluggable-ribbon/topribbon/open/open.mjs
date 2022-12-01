@@ -49,9 +49,9 @@ async function droppedFile(event) {
 
 async function _uploadFile() {
     try {
-        let {name, data} = await util.uploadAFile("application/json");
-        data = JSON.stringify(await apiclparser.apiclParser(data));
-        blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name, data});
+        let {name, data} = await util.uploadAFile("application/json"); data =await apiclparser.apiclParser(data);
+        if(data){data = JSON.stringify(data);blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name,data});}  
+       
     } catch (err) {LOG.error(`Error opening file: ${err}`);}
 }
     

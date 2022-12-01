@@ -12,7 +12,6 @@ class FlowNode {
     async init(pluginName, pluginPath, connectable = true) {
         this.SHAPE_NAME = pluginName; this.PLUGIN_PATH = pluginPath; this.SHAPE_CONNECTABLE = connectable;
         this.I18N = (await import(`${pluginPath}/${pluginName}.i18n.mjs`)).i18n;
-        console.log(pluginName);
         const svgSource64 = btoa(await (await fetch(`${pluginPath}/${pluginName}.svg`)).text());
         const svg = "data:image/svg+xml," + svgSource64; this.IMAGE = "data:image/svg+xml;base64," + svgSource64;
         blackboard.broadcastMessage(MSG_SHAPE_INIT, { name: this.SHAPE_NAME, imgURL: svg });

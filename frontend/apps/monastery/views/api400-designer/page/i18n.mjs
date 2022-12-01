@@ -81,7 +81,8 @@ export const i18n = {
         "SelectDropDown":"Please Select one",
         "SelectOperation":"Please Select one operation",
         "FillField":"Please fill out this field",
-        "FillQuote":"Please fill with single quotes"
+        "FillQuote":"Please fill with single quotes",
+        "IncorrectApicl":"Incorrect APICL format"
         
     },
 
