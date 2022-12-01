@@ -480,7 +480,7 @@ const _convertForScrkeys = function (node) {
  */
 const _convertForScrops = function (node, nodes) {
     const nextNode = checkNodeInAllNodes(node, nodes);
-    if (node && node.scrops == "start" && node.pool != "" && nextNode.nodeName == "scrkeys") {
+    if (node && node.scrops == "start" && node.pool&& node.pool != "" && nextNode.nodeName == "scrkeys") {
             let keys = _convertForScrkeys(nextNode).match(/KEYS\(.+\)/i)[0];
              nodes.splice(nodes.indexOf(nextNode), 1);  
              const nextNodeafterkeysnode = checkNodeInAllNodes(nextNode , nodes);  
