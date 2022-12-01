@@ -26,18 +26,16 @@ function _getValue(host) {
 }
 
 function _setValue(value, host) {
-  const data = {};
+  const data = {},shadowRoot = host instanceof Element ? diloagBoxComponent.getShadowRootByContainedElement(host) :
+  diloagBoxComponent.getShadowRootByHostId(host || DEFAULT_HOST_ID);
+
   if (value == "start") data.start = "checked";
   else if (value == "stop") data.stop = "checked";
   else if (value  == "release") data.release = "checked";
   radio_button.setData(host.id, data);
-  const shadowRoot = host instanceof Element ? diloagBoxComponent.getShadowRootByContainedElement(host) :
-  diloagBoxComponent.getShadowRootByHostId(host || DEFAULT_HOST_ID);
-  if(value!="start"){  
-    shadowRoot.querySelector('#pool').setAttribute("disabled","true");
-    shadowRoot.querySelector('#pool').setAttribute("value","");
   
-  }
+  if(value!="start"){ shadowRoot.querySelector('#pool').setAttribute("disabled","true");
+    shadowRoot.querySelector('#pool').setAttribute("value","");}
   else shadowRoot.querySelector('#pool').removeAttribute("disabled");
 }
 

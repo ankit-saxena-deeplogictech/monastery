@@ -1,25 +1,23 @@
 SCHEMA
 ======
 {
-  "toolbox":{"html":"tool-box",
-            "onclickHandler":"window.monkshu_env.components['text-box'].addTextBox('Parameter','false')",
-            "onclickRemoveHandler":"window.monkshu_env.components['tool-box'].removeElement()",
-            "text":"{{i18n.Parameters}}",
-            "style":"width:100%; height: 100%;"},
-  "listbox":{"html":"list-box","style":"width:100%; height: 100%;","type":"Parameter"}
+
+  "listbox":{"html":"list-box","onclickHandler":"window.monkshu_env.components['list-box'].addTextBox(this)",
+             "id":"strapi","placeholder":"Parameter","required":"false",
+            "onclickRemoveHandler":"window.monkshu_env.components['list-box'].removeElement()",
+            "text":"{{i18n.Parameters}}","style":"width:100%; height: 100%;","type":"parameter"}
  
 }
 ======
 
 LAYOUT
 =================
-----------------
-|   toolbox    |
+
 ----------------
 |   listbox    |      
 ----------------
 =================
-Row Heights = 1.6em,calc(100% - 1.6em)
+Row Heights = 100%
 Col Widths = 100%
 =================
 

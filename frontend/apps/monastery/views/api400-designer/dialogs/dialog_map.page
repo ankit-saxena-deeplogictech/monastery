@@ -2,12 +2,18 @@ SCHEMA
 ======
 {
   "result": {"html":"input", "type":"text", "placeholder":"{{i18n.ResultVariable}}","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
-  "toolbox":{"html":"tool-box",
-            "onclickHandler":"window.monkshu_env.components['text-box'].addTextBoxesForMap()",
-            "onclickRemoveHandler":"window.monkshu_env.components['tool-box'].removeElement()",
+  "listbox":{"html":"list-box",
+  "onclickHandler":"window.monkshu_env.components['list-box'].addMultipleTextBoxes(this)",
+            "onclickRemoveHandler":"window.monkshu_env.components['list-box'].removeElement()",
             "text":"{{i18n.Map}}",
-            "style":"width:100%; height: 100%;"},
-  "listbox":{"html":"list-box","style":"width:100%; height: 100%;","type":"Map"}
+            "idArray":"['string', 'start', 'count', 'repetition', 'function']",
+            "placeHolderArray":"['String Variable', 'Start Pos', 'Num of Char', 'Repetition No', 'String Function']",
+            "classNameArray":"['stringbox', 'startbox', 'countbox', 'repetitionbox', 'functionbox']",
+            "placeHolderTypeArray":"['dynamic', 'static', 'static', 'static', 'static']",
+            "valueType":"['text','text','text','text','text']",
+            "required":"['true','true','true','true','false']",
+            "classNameForDiv":"map",
+            "style":"width:100%; height: 100%;","type":"map"}
  
 }
 ======
@@ -18,12 +24,10 @@ LAYOUT
 ----------------
 |   result     |
 ----------------
-|   toolbox    |
-----------------
 |   listbox    |      
 ----------------
 =================
-Row Heights = 4em,2.2em,calc(100% - 2.2em - 4em)
+Row Heights = 4em,calc(100% - 4em)
 Col Widths = 100%
 =================
 

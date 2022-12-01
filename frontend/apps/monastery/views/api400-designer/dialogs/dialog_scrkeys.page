@@ -2,12 +2,17 @@ SCHEMA
 ======
 {
   "session": {"html":"input", "type":"text", "placeholder":"{{i18n.SessionName}}","oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
-  "toolbox":{"html":"tool-box",
-            "onclickHandler":"window.monkshu_env.components['text-box'].addTextBoxesForScrKeys()",
-            "onclickRemoveHandler":"window.monkshu_env.components['tool-box'].removeElement()",
-            "text":"{{i18n.Keys}}",
-            "style":"width:100%; height: 100%;"},
-  "listbox":{"html":"list-box","style":"width:100%; height: 100%;","type":"Keys"}
+  "listbox":{"html":"list-box",
+             "onclickHandler":"window.monkshu_env.components['list-box'].addMultipleTextBoxes(this)",
+             "idArray": "['y', 'x', 'key']",
+             "placeHolderArray" : "['y-cordinate', 'x-cordinate', 'Key']",
+             "classNameArray" : "['y-cordinates', 'x-cordinates', 'Keys']",
+             "placeHolderTypeArray" : "['static', 'static', 'dynamic']",
+             "valueType":"['text','text','text']",
+             "required": "['true','true','true']",
+              "classNameForDiv":"scr-keys",
+            "onclickRemoveHandler":"window.monkshu_env.components['list-box'].removeElement()",
+            "text":"{{i18n.Keys}}","style":"width:100%; height: 100%;","type":"keys"}
  
 }
 ======
@@ -18,12 +23,10 @@ LAYOUT
 ----------------
 |   session    |
 ----------------
-|   toolbox    |
-----------------
 |   listbox    |      
 ----------------
 =================
-Row Heights = 4em,2.2em,calc(100% - 2.2em - 4em)
+Row Heights = 4em,calc(100% - 4em)
 Col Widths = 100%
 =================
 

@@ -20,7 +20,7 @@ const MSG_REGISTER_SHAPE = "REGISTER_SHAPE", MSG_SHAPE_INIT = "SHAPE_INIT_ON_RIB
     MSG_MODEL_LOAD_MODEL = "LOAD_MODEL", MSG_RESET = "RESET", MSG_FILE_UPLOADED = "FILE_UPLOADED", GRAPH_ID = "flowui", MODEL_OP_ADDED = "added",
     MODEL_OP_REMOVED = "removed", MODEL_OP_MODIFIED = "modified", MSG_SHAPE_MOVED = "SHAPE_MOVED";
 const PAGE_GENERATOR_GRID_ITEM_CLASS = "grid-item-extension", HTML_INPUT_ELEMENTS = ["input", "select",
-    "textarea", "spread-sheet", "text-editor", "drag-drop", "drop-down", "list-box", "text-box", "radio-button"];
+    "textarea", "spread-sheet", "text-editor", "drag-drop", "drop-down", "list-box",  "radio-button"];
 let ID_CACHE = {}, CONF, VIEW_PATH;
 
 const _generateShapeName = name => name.toLowerCase(), _generateShapeX = _ => 30, _generateShapeY = _ => 30, _generateShapeXForIfTrue = _ => 120, _generateShapeYForIfTrue = _ => 30, _generateShapeXForIfFalse = _ => 30, _generateShapeYForIfFalse = _ => 120;

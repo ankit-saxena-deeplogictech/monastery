@@ -72,7 +72,7 @@ async function _getFromServer() {
                 saved_props = util.clone(result, ["adminpassword"]); // don't save password, for security
                 const selectedModel = result.packages, readModelResult = serverManager.getApicl(selectedModel, result.server,
                     result.port, result.adminid, result.adminpassword);
-                if (!pubResult.result) DIALOG.showError(dialogElement, await i18n.get(readModelResult.key));
+                if (!readModelResult.result) DIALOG.showError(dialogElement, await i18n.get(readModelResult.key));
                 else blackboard.broadcastMessage(MSG_FILE_UPLOADED, {
                     name: selectedModel,
                     data: readModelResult.model
