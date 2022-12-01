@@ -4,8 +4,12 @@
  * License: See enclosed LICENSE file.
  */
 
-import { serverManager } from "../js/serverManager.js"
+import { serverManager } from "../js/serverManager.js";
+import {i18n} from "/framework/js/i18n.mjs";
+import {util} from "/framework/js/util.mjs";
 
+
+const DIALOG = window.monkshu_env.components["dialog-box"], MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/..`;
 let xCounter, yCounter, counter = 0, dependencies, result, storeIDS, flagNOthenYESelse = 0,
     apicl, initAPICL, commandCounter, nextElseDependency;
 
@@ -17,9 +21,12 @@ let xCounter, yCounter, counter = 0, dependencies, result, storeIDS, flagNOthenY
 async function apiclParser(data) {
     let labelRe = /^\s*{*\s*[\"\'](.+?)[\"\']\s*\:/gm, labels = [], match;
     while (match = labelRe.exec(data)) labels.push(match[1]);
+    console.log(new Set(labels).size);
+    const messageTheme = await $$.requireJSON(`${VIEW_PATH}/dialogs/dialogPropertiesPrompt.json`);
+    if(new Set(labels).size !== labels.length){ await  DIALOG.showMessage(await i18n.get("IncorrectApicl"), "error", null, messageTheme, "MSG_DIALOG");return false;}
     xCounter = 100, yCounter = 80, dependencies = [], storeIDS = {}, commandCounter = [],
         result = [], nextElseDependency = [], apicl = {}, initAPICL = _initializeAPICLIndexAndFixJSON(JSON.parse(data), labels);
-    console.log(apicl);
+ 
     if (apicl[Object.keys(apicl).length - 1].includes("NOP")) {
         const lastCommand = apicl[Object.keys(apicl).length];
         apicl[Object.keys(apicl).length] = apicl[Object.keys(apicl).length - 1];
@@ -602,7 +609,8 @@ const _addCommandCount = function (description) {
  * @returns an object, { "index": false }
  */
 const _initializeAPICLIndexAndFixJSON = function (initApicl, labels) {
-    let keyValuePair = [], FixedKeyValuePair = [], fixedJSONobj = {}; labels.forEach(keyIndex => keyValuePair.push([keyIndex, initApicl[keyIndex]]));
+    
+    let keyValuePair = [], FixedKeyValuePair = [], fixedJSONobj = {};  labels.forEach(keyIndex => keyValuePair.push([keyIndex, initApicl[keyIndex]]));
     for (let i = 0; i < keyValuePair.length; i++) {
         let key = keyValuePair[i][0];
         keyValuePair[i][0] = "&" + (i + 1);
