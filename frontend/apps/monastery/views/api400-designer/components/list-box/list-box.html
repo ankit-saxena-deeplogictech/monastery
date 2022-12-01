@@ -34,9 +34,7 @@
     appearance: textfield;
   }
 
-  div#dialog {
-    padding-bottom: 20px;
-  }
+
 
   body {
     margin: 0%;
@@ -85,23 +83,21 @@
     margin-right: 0vw;
   }
 
+  div#dialog {
+    padding-bottom: 20px;
+  }
+
   img.button {
     width: 20px;
   }
 </style>
 <span id="toolbar"> <span id="leftitems">
-   <span>
-      <img
-      src="{{{componentPath}}}/img/add.svg"
-      onclick="{{onclick}}"
-      class="button"
-      />
+    <span>
+      <img src="{{{componentPath}}}/img/add.svg" onclick="{{onclick}}" class="button" />
       &nbsp;&nbsp;{{text}}&nbsp;&nbsp;
-      <img
-        src="{{{componentPath}}}/img/delete.svg"
-        onclick='{{onclickRemoveHandler}}' class='button' />
-     
-     </span>
+      <img src="{{{componentPath}}}/img/delete.svg" onclick='{{onclickRemoveHandler}}' class='button' />
+
+    </span>
   </span>
 </span>
 
