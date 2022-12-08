@@ -121,6 +121,6 @@ function getFileData(file, type="text") {
 }
 
 const _isDraggedItemAJSONFile = event => event.dataTransfer.items?.length && event.dataTransfer.items[0].kind === "file"
-    && event.dataTransfer.items[0].type.toLowerCase() === "application/apicl";
+    && event.dataTransfer.items[0].type.toLowerCase() === "application/json";
 
 export const open = {init, clicked, getImage, getHelpText, getDescriptiveName, allowDrop, droppedFile}
