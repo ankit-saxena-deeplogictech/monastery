@@ -49,7 +49,7 @@ async function droppedFile(event) {
 
 async function _uploadFile() {
     try {
-        let {name, data} = await util.uploadAFile("application/json"); data =await apiclparser.apiclParser(data);
+        let {name, data} = await uploadAFile("*/*"); data =await apiclparser.apiclParser(data);
         if(data){data = JSON.stringify(data);blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name,data});}  
        
     } catch (err) {LOG.error(`Error opening file: ${err}`);}
@@ -81,7 +81,46 @@ async function _getFromServer() {
         });
 }
 
+/**
+ * Uploads a single file.
+ * @param accept Optional: The MIME type to accept. Default is "*".
+ * @param type Optional: Can be "text" or "binary". Default is "text".
+ * @returns A promise which resolves to {name - filename, data - string or ArrayBuffer} or rejects with error
+ */
+ function uploadAFile(accept="*/*", type="text") {
+    const uploadFiles = _ => new Promise(resolve => {
+        const uploader = document.createElement("input"); uploader.setAttribute("type","file"); 
+        uploader.style.display = "none"; uploader.setAttribute("accept", accept);
+        
+        document.body.appendChild(uploader); uploader.onchange = _ => {resolve(uploader.files); document.body.removeChild(uploader); }; 
+        uploader.click();
+    });
+
+    return new Promise(async (resolve, reject) => {
+        const file = (await uploadFiles())[0]; if (!file) {reject("User cancelled upload"); return;}
+        try {resolve(await getFileData(file, type));} catch (err) {reject(err);} 
+    });
+}
+
+/**
+ * Reads the given file and returns its data.
+ * @param file The File object
+ * @param type Optional: Can be "text" or "binary". Default is "text".
+ * @returns A promise which resolves to {name - filename, data - string or ArrayBuffer} or rejects with error
+ */
+function getFileData(file, type="text") {
+    const apiclRegex = /(\.apicl)/;
+    if(apiclRegex.test(file.name)){
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = event => resolve({name: file.name, data: event.target.result});
+        reader.onerror = _event => reject(reader.error);
+        if (type.toLowerCase() == "text") reader.readAsText(file); else reader.readAsArrayBuffer(file);
+    });
+    } else {alert('Only apicl files are allowed');}
+}
+
 const _isDraggedItemAJSONFile = event => event.dataTransfer.items?.length && event.dataTransfer.items[0].kind === "file"
-    && event.dataTransfer.items[0].type.toLowerCase() === "application/json";
+    && event.dataTransfer.items[0].type.toLowerCase() === "application/apicl";
 
 export const open = {init, clicked, getImage, getHelpText, getDescriptiveName, allowDrop, droppedFile}
