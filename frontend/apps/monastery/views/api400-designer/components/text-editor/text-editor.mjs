@@ -7,23 +7,20 @@ import { util } from "/framework/js/util.mjs";
 import { utilMonastery } from "../../../../js/util.mjs";
 import { monkshu_component } from "/framework/js/monkshu_component.mjs";
 
-const COMPONENT_PATH = util.getModulePath(import.meta);
-const DIALOG = window.monkshu_env.components["dialog-box"];
-const P3_LIBS = [
+const COMPONENT_PATH = util.getModulePath(import.meta),DIALOG = window.monkshu_env.components["dialog-box"],
+P3_LIBS = [
   `${COMPONENT_PATH}/3p/codemirror/lib/codemirror.js`,
   `${COMPONENT_PATH}/3p/codemirror/addon/selection/active-line.js`,
   `${COMPONENT_PATH}/3p/codemirror/addon/edit/matchbrackets.js`,
   `${COMPONENT_PATH}/3p/codemirror/addon/display/placeholder.js`,
-];
-
-const P3_LIBS_JAVASCRPT = [
+],
+P3_LIBS_JAVASCRPT = [
   `${COMPONENT_PATH}/3p/codemirror/mode/javascript/javascript.js`,
   `${COMPONENT_PATH}/3p/codemirror/addon/lint/javascript-lint.js`,
   `${COMPONENT_PATH}/3p/jshint/jshint.js`,
   `${COMPONENT_PATH}/3p/codemirror/addon/lint/lint.js`,
-];
-
-const P3_LIBS_SQL = [`${COMPONENT_PATH}/3p/codemirror/mode/sql/sql.js`];
+],
+P3_LIBS_SQL = [`${COMPONENT_PATH}/3p/codemirror/mode/sql/sql.js`];
 
 async function elementConnected(element) {
   Object.defineProperty(element, "value", {
@@ -54,8 +51,8 @@ async function elementRendered(element) {
     for (const p3libJS of P3_LIBS_JAVASCRPT) await $$.require(p3libJS); // load all the JS related libs we need
     setTimeout((_) => {
       // apparently we need timeout for CM to load properly
-      const editorElement = text_editor.getShadowRootByHost(element).querySelector("textarea#texteditor");
-      const cm = CodeMirror((cmElement) => editorElement.parentNode.replaceChild(cmElement, editorElement),
+      const editorElement = text_editor.getShadowRootByHost(element).querySelector("textarea#texteditor"),
+      cm = CodeMirror((cmElement) => editorElement.parentNode.replaceChild(cmElement, editorElement),
         {
           lineNumbers: true,
           gutter: true,
@@ -66,12 +63,12 @@ async function elementRendered(element) {
           lint: { selfContain: true },
           gutters: ["CodeMirror-lint-markers"],
           matchBrackets: true,
-          placeholder:"// JS script"
+          placeholder: "// JS script"
         }
       );
       text_editor.getMemoryByHost(element).editor = cm;
       cm.setSize("100%", "100%");
-      if (!element.getAttribute("mod"))editorElement.setAttribute('placeholder', '// JS script');
+      if (!element.getAttribute("mod")) editorElement.setAttribute('placeholder', '// JS script');
       else cm.setValue("exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n");
       if (element.getAttribute("value")) _setValue(element.getAttribute("value"), element);
     }, 10);
@@ -81,8 +78,8 @@ async function elementRendered(element) {
     for (const p3libSQL of P3_LIBS_SQL) await $$.require(p3libSQL); // load all the SQL related libs we need
     setTimeout((_) => {
       // apparently we need timeout for CM to load properly
-      const editorElement = text_editor.getShadowRootByHost(element).querySelector("textarea#texteditor");
-      const cm = CodeMirror((cmElement) => editorElement.parentNode.replaceChild(cmElement, editorElement),
+      const editorElement = text_editor.getShadowRootByHost(element).querySelector("textarea#texteditor"),
+      cm = CodeMirror((cmElement) => editorElement.parentNode.replaceChild(cmElement, editorElement),
         {
           lineNumbers: true,
           gutter: true,
@@ -91,7 +88,7 @@ async function elementRendered(element) {
           styleActiveSelected: true,
           mode: "sql",
           matchBrackets: true,
-          placeholder:"--SQL"
+          placeholder: "--SQL"
         }
       );
       text_editor.getMemoryByHost(element).editor = cm;
@@ -109,22 +106,22 @@ async function open(element) {
     LOG.error(`Error uploading file, ${err}`);
     text_editor.getHostElement(element).shadowRoot.querySelector('#error').innerText = err;
     text_editor.getHostElement(element).shadowRoot.querySelector('#error').style.display = 'block';
-    setTimeout(()=>{
+    setTimeout(() => {
       text_editor.getHostElement(element).shadowRoot.querySelector('#error').innerText = '';
       text_editor.getHostElement(element).shadowRoot.querySelector('#error').style.display = 'none';
-    },4000);
+    }, 4000);
   }
 }
 
 async function save(element) {
-  const host = text_editor.getHostElement(element);
-  const jsContents = _getValue(host);
+  const host = text_editor.getHostElement(element),
+        jsContents = _getValue(host);
   util.downloadFile(jsContents, "text/javascript", decodeURIComponent(`${DIALOG.getElementValue("result")}.js`) || "code.js");
 }
 
 function _getValue(host) {
-  const cm = text_editor.getMemoryByHost(host).editor;
-  const value = cm.getDoc().getValue();
+  const cm = text_editor.getMemoryByHost(host).editor,
+        value = cm.getDoc().getValue();
   return value;
 }
 
@@ -133,16 +130,6 @@ function _setValue(value, host) {
   cm.getDoc().setValue(value);
 }
 
-// convert this all into a WebComponent so we can use it
-export const text_editor = {
-  trueWebComponentMode: true,
-  elementConnected,
-  elementRendered,
-  open,
-  save
-};
-monkshu_component.register(
-  "text-editor",
-  `${COMPONENT_PATH}/text-editor.html`,
-  text_editor
-);
+export const text_editor = {trueWebComponentMode: true,elementConnected,elementRendered,open,save};
+
+monkshu_component.register("text-editor",`${COMPONENT_PATH}/text-editor.html`,text_editor);

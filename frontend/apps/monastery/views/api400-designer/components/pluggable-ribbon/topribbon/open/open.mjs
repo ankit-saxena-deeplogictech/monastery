@@ -110,7 +110,7 @@ async function _getFromServer() {
  */
 function getFileData(file, type="text") {
     const apiclRegex = /(\.apicl)/;
-    if(apiclRegex.test(file.name)){
+    if (apiclRegex.test(file.name)) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = event => resolve({name: file.name, data: event.target.result});
