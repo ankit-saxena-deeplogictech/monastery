@@ -5,7 +5,6 @@
  */
 import { apimanager as apiman } from "/framework/js/apimanager.mjs";
 import { api400model } from "../model/api400model.mjs";
-import { openserverhelper } from "./openserverhelper.mjs";
 import { apiclparser } from "../model/apiclparser.mjs"
 import {loader} from "../../../js/loader.mjs";
 /**
@@ -99,7 +98,6 @@ async function callApi(name, server, port , headers , body,element) {
  * @returns {result: true|false, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
 async function publishApicl(apicl, name, server, port, user, password,element) {
-   console.log(name,server,port,user,password,element);
     try {   // try to publish now
         await loader.beforeLoading();_disableButton(element);
       
@@ -156,8 +154,7 @@ async function publishModule(server, port, user, password,element) {
  * @param {string} name The module name
  * @returns {result: true|false, mod: JS data on success, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
-async function getModule(name) {
-    const serverDetails = await openserverhelper.serverDetails();
+async function getModule(name,serverDetails) {
     try {   // try to read the module now
         let result = await apiman.rest(`http://${serverDetails.server}:${serverDetails.port}/admin/getMOD`, "POST", { "user": serverDetails.adminid, "password": serverDetails.adminpassword, name }, true);
         if (typeof result == "string") result = JSON.parse(result);
@@ -165,7 +162,7 @@ async function getModule(name) {
         return {
             result: result.result, mod: result.result ? data : null, err: "Module read failed at the server or Not Found", key: "ModuleNotFound",
         };
-    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue", mod: "exports.execute = execute;\n\nfunction execute(env, callback){\n\ncallback();\n}\n" } }
+    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
 
 }
 
@@ -216,13 +213,12 @@ async function _loginToServer(server, port, adminid, adminpassword) {
 }
 
 function _disableButton(element){
-    console.log(element);
     element.style["pointer-events"]="none";
     element.style["opacity"]=0.4;
 }
 
 
-function _enableButton(element){console.log(element);
+function _enableButton(element){
 
     element.style["pointer-events"]="";
     element.style["opacity"]="";
