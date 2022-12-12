@@ -75,11 +75,26 @@ select.nature,select.type{
 div.runsqlprc{
   background: #C9E5FF;
   border-radius:7px;
-  margin:11px 14px 0px 18px;
+  margin:11px 0px 0px 18px;
   display: grid;
-  grid-template-columns: 50% 25% 25%;
-
+  grid-template-columns: 49% 25% 25%;
+  grid-template-rows: auto;
+  grid-template-areas:  "variable nature type";
+  width:52.5em;
 }
+
+div.runsqlprc >.variable {
+  grid-area: variable ;
+}
+
+div.runsqlprc >.nature {
+  grid-area: nature;
+}
+
+div.runsqlprc >.type {
+  grid-area: type ;
+}
+
 
 ::placeholder {opacity: 0.8;}
 
@@ -87,6 +102,10 @@ body {
     margin: 0%;
     display: inline-block;
     width: 100%;
+}
+
+input.variablebox{
+    margin-left:15px;
 }
 
 =======

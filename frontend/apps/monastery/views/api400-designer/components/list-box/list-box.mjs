@@ -50,7 +50,7 @@ function _getValue(host, type) {
 function _setValue(values, type,element) {
 
   if (type == "map" ||type == "keys" ||type == "read") for (const textBoxValues of values) addMultipleTextBoxes(element,textBoxValues)
-  else if (type == "runsqlprc") for (const textBoxValue of values) addContainerForRunsqlprc(textBoxValue[0], textBoxValue[1], textBoxValue[2]);
+  else if (type == "runsqlprc") for (const textBoxValue of values) addContainerForRunsqlprc(textBoxValue[1], textBoxValue[0], textBoxValue[2]);
   else for (const textBoxValue of values) if (textBoxValue != '') addTextBox(element,textBoxValue);
 
   _setUpDefaultBoxOrContainerBox(type,element);
@@ -159,7 +159,7 @@ function _createDivElementForRunsqlPrc(parentContainer, variable, natureOfParm, 
   const inputElement1 = _createElement(parentContainer, "variable", variable, "Variable", "variablebox","dynamic","text","true"),
   selectElement1 = _createDropDownElement(parentContainer, "nature"),
   selectElement2 = _createDropDownElement(parentContainer, "type");
-  divElement.append( inputElement1,selectElement1, selectElement2);
+  divElement.append(selectElement1, inputElement1, selectElement2);
 
   if (natureOfParm != undefined) {
     for (let i = 0; i < selectElement1.options.length; ++i)  if (selectElement1.options[i].text == natureOfParm.slice(1))
