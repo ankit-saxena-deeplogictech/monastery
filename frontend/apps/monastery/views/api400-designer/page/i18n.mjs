@@ -82,8 +82,9 @@ export const i18n = {
         "SelectOperation":"Please Select one operation",
         "FillField":"Please fill out this field",
         "FillQuote":"Please fill with single quotes",
-        "IncorrectApicl":"Incorrect APICL format"
-        
+        "IncorrectApicl":"Incorrect APICL format",
+        "IncorrectMod":"Plese Fill js code in Mod ",
+        "ModNotFound":"Js Module Not Found "
     },
 
     hi: {
