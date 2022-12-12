@@ -162,7 +162,6 @@ async function _getGraph(hostID) {
 	graph.addListener(mxEvent.CELLS_REMOVED, (sender, evt) => {	// shape deleted or edge deleted
 		const listOfCellsRemoved = evt.getProperty("cells");
 		for (const cell of listOfCellsRemoved) {
-			console.log(cell);
 			if (cell.vertex) blackboard.broadcastMessage(	// shape deleted
 				MSG_SHAPE_REMOVED, { name: cell.style, id: cell.id, graphID: _findGraphID(sender) });
 			else if (cell.edge) {

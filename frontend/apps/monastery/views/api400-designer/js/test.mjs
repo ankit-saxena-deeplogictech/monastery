@@ -52,7 +52,6 @@ async function openDialog() {
 
                 const api400mod = api400model.getModel();
                 const jsModule = api400model.getModules();
-                console.log(jsModule);
                 if(jsModule.length!=0){
                     LOG.info(JSON.stringify(jsModule));
                     // check same module JS name is exists on api400 server
