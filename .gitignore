@@ -1,2 +1,4 @@
 backend/server/logs
 frontend/server/logs
+.vscode/launch.json
+frontend/apps/monastery/js/constants.mjs

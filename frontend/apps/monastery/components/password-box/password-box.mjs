@@ -5,10 +5,7 @@
  * (C) 2021 TekMonks. All rights reserved.
  * License: See enclosed license file.
  */
-import {util} from "/framework/js/util.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
-
-const COMPONENT_PATH = util.getModulePath(import.meta);
 
 async function elementConnected(element) {
 	const data = {
@@ -20,7 +17,6 @@ async function elementConnected(element) {
 		required: element.getAttribute("required"),
 		pattern: element.getAttribute("pattern"),
 		onkeyup: element.getAttribute("onkeyup"),
-		
 	}
 
 	if (element.getAttribute("styleBody")) data.styleBody = `<style>${element.getAttribute("styleBody")}</style>`;
