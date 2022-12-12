@@ -56,7 +56,8 @@ async function getApicl(name, server, port, user, password,element) {
         };
     } catch (err) {
         await loader.afterLoading(); _enableButton(element.parentElement);
-        return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
+        return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } 
+    }
 
 }
 /**
@@ -71,8 +72,8 @@ async function getApicl(name, server, port, user, password,element) {
 async function callApi(name, server, port , headers , body,element) {
 
     try {   // call the api
-        LOG.info(`http://${server}:${port}/${name}`);
-        await loader.beforeLoading();_disableButton(element);
+        LOG.info(`[Call API] : http://${server}:${port}/${name}`);
+        await loader.beforeLoading();   _disableButton(element);
 
         let result = await apiman.rest(`http://${server}:${port}/${name}`, "POST", body||{}, false, true);
         if(result) await loader.afterLoading();  _enableButton(element);
@@ -81,9 +82,8 @@ async function callApi(name, server, port , headers , body,element) {
         return result;
     } catch (err) { 
         await loader.afterLoading(); _enableButton(element);
-        return {
-         result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
-
+        return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } 
+    }
 }
 
 
@@ -111,7 +111,8 @@ async function publishApicl(apicl, name, server, port, user, password,element) {
         };
     } catch (err) {
         await loader.afterLoading(); _enableButton(element);
-         return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
+        return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } 
+    }
 
 }
 
@@ -162,8 +163,9 @@ async function getModule(name,serverDetails) {
         return {
             result: result.result, mod: result.result ? data : null, err: "Module read failed at the server or Not Found", key: "ModuleNotFound",
         };
-    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
-
+    } catch (err) { 
+        return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } 
+    }
 }
 
 /**
@@ -190,8 +192,8 @@ async function unpublishApicl(name, server, port, user, password,element) {
         };
     } catch (err) { 
         await loader.afterLoading(); _enableButton(element);
-
-        return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
+        return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } 
+    }
 }
 
 
@@ -212,17 +214,7 @@ async function _loginToServer(server, port, adminid, adminpassword) {
     }
 }
 
-function _disableButton(element){
-    element.style["pointer-events"]="none";
-    element.style["opacity"]=0.4;
-}
-
-
-function _enableButton(element){
-
-    element.style["pointer-events"]="";
-    element.style["opacity"]="";
-}
-
+function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 export const serverManager = { publishApicl, unpublishApicl, getApiclList, getApicl, getModule, publishModule, callApi };

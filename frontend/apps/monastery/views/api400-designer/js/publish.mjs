@@ -19,9 +19,8 @@ const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/.
 let saved_props;
 
 async function openDialog() {
-    let pageFile =  `${VIEW_PATH}/dialogs/dialog_publish.page`;
-
-    let html = await page_generator.getHTML(new URL(pageFile), null, {modelName: blackboard.getListeners(MSG_GET_MODEL_NAME)[0]({})||""});
+    let pageFile =  `${VIEW_PATH}/dialogs/dialog_publish.page`,
+    html = await page_generator.getHTML(new URL(pageFile), null, {modelName: blackboard.getListeners(MSG_GET_MODEL_NAME)[0]({})||""});
 
     const dom = new DOMParser().parseFromString(html, "text/html");
     if (saved_props) for (const id in saved_props) dom.querySelector(`#${id}`).setAttribute("value", saved_props[id]);
@@ -42,8 +41,7 @@ async function openDialog() {
             }
            const pubResult = await serverManager.publishApicl(model, result.name, result.server, result.port, result.adminid, result.adminpassword,dialogElement);
             blackboard.broadcastMessage(MSG_RENAME_MODEL, {name: result.name});
-          
-     
+
             if (!pubResult.result) DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); 
             else {DIALOG.showMessage(await i18n.get("PublishSuccess"), "ok", null, messageTheme, "MSG_DIALOG");  return true;}
         } });
