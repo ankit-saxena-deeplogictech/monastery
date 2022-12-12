@@ -79,7 +79,7 @@ div#windowcontent {
 <div id="window">
     <span id="header" onmousedown="monkshu_env.components['floating-window'].mouseDownOnHeader(event, this)">
         <span id="title">{{title}}{{^title}}Output{{/title}}</span>
-        <img id="close" src="{{closeIcon}}{{^closeIcon}}{{componentPath}}/img/close.svg{{/closeIcon}}" 
+        <img id="close" src="{{{closeIcon}}}" 
             onclick="monkshu_env.components['floating-window'].hideWindow(this)">
     </span>
 
