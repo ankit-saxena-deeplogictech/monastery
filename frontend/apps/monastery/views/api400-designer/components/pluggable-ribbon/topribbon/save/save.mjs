@@ -30,11 +30,8 @@ async function clicked(element, event) {
     CONTEXT_MENU.showMenu(CONTEXT_MENU_ID, HTML_CONTENT, x, y, 0, 5, _convert18NtoRenderData());
 }
 
-const getImage = _ => IMAGE;
-
-const getHelpText = (lang=en) => I18N.HELP_TEXTS[lang];
-
-const getDescriptiveName = (lang=en) => I18N.DESCRIPTIVE_NAME[lang];
+const getImage = _ => IMAGE, getHelpText = (lang=en) => I18N.HELP_TEXTS[lang],
+    getDescriptiveName = (lang=en) => I18N.DESCRIPTIVE_NAME[lang];
 
 function saveToDisk(name) {
     if (name && name.trim() != "") MODEL_NAME = name; else MODEL_NAME = null;
