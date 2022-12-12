@@ -7,6 +7,8 @@
 import { serverManager } from "../js/serverManager.js";
 import {i18n} from "/framework/js/i18n.mjs";
 import {util} from "/framework/js/util.mjs";
+import { openserverhelper } from "../js/openserverhelper.mjs";
+
 
 
 const DIALOG = window.monkshu_env.components["dialog-box"], MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/..`;
@@ -18,10 +20,9 @@ let xCounter, yCounter, counter = 0, dependencies, result, storeIDS, flagNOthenY
 * @param data The incoming apicl to convert, the format should be { "index:" : "command" }
 * @returns The  api400modelobject, { "apicl": [{ "commands": finalCommands, "name": "commands", "id": counter }] }
 */
-async function apiclParser(data) {
+async function apiclParser(data,uploadType) {
     let labelRe = /^\s*{*\s*[\"\'](.+?)[\"\']\s*\:/gm, labels = [], match;
     while (match = labelRe.exec(data)) labels.push(match[1]);
-    console.log(new Set(labels).size);
     const messageTheme = await $$.requireJSON(`${VIEW_PATH}/dialogs/dialogPropertiesPrompt.json`);
     if(new Set(labels).size !== labels.length){ await  DIALOG.showMessage(await i18n.get("IncorrectApicl"), "error", null, messageTheme, "MSG_DIALOG");return false;}
     xCounter = 100, yCounter = 80, dependencies = [], storeIDS = {}, commandCounter = [],
@@ -34,13 +35,12 @@ async function apiclParser(data) {
     }
     for (const key in apicl) {
         if (!initAPICL[key]) {
-            const modelObject = await _parseCommand(apicl[key], key);
+            const modelObject = await _parseCommand(apicl[key], key,uploadType);
             if (Object.keys(modelObject).length > 0) { result.push(modelObject); initAPICL[key] = modelObject.id; }
         }
     }
     const resolvedPromises = await Promise.all(result);
     let finalCommands = _correctAPICL(resolvedPromises);
-    console.log(finalCommands);
     if (apicl[Object.keys(apicl).length].includes("NOP")) finalCommands = _updateCordiantes(finalCommands, apicl[Object.keys(apicl).length]);
     else if (apicl[Object.keys(apicl).length + 1] && apicl[Object.keys(apicl).length + 1].includes("NOP")) finalCommands = _updateCordiantes(finalCommands, apicl[Object.keys(apicl).length + 1]);
     counter = 0;
@@ -55,7 +55,7 @@ async function apiclParser(data) {
 * @param key index number of the command 
 * @returns modelobject, which contains nodeName, description, id, x-coordinates, y-coordinates, and other required properties for that command
 */
-const _parseCommand = async function (command, key) {
+const _parseCommand = async function (command, key,uploadType) {
     counter++;
     let ret = {}, nodeNameAsSubCmd = '', attr, cmd = command.split(' '), nodeName = cmd[0].toLowerCase();
     if (nodeName == "runjs" && _findBetweenParenthesis(command, "MOD") != "") nodeName = "mod";
@@ -88,7 +88,7 @@ const _parseCommand = async function (command, key) {
     else if (nodeName == 'jsonata') { ret = await _parseJsonata(command, isThisSubCmd) }
     else if (nodeName == 'map') { ret = await _parseMap(command, isThisSubCmd) }
     else if (nodeName == 'scr') { ret = await _parseScr(command, isThisSubCmd, key) }
-    else if (nodeName == 'mod') { ret = await _parseMod(command) }
+    else if (nodeName == 'mod') { ret = await _parseMod(command,uploadType) }
     else if (nodeName == 'substr') { ret = await _parseSubstr(command, isThisSubCmd) }
     else if (nodeName == 'endapi') { ret = await _parseEndapi() }
 
@@ -385,7 +385,7 @@ const _parseRunsqlprc = async function (command) {
             paramNature = `&${otherParams[0]}`
         }
         else parameter = param;
-        finalValues.push([parameter, paramNature, paramType]);
+        finalValues.push([paramNature,parameter,paramType]);
     }
     ret["listbox"] = JSON.stringify(finalValues);
     ret["nodeName"] = "runsqlprc";
@@ -469,11 +469,17 @@ const _parseMap = async function (command, isThisSubCmd) {
  * @param command  apicl command for RUNJS MOD
  * @returns RUNJS MOD node object with required properties
  */
-async function _parseMod(command) {
+async function _parseMod(command,uploadType) {
+    const messageTheme = await $$.requireJSON(`${VIEW_PATH}/dialogs/dialogPropertiesPrompt.json`);
+
     const ret = {};
     ret["modulename"] = _findBetweenParenthesis(command, "MOD");
-    const jsData = await serverManager.getModule(_findBetweenParenthesis(command, "MOD")); // gets the JS code from module file (passsing module name in function)
+    if(!uploadType){
+    const serverDetails = await openserverhelper.serverDetails();
+    const jsData = await serverManager.getModule(_findBetweenParenthesis(command, "MOD"),serverDetails); // gets the JS code from module file (passsing module name in function)
     ret["code"] = jsData.mod;
+    if(!jsData.result)  await  DIALOG.showMessage(await i18n.get("ModNotFound"), "error", null, messageTheme, "MSG_DIALOG");}
+    else {await  DIALOG.showMessage(await i18n.get("IncorrectMod"), "error", null, messageTheme, "MSG_DIALOG");}
     ret["nodeName"] = "mod";
     return ret;
 }

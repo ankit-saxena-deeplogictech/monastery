@@ -9,7 +9,7 @@ import {serverManager} from "../../../../js/serverManager.js";
 import {page_generator} from "/framework/components/page-generator/page-generator.mjs";
 import {apiclparser} from "../../../../model/apiclparser.mjs"
 
-const PLUGIN_PATH = util.getModulePath(import.meta), MSG_FILE_UPLOADED = "FILE_UPLOADED", 
+const PLUGIN_PATH = util.getModulePath(import.meta), MSG_FILE_UPLOADED = "FILE_UPLOADED", FILE_UPLOADED_FROM_DISK = "UPLOADED_FROM_DISK ",
     CONTEXT_MENU = window.monkshu_env.components["context-menu"], CONTEXT_MENU_ID = "contextmenumain",
     DIALOG_RET_PROPS = ["name", "server", "port", "adminid", "adminpassword"], 
     DIALOG = window.monkshu_env.components["dialog-box"], VIEW_PATH=`${PLUGIN_PATH}/../../../../`;
@@ -49,7 +49,7 @@ async function droppedFile(event) {
 
 async function _uploadFile() {
     try {
-        let {name, data} = await uploadAFile("*/*"); data =await apiclparser.apiclParser(data);
+        let {name, data} = await uploadAFile("*/*"); data =await apiclparser.apiclParser(data,FILE_UPLOADED_FROM_DISK);
         if(data){data = JSON.stringify(data);blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name,data});}  
        
     } catch (err) {LOG.error(`Error opening file: ${err}`);}

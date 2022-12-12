@@ -18,7 +18,6 @@ function init() {
 }
 
 async function connectServerClicked(dialogElement) {
-    console.log(dialogElement);
     const server = DIALOG.getElementValue("server"), port = DIALOG.getElementValue("port"),
         adminid = DIALOG.getElementValue("adminid"), adminpassword = password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value;
     const listResult = await serverManager.getApiclList(server, port, adminid, adminpassword, dialogElement);
@@ -37,7 +36,6 @@ async function connectServerClicked(dialogElement) {
 }
 
 async function openClicked(_elementSendingTheEvent, idOfPackageToOpen) {
-    console.log(_elementSendingTheEvent);
     const server = DIALOG.getElementValue("server"), port = DIALOG.getElementValue("port"),
         adminid = DIALOG.getElementValue("adminid"), adminpassword = password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value;
     const modelResult = await serverManager.getApicl(idOfPackageToOpen, server, port, adminid, adminpassword, _elementSendingTheEvent);

@@ -33,7 +33,6 @@ function loadModel(jsonModel) {
 
     try {
         api400modelObj = JSON.parse(jsonModel);
-        console.log(api400modelObj);
     }
     catch (err) { LOG.error(`Bad API400 model, error ${err}, skipping.`); return; }
     if (!(api400modelObj.apicl)) { LOG.error(`Bad API400 model, not in right format.`); return; }

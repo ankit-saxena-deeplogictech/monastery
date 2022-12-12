@@ -12,31 +12,14 @@ License: MIT - see enclosed license.txt file.
 	<meta name=viewport content="width=device-width, initial-scale=1.0, minimum-scale=0.5 maximum-scale=1.0">
 
 	<title>Monastery</title>
-
+    <link href="./img/favicon.svg" rel="icon" type="image/x-icon">
 	<!-- Include the monkshu framework -->
 	<script type="text/javascript" src="/framework/js/$$.js"></script>
-
 	<!-- And off we go ... -->
 	<script type="text/javascript">$$.boot(new URL("./", window.location));</script>
-	<script type="module">import {loader} from "./js/loader.mjs";  window.onload = () => { loader.beforeLoading() };
-</script>
+	<script type="module">import {loader} from "./js/loader.mjs";  window.onload = () => { loader.beforeLoading() };</script>
 
-	<style>
-			.spinner {
-			position: fixed;
-			left: 45%;
-			top: 42%;
-			z-index: 9999;
-
-		}
-
-
-		.loading-spinner {
-			height: 9em;
-			width: 9em;
-
-		}
-	</style>
+	<style>@import './css/loader.css';</style>
 </head>
 
 </html>

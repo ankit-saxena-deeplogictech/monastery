@@ -15,7 +15,6 @@ const afterLoading = async () =>{
     if(document.querySelector('.spinner')){
 
     const spinnerElement = document.querySelector('.spinner');
-    console.log(spinnerElement);
     document.body.removeChild(spinnerElement);
     }
 }
