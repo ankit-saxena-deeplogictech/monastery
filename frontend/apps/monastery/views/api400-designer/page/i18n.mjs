@@ -84,7 +84,8 @@ export const i18n = {
         "FillQuote":"Please fill with single quotes",
         "IncorrectApicl":"Incorrect APICL format",
         "IncorrectMod":"Plese Fill js code in Mod ",
-        "ModNotFound":"Js Module Not Found "
+        "ModNotFound":"Js Module Not Found ",
+        "TestAPIFailed":"Testing API Failed"
     },
 
     hi: {
