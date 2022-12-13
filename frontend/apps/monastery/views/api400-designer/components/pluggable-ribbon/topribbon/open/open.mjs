@@ -30,9 +30,13 @@ async function clicked(element, event) {
     CONTEXT_MENU.showMenu(CONTEXT_MENU_ID, menus, x, y, 0, 5);
 }
 
-const getImage = _ => IMAGE, getHelpText = (lang = en) => I18N.HELP_TEXTS[lang]
-    getDescriptiveName = (lang = en) => I18N.DESCRIPTIVE_NAME[lang],
-    allowDrop = event => _isDraggedItemAJSONFile(event);
+const getImage = _ => IMAGE;
+
+const getHelpText = (lang=en) => I18N.HELP_TEXTS[lang];
+
+const getDescriptiveName = (lang=en) => I18N.DESCRIPTIVE_NAME[lang];
+
+const allowDrop = event => _isDraggedItemAJSONFile(event);
 
 async function droppedFile(event) {
     event.preventDefault(); if (!_isDraggedItemAJSONFile(event)) return; // can't support whatever was dropped

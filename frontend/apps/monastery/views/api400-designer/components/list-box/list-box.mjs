@@ -19,8 +19,7 @@ const elementConnected = async (element) => {
   const data = {
     text: element.getAttribute("text"), onclick: element.getAttribute("onclickHandler"),
     onclickRemoveHandler: element.getAttribute("onclickRemoveHandler"), componentPath: COMPONENT_PATH,
-    styleBody: element.getAttribute("styleBody")
-      ? `<style>${element.getAttribute("styleBody")}</style>`
+    styleBody: element.getAttribute("styleBody") ? `<style>${element.getAttribute("styleBody")}</style>`
       : undefined
   };
   list_box.setData(element.id, data);
@@ -78,7 +77,7 @@ function _setUpDefaultBoxOrContainerBox(elementType, element) {
   }
 }
 
-function removeElement() {
+function removeElement()  {  //Removes the last element in the page-contents container
   const dialogShadowRoot = dialog_box.getShadowRootByHostId(DIALOG_HOST_ID),
         parent = dialogShadowRoot.querySelector("div#page-contents"),
         noOfElements = parent.children.length;
@@ -86,6 +85,11 @@ function removeElement() {
   parent.removeChild(parent.lastChild);
 }
 
+/**
+ * Adds single text box 
+ * @param element Host element
+ * @param value value inside text box
+ */
 function addTextBox(element, value) {
   const listBoxElement = list_box.getHostElement(element),
         parentContainer = _getParentContainer(), 
@@ -94,7 +98,11 @@ function addTextBox(element, value) {
                                       listBoxElement.getAttribute("required"));
   parentContainer.appendChild(inputElement);
 }
-
+/**
+ * Adds multiple text boxes container
+ * @param element Host element
+ * @param textBoxValues contains values of text boxes
+ */
 function addMultipleTextBoxes(element, textBoxValues) {
   const listBoxElement = list_box.getHostElement(element),
         parentContainer = _getParentContainer(),
@@ -108,6 +116,12 @@ function _getAttribute(element, type) {
   if (type != "classNameForDiv") return JSON.parse(element.getAttribute(type).replace(/'/g, '"'));
 }
 
+/**
+ * Adds one text box and two drop-down elements to the div container
+ * @param variable value of variable text box
+ * @param natureOfParm value of natureOfParm  drop-down
+ * @param typeOfParam value of typeOfParam drop-down
+ */
 function addContainerForRunsqlprc(variable, natureOfParm, typeOfParam) {
   const parentContainer = _getParentContainer(), 
         divElement = _createDivElementForRunsqlPrc(parentContainer, variable, natureOfParm, typeOfParam);

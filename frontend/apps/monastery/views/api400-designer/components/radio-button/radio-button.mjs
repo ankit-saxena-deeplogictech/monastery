@@ -40,7 +40,11 @@ function _setValue(value, host) {
   else shadowRoot.querySelector('#pool').removeAttribute("disabled");
 }
 
-function check(element) {
+/**
+ * Disables the pool text box based on operation selected
+ * @param element Host element
+ */
+function checkSelectedAndDisablePool(element) {
   const shadowRoot = element instanceof Element ? diloagBoxComponent.getShadowRootByContainedElement(element) :
     diloagBoxComponent.getShadowRootByHostId(element || DEFAULT_HOST_ID);
 
@@ -48,6 +52,6 @@ function check(element) {
   else shadowRoot.querySelector('#pool').removeAttribute("disabled");
 }
 
-export const radio_button = { trueWebComponentMode: false, elementConnected, check };
+export const radio_button = { trueWebComponentMode: false, elementConnected, checkSelectedAndDisablePool };
 
 monkshu_component.register("radio-button",`${COMPONENT_PATH}/radio-button.html`,radio_button);

@@ -470,9 +470,7 @@ const _parseMap = async function (command, isThisSubCmd) {
  * @returns RUNJS MOD node object with required properties
  */
 async function _parseMod(command,uploadType) {
-    const messageTheme = await $$.requireJSON(`${VIEW_PATH}/dialogs/dialogPropertiesPrompt.json`);
-
-    const ret = {};
+    const messageTheme = await $$.requireJSON(`${VIEW_PATH}/dialogs/dialogPropertiesPrompt.json`), ret = {};
     ret["modulename"] = _findBetweenParenthesis(command, "MOD");
     if(!uploadType){
     const serverDetails = await openserverhelper.serverDetails();
