@@ -196,24 +196,6 @@ async function unpublishApicl(name, server, port, user, password,element) {
     }
 }
 
-
-async function _loginToServer(server, port, adminid, adminpassword) {
-    const API_LOGIN_SECURE = `https://${server}:${port}/apps/monastery/login`;
-    const API_LOGIN_INSECURE = `http://${server}:${port}/apps/monastery/login`;
-    try {   // try secure first
-        const result = await apiman.rest(API_LOGIN_SECURE, "GET", { id: adminid, pw: adminpassword }, false, true);
-        if (result.result) return { result: true, scheme: "https" };
-        else throw `Server secure login failed, trying insecure, ${await i18n.get(SecureConnectFailed)}`;
-    } catch (err) {    // try insecure else give up
-        try {
-            LOG.debug(err);
-            const result = await apiman.rest(API_LOGIN_INSECURE, "GET", { id: adminid, pw: adminpassword }, false, true);
-            if (result.result) return { result: true, scheme: "http" };
-            else return { result: false, err: "Login failed at the server", raw_err: "Login failed at the server", key: "LoginIssue" };
-        } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
-    }
-}
-
 function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
 function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 

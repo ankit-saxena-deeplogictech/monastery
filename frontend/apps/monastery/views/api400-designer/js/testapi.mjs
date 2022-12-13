@@ -23,7 +23,7 @@ const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH = `${MODULE_PATH}
 let saved_props;
 
 async function openDialog() {
-    let pageFile = `${VIEW_PATH}/dialogs/dialog_test.page`;
+    let pageFile = `${VIEW_PATH}/dialogs/dialog_testapi.page`;
     const floatingWindowHTML = await $$.requireText(CONSOLE_HTML_FILE);
 
     let html = await page_generator.getHTML(new URL(pageFile), null, { modelName: blackboard.getListeners(MSG_GET_MODEL_NAME)[0]({}) || "" });
@@ -38,33 +38,27 @@ async function openDialog() {
     html = dom.documentElement.outerHTML;   // this creates HTML with default values set from the previous run
 
     // now show and run the dialog
-    const dialogPropertiesPath = `${VIEW_PATH}/dialogs/dialogPropertiestest.json`;
-    const messageTheme = await $$.requireJSON(`${VIEW_PATH}/dialogs/dialogPropertiesPrompt.json`);
+    const dialogPropertiesPath = `${VIEW_PATH}/dialogs/dialogPropertiestestapi.json`;
     DIALOG.showDialog(dialogPropertiesPath, html, null, DIALOG_RET_PROPS,
         async (typeOfClose, result, dialogElement) => {
             if (typeOfClose == "submit") {
-                DIALOG.getElement("ok").value = 'Testing...'
                 saved_props = util.clone(result, ["adminpassword"]); // don't save password, for security
                 result.adminpassword = password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value;
 
-                const api400mod = api400model.getModel(),jsModule = api400model.getModules();
+                const api400mod = api400model.getModel(), jsModule = api400model.getModules();
                 if (jsModule.length != 0) {
-                    LOG.info(JSON.stringify(jsModule));
-                    // check same module JS name is exists on api400 server
-                    // throw error based on check , and show warning box
                     const pubModResult = await serverManager.publishModule(result.server, result.port, result.adminid, result.adminpassword, dialogElement);
                     if (!pubModResult.result) { DIALOG.showError(dialogElement, await i18n.get(pubModResult.key)); return null; }
                 }
                 let tempApiName = `ID${Date.now()}`;
-                const header = DIALOG.getElementValue("header"), body = DIALOG.getElementValue("body"),
-                    pubResult = await serverManager.publishApicl(api400mod, tempApiName, result.server, result.port, result.adminid, result.adminpassword, dialogElement),
-                    apiResult = await serverManager.callApi(tempApiName, result.server, result.port, header, body, dialogElement);
+                const header = DIALOG.getElementValue("header"), body = DIALOG.getElementValue("body");
+                await serverManager.publishApicl(api400mod, tempApiName, result.server, result.port, result.adminid, result.adminpassword, dialogElement);
+                const apiResult = await serverManager.callApi(tempApiName, result.server, result.port, header, body, dialogElement);
 
                 await FLOATING_WINDOW.showWindow(CONSOLE_THEME, Mustache.render(floatingWindowHTML, { message: `${JSON.stringify(apiResult, null, 2)}`, error: undefined }));
 
                 const unPubResult = await serverManager.unpublishApicl(tempApiName, result.server, result.port, result.adminid, result.adminpassword, dialogElement);
                 if (!unPubResult.result) DIALOG.showError(dialogElement, await i18n.get(unPubResult.key));
-                // else {DIALOG.showMessage(await i18n.get("ApiTestSuccess"), "ok", null, messageTheme, "MSG_DIALOG");  return true;}
 
 
             }
@@ -72,4 +66,4 @@ async function openDialog() {
     );
 }
 
-export const test = { openDialog };
+export const testapi = { openDialog };
