@@ -45,22 +45,33 @@ async function openDialog() {
                 saved_props = util.clone(result, ["adminpassword"]); // don't save password, for security
                 result.adminpassword = password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value;
 
-                const api400mod = api400model.getModel(), jsModule = api400model.getModules();
-                if (jsModule.length != 0) {
-                    const pubModResult = await serverManager.publishModule(result.server, result.port, result.adminid, result.adminpassword, dialogElement);
-                    if (!pubModResult.result) { DIALOG.showError(dialogElement, await i18n.get(pubModResult.key)); return null; }
+                try {
+                    const api400mod = api400model.getModel(), jsModule = api400model.getModules();
+                    if (jsModule.length != 0) {
+                        const pubModResult = await serverManager.publishModule(result.server, result.port, result.adminid, result.adminpassword, dialogElement);
+                        if (!pubModResult.result) { DIALOG.showError(dialogElement, await i18n.get(pubModResult.key)); return null; }
+                    }
+                    let tempApiName = `ID${Date.now()}`;
+                    const header = DIALOG.getElementValue("header"), body = DIALOG.getElementValue("body");
+                    // Step 1 : Publish the API
+                    const pubResult = await serverManager.publishApicl(api400mod, tempApiName, result.server, result.port, result.adminid, result.adminpassword, dialogElement);
+                    if (!pubResult.result) { DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); return; }
+
+                    // Step 2 : Call the API
+                    const apiResult = await serverManager.callApi(tempApiName, result.server, result.port, header, body, dialogElement);
+                    if (apiResult && apiResult.result)
+                        await FLOATING_WINDOW.showWindow(CONSOLE_THEME, Mustache.render(floatingWindowHTML, { message: `${JSON.stringify(apiResult, null, 2)}`, error: undefined }));
+
+                    // Step 3 : Remove the API
+                    if (pubResult && pubResult.result) {
+                        const unPubResult = await serverManager.unpublishApicl(tempApiName, result.server, result.port, result.adminid, result.adminpassword, dialogElement);
+                        if (!unPubResult.result) DIALOG.showError(dialogElement, await i18n.get(unPubResult.key));
+                    } 
+                } catch (error) {
+                    
                 }
-                let tempApiName = `ID${Date.now()}`;
-                const header = DIALOG.getElementValue("header"), body = DIALOG.getElementValue("body");
-                await serverManager.publishApicl(api400mod, tempApiName, result.server, result.port, result.adminid, result.adminpassword, dialogElement);
-                const apiResult = await serverManager.callApi(tempApiName, result.server, result.port, header, body, dialogElement);
 
-                await FLOATING_WINDOW.showWindow(CONSOLE_THEME, Mustache.render(floatingWindowHTML, { message: `${JSON.stringify(apiResult, null, 2)}`, error: undefined }));
-
-                const unPubResult = await serverManager.unpublishApicl(tempApiName, result.server, result.port, result.adminid, result.adminpassword, dialogElement);
-                if (!unPubResult.result) DIALOG.showError(dialogElement, await i18n.get(unPubResult.key));
-
-
+                
             }
         }
     );
