@@ -46,6 +46,7 @@ async function openDialog() {
                 result.adminpassword = password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value;
 
                 try {
+                    // Step 1 : Publish the Module first , if present
                     const api400mod = api400model.getModel(), jsModule = api400model.getModules();
                     if (jsModule.length != 0) {
                         const pubModResult = await serverManager.publishModule(result.server, result.port, result.adminid, result.adminpassword, dialogElement);
@@ -53,18 +54,18 @@ async function openDialog() {
                     }
                     let tempApiName = `ID${Date.now()}`;
                     const header = DIALOG.getElementValue("header"), body = DIALOG.getElementValue("body");
-                    // Step 1 : Publish the API
+                    // Step 2 : Publish the APICL , with temporary name
                     const pubResult = await serverManager.publishApicl(api400mod, tempApiName, result.server, result.port, result.adminid, result.adminpassword, dialogElement);
                     if (!pubResult.result) { DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); return; }
 
-                    // Step 2 : Call the API
+                    // Step 3 : Call the API
                     const apiResult = await serverManager.callApi(tempApiName, result.server, result.port, header, body, dialogElement);
                     if (apiResult){
                         await FLOATING_WINDOW.showWindow(CONSOLE_THEME, Mustache.render(floatingWindowHTML, { message: `${JSON.stringify(apiResult, null, 2)}`, error: undefined }));
                         if (!apiResult.result) DIALOG.showError(dialogElement, await i18n.get("TestAPIFailed"));
 
                     }  
-                    // Step 3 : Remove the API
+                    // Step 4 : Remove/Delete the published APICL above
                     if (pubResult && pubResult.result) {
                         const unPubResult = await serverManager.unpublishApicl(tempApiName, result.server, result.port, result.adminid, result.adminpassword, dialogElement);
                         if (!unPubResult.result) DIALOG.showError(dialogElement, await i18n.get(unPubResult.key));
