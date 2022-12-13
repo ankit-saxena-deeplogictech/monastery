@@ -49,7 +49,7 @@ async function openDialog() {
                     const api400mod = api400model.getModel(), jsModule = api400model.getModules();
                     if (jsModule.length != 0) {
                         const pubModResult = await serverManager.publishModule(result.server, result.port, result.adminid, result.adminpassword, dialogElement);
-                        if (!pubModResult.result) { DIALOG.showError(dialogElement, await i18n.get(pubModResult.key)); return null; }
+                        if (!pubModResult.result) { await DIALOG.showError(dialogElement, await i18n.get(pubModResult.key)); return null; }
                     }
                     let tempApiName = `ID${Date.now()}`;
                     const header = DIALOG.getElementValue("header"), body = DIALOG.getElementValue("body");
@@ -59,16 +59,19 @@ async function openDialog() {
 
                     // Step 2 : Call the API
                     const apiResult = await serverManager.callApi(tempApiName, result.server, result.port, header, body, dialogElement);
-                    if (apiResult && apiResult.result)
+                    if (apiResult){
                         await FLOATING_WINDOW.showWindow(CONSOLE_THEME, Mustache.render(floatingWindowHTML, { message: `${JSON.stringify(apiResult, null, 2)}`, error: undefined }));
+                        if (!apiResult.result) DIALOG.showError(dialogElement, await i18n.get("TestAPIFailed"));
 
+                    }  
                     // Step 3 : Remove the API
                     if (pubResult && pubResult.result) {
                         const unPubResult = await serverManager.unpublishApicl(tempApiName, result.server, result.port, result.adminid, result.adminpassword, dialogElement);
                         if (!unPubResult.result) DIALOG.showError(dialogElement, await i18n.get(unPubResult.key));
                     } 
                 } catch (error) {
-                    
+                    LOG.error(`[TEST API] Error :${error}`);
+                    DIALOG.showError(dialogElement, await i18n.get("TestAPIFailed"));
                 }
 
                 
