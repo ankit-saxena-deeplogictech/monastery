@@ -42,7 +42,7 @@
 	const shadowRoot = text_editor.getShadowRootByHost(element);
 	if(json && json.result){
 		shadowRoot.querySelector("div#statuscontainer").style.display = "block";
-	}
+	} else shadowRoot.querySelector("div#statuscontainer").style.display = "none";
 	_setValue(data, element);
 	return;
  }
