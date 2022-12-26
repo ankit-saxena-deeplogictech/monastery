@@ -25,19 +25,20 @@ async function main(page, desiredData) {
 	const decodedURL = new URL(page || router.decodeURL(window.location.href)), justURL = decodedURL.href.split("?")[0];
 
 	if (session.get(APP_EXIT_FLAG)) {	// exit check, once exited, can't reload
-		router.loadPage(APP_CONSTANTS.EXIT_HTML);	
+		router.loadPage(APP_CONSTANTS.LOGIN_HTML);
+		session.remove(APP_EXIT_FLAG);
 		return;
 	}
-	if (justURL == APP_CONSTANTS.INDEX_HTML) router.loadPage(APP_CONSTANTS.REGISTER_HTML);
+	if (justURL == APP_CONSTANTS.INDEX_HTML) router.loadPage(APP_CONSTANTS.LOGIN_HTML);
 	else if (securityguard.isAllowed(justURL)) {
 		if (router.getLastSessionURL() && (decodedURL.toString() == router.getLastSessionURL().toString())) router.reload();
 		else router.loadPage(decodedURL.href, desiredData);
-	} else router.loadPage(APP_CONSTANTS.REGISTER_HTML);
+	} else router.loadPage(APP_CONSTANTS.LOGIN_HTML);
 
-	if (session.get(APP_EXIT_FLAG)) {	// exit check, once exited, can't reload
-		router.loadPage(APP_CONSTANTS.EXIT_HTML);	
-		return;
-	}
+	// if (session.get(APP_EXIT_FLAG)) {	// exit check, once exited, can't reload
+	// 	router.loadPage(APP_CONSTANTS.EXIT_HTML);	
+	// 	return;
+	// }
 
 
 	// else route to what ever is requested.
@@ -64,8 +65,11 @@ function loggedIn() {
 function exit() {
 	loginmanager.logout();
 	session.set(APP_EXIT_FLAG, true);
-	router.loadPage(APP_CONSTANTS.EXIT_HTML);
+	router.loadPage(APP_CONSTANTS.LOGIN_HTML);
+	session.remove(APP_EXIT_FLAG);
 }
+
+function exitToChooser() { router.loadPage(APP_CONSTANTS.CHOOSER_HTML); }
 
 async function _addPageLoadInterceptors() {
 	const interceptors = await $$.requireJSON(`${APP_CONSTANTS.APP_PATH}/conf/pageLoadInterceptors.json`);
@@ -76,4 +80,4 @@ async function _addPageLoadInterceptors() {
 	}
 }
 
-export const application = { init, main, interceptPageLoadData, exit, loggedIn };
+export const application = { init, main, interceptPageLoadData, exit, exitToChooser, loggedIn };
