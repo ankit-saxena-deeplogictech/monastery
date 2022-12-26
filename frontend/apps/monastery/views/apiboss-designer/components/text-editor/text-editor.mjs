@@ -49,9 +49,8 @@
 
  function copyToClipboard(){
 	const host = text_editor.getHostElementByID("response");
-	const shadowRoot = text_editor.getShadowRootByHost(host);
-	if(shadowRoot.querySelector("span.cm-atom")){
-		navigator.clipboard.writeText(shadowRoot.querySelector("span.cm-atom").innerText);
+	if(_getValue(host)){
+		navigator.clipboard.writeText(_getValue(host));
 	}
  }
  

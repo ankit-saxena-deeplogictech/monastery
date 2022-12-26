@@ -188,9 +188,12 @@ async function tryIt(element, event) {
   const jwtToken = shadowRoot.querySelector("input#jwt-token").value;
   const host = new URL(`http://localhost:9090`).host; // have to change the host for our dynamic case
   let sub = 'access'
-  if (Object.keys(reqBody).length) {
+  if (jwtToken) {
     const storage = _getAPIManagerStorage(); storage.tokenManager[`${host}_${sub}`] = jwtToken; _setAPIManagerStorage(storage);
     let resp = await apiman.rest(`http://localhost:9090${path}`, "POST", reqBody, true);
+    text_editor.getJsonData(resp);
+  } else {
+    let resp = await apiman.rest(`http://localhost:9090${path}`, "POST", reqBody);
     text_editor.getJsonData(resp);
   }
 };
