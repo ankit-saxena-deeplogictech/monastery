@@ -7,8 +7,10 @@ import { monkshu_component } from "/framework/js/monkshu_component.mjs";
 import { text_editor } from "../text-editor/text-editor.mjs";
 import { apimanager as apiman } from "/framework/js/apimanager.mjs";
 import { APP_CONSTANTS } from "../../../../js/constants.mjs";
+import { session } from "../../../../../../framework/js/session.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH;
+const APIMANAGER_SESSIONKEY = "__org_monkshu_APIManager";
 
 let model,target;
 
@@ -183,14 +185,28 @@ async function tryIt(element, event) {
     getParaVal(para, reqBody);
   })
   let path = shadowRoot.querySelector("span#path").innerText;
+  const jwtToken = shadowRoot.querySelector("input#jwt-token").value;
+  const host = new URL(`http://localhost:9090`).host; // have to change the host for our dynamic case
+  let sub = 'access'
   if (Object.keys(reqBody).length) {
-    let resp = await apiman.rest(`http://localhost:9090${path}`, "POST", reqBody);
+    const storage = _getAPIManagerStorage(); storage.tokenManager[`${host}_${sub}`] = jwtToken; _setAPIManagerStorage(storage);
+    let resp = await apiman.rest(`http://localhost:9090${path}`, "POST", reqBody, true);
     text_editor.getJsonData(resp);
   }
 };
 
+function _getAPIManagerStorage() {
+  if (!session.get(APIMANAGER_SESSIONKEY)) 
+      session.set(APIMANAGER_SESSIONKEY, {tokenManager:{}, keys:{}, keyHeader:"org_monkshu_apikey", apiResponseCache: {}}); 
+  return session.get(APIMANAGER_SESSIONKEY);
+}
+
+function _setAPIManagerStorage(storage) {
+  session.set(APIMANAGER_SESSIONKEY, storage);
+}
+
 export const api_details = {
-  trueWebComponentMode: true, elementConnected, elementRendered, addMoreParameters, toggle, deleteParameters, _serachParamInSchema, tryIt, getParaVal, updateExposedpathandMethod
+  trueWebComponentMode: true, elementConnected, elementRendered, addMoreParameters, toggle, deleteParameters, _serachParamInSchema, tryIt, getParaVal, updateExposedpathandMethod, _getAPIManagerStorage, _setAPIManagerStorage
 }
 
 monkshu_component.register(
