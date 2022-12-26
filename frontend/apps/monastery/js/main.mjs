@@ -79,7 +79,7 @@ function showLoginMessages() {
 
 const logoutClicked = _ => loginmanager.logout();
 
-const interceptPageData = _ => router.addOnLoadPageData(APP_CONSTANTS.MAIN_HTML, async data => {   // set admin role if applicable
+const interceptPageData = _ => router.addOnLoadPageData(APP_CONSTANTS.CHOOSER_HTML, async data => {   // set admin role if applicable
     if (securityguard.getCurrentRole()==APP_CONSTANTS.ADMIN_ROLE) data.admin = true; 
 });
 
