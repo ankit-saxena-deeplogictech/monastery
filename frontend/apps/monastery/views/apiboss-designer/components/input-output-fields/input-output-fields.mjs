@@ -93,7 +93,7 @@ function fieldAdd(classname, divClass, selectClass, inputId, optionId, textareaI
                   <option class="values"  value="">Field Type</option>
                   <option class="values" value="string">String</option>
                   <option class="values"  value="boolean">Boolean</option>
-                  <option class="values" value="integer">Integer</option>
+                  <option class="values" value="number">Number</option>
                   <option class="values" value="object">Object</option>
                   <option class="values" value="array">Array</option>
                   <option class="values" value="null">Null</option>
@@ -162,7 +162,7 @@ if (shadowRoot.querySelector('.parent') && !shadowRoot.querySelector('#arrayType
       arrayType.innerHTML = `<option class="values"  value="">Field Type</option>
           <option class="values" value="string">String</option>
           <option class="values"  value="boolean">Boolean</option>
-          <option class="values" value="integer">Integer</option>
+          <option class="values" value="number">Number</option>
           <option class="values" value="object">Object</option>
           <option class="values" value="array">Array</option>
           <option class="values" value="null">Null</option>`
@@ -180,7 +180,7 @@ if (shadowRoot.querySelector('.child') && !shadowRoot.querySelector('#arrayType'
       arrayType.innerHTML = `<option class="values"  value="">Field Type</option>
           <option class="values" value="string">String</option>
           <option class="values"  value="boolean">Boolean</option>
-          <option class="values" value="integer">Integer</option>
+          <option class="values" value="number">Number</option>
           <option class="values" value="object">Object</option>
           <option class="values" value="array">Array</option>
           <option class="values" value="null">Null</option>`
@@ -385,8 +385,8 @@ if (shadowRoot.querySelector('.output-parent') && !shadowRoot.querySelector('#ou
       arrayType.id = 'output-arrayType'; // have to change here
       arrayType.innerHTML = `<option class="values"  value="">Field Type</option>
           <option class="values" value="string">String</option>
-          <option class="values"  value="number">Number</option>
-          <option class="values" value="integer">Integer</option>
+          <option class="values"  value="boolean">Boolean</option>
+          <option class="values" value="number">Number</option>
           <option class="values" value="object">Object</option>
           <option class="values" value="array">Array</option>
           <option class="values" value="null">Null</option>`
@@ -403,8 +403,8 @@ if (shadowRoot.querySelector('.output-child') && !shadowRoot.querySelector('#out
       arrayType.id = 'output-arrayType'; // have to change here
       arrayType.innerHTML = `<option class="values"  value="">Field Type</option>
           <option class="values" value="string">String</option>
-          <option class="values"  value="number">Number</option>
-          <option class="values" value="integer">Integer</option>
+          <option class="values" value="boolean">Boolean</option>
+          <option class="values" value="number">Number</option>
           <option class="values" value="object">Object</option>
           <option class="values" value="array">Array</option>
           <option class="values" value="null">Null</option>`
