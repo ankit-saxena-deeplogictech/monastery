@@ -60,8 +60,8 @@ function error(element, message) {
  * @param {function} callback The callback function once OK is clicked, optional
  */
 const showMessage = (message, hostID, callback=_=>{}) => monkshu_env.components['dialog-box'].showDialog(
-    `${COMPONENT_PATH}/templates/message.html`, true, false, {message}, hostID, [], 
-    _=> {monkshu_env.components['dialog-box'].hideDialog(hostID); callback();} );
+    `${APP_CONSTANTS.COMPONENTS_PATH}/dialog-box/templates/message.html`, true, 
+    false, {message}, hostID, [], _=> {monkshu_env.components['dialog-box1'].hideDialog(hostID); callback();});
 
 /**
  * Hides the error being shown on the dialog
@@ -124,4 +124,4 @@ function _resetUI(shadowRoot) {
 
 const trueWebComponentMode = true;	// making this false renders the component without using Shadow DOM
 export const dialog_box = {showDialog, trueWebComponentMode, hideDialog, cancel, error, showMessage, hideError, submit}
-monkshu_component.register("dialog-box", `${COMPONENT_PATH}/dialog-box.html`, dialog_box);
+monkshu_component.register("dialog-box1", `${COMPONENT_PATH}/dialog-box.html`, dialog_box);

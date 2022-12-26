@@ -127,6 +127,17 @@
 	</style>
 
 	<title>{{i18n.Title}}</title>
+
+	<script type="module">
+			import {main} from "./js/main.mjs"; monkshu_env.apps[APP_CONSTANTS.APP_NAME].main = main; 
+
+		import "./components/dialog-box/dialog-box.mjs";
+		import "./components/span-with-menu/span-with-menu.mjs";
+		// import "./components/progress-bar/progress-bar.mjs";
+		import {monkshu_component} from "/framework/js/monkshu_component.mjs";
+		blackboard.registerListener(monkshu_component.BLACKBOARD_MESSAGE_COMPONENT_RENDERED, component => {
+			if (component == "file-manager#fm") main.showLoginMessages(); });	// rendering needs to be complete as filemanager has it's own dialog which onconnect clears memory etc
+		</script>
 </head>
 
 <body>
@@ -134,7 +145,12 @@
 		<div id="details">
 			<img src="./img/user-square.svg" title="{{i18n.User}}">
 			<span id="username">Hi, Cool User</span>	
-			<img src="./img/options.svg" title="{{i18n.Options}}" onclick="window.monkshu_env.__chooser.showOptions()">
+			<span-with-menu id="gear" styleBody="url(./pages/menu.stylebody.css)"><img src="./img/settings.svg" style="height: 2em;width: 2em;vertical-align: middle;">
+				<menu-item onclick="monkshu_env.apps[APP_CONSTANTS.APP_NAME].main.changePassword(this)" label="{{i18n.ChangePassword}}"></menu-item>
+				<menu-item onclick="monkshu_env.apps[APP_CONSTANTS.APP_NAME].main.showOTPQRCode(this)" label="{{i18n.ChangePhone}}"></menu-item>
+				<menu-item onclick="monkshu_env.apps[APP_CONSTANTS.APP_NAME].main.changeProfile(this)" label="{{i18n.ChangeProfile}}"></menu-item>
+				{{#admin}}<menu-item onclick="monkshu_env.frameworklibs.router.navigate(APP_CONSTANTS.MANAGE_HTML)" label="{{i18n.ManageUsers}}"></menu-item>{{/admin}}
+			</span-with-menu>
 		</div>
 		<img src="./img/exit.svg" title="{{i18n.Exit}}" onclick="window.monkshu_env.__chooser.exitClicked()">
 	</div>
