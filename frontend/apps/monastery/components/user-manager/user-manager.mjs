@@ -7,7 +7,7 @@ import {util} from "/framework/js/util.mjs";
 import {i18n} from "/framework/js/i18n.mjs";
 import {router} from "/framework/js/router.mjs";
 import {session} from "/framework/js/session.mjs";
-import "./subcomponents/dialog-box/dialog-box.mjs";
+import "./subcomponents/display-box/display-box.mjs";
 import "./subcomponents/context-menu/context-menu.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
@@ -59,7 +59,7 @@ async function userMenuClicked(event, element, name, id, _org, role, approved) {
 
 async function addUser(element) {
 	const roles = []; for (const thisrole of conf.roles) roles.push({label:await i18n.get(thisrole), value: thisrole, selected: thisrole==conf.user_role?true:undefined});
-	monkshu_env.components['dialog-box'].showDialog(`${MODULE_PATH}/dialogs/addeditprofile.html`, true, true, 
+	monkshu_env.components['display-box'].showDialog(`${MODULE_PATH}/dialogs/addeditprofile.html`, true, true, 
 			{approved: true, roles, CONF:conf}, "dialog", ["name", "id", "role", "approved"], async ret => {
 		
 		if (ret.approved.toLowerCase() == "true") ret.approved = true; else ret.approved = false;
@@ -69,11 +69,11 @@ async function addUser(element) {
 
 		if (!addResult?.result) {	// account creation failed
 			const err = router.getMustache().render(await i18n.get("AddError"), {name: ret.name, id: ret.id}); 
-			LOG.error(err); monkshu_env.components['dialog-box'].hideDialog("dialog"); _showMessage("dialog", err);
+			LOG.error(err); monkshu_env.components['display-box'].hideDialog("dialog"); _showMessage("dialog", err);
 		} else if (!addResult.emailresult) {	// account created but login email send failed
 			const err = router.getMustache().render(await i18n.get("AddEmailError"), {name: ret.name, id: ret.id, loginurl: addResult.loginurl}); 
-			LOG.error(err); monkshu_env.components['dialog-box'].hideDialog("dialog"); _showError(err);
-		} else monkshu_env.components['dialog-box'].hideDialog("dialog");
+			LOG.error(err); monkshu_env.components['display-box'].hideDialog("dialog"); _showError(err);
+		} else monkshu_env.components['display-box'].hideDialog("dialog");
 
 		user_manager.reload(user_manager.getHostElementID(element));
 	});
@@ -81,7 +81,7 @@ async function addUser(element) {
 
 async function editUser(name, id, role, approved, element) {
 	const roles = []; for (const thisrole of conf.roles) roles.push({label:await i18n.get(thisrole), value: thisrole, selected: thisrole==role?true:undefined});
-	monkshu_env.components['dialog-box'].showDialog(`${MODULE_PATH}/dialogs/addeditprofile.html`, true, true, 
+	monkshu_env.components['display-box'].showDialog(`${MODULE_PATH}/dialogs/addeditprofile.html`, true, true, 
 			{name, id, role, approved:approved==1?true:undefined, roles, CONF:conf}, "dialog", 
 			["name", "id", "role", "approved", "old_id"], async ret => {
 		
@@ -91,9 +91,9 @@ async function editUser(name, id, role, approved, element) {
 		console.log(editResult);
 		if (!editResult?.result) {
 			const err = router.getMustache().render(await i18n.get("EditError"), {name, id}); 
-			LOG.error(err); monkshu_env.components['dialog-box'].error("dialog", err);
+			LOG.error(err); monkshu_env.components['display-box'].error("dialog", err);
 		} else {
-			monkshu_env.components['dialog-box'].hideDialog("dialog");
+			monkshu_env.components['display-box'].hideDialog("dialog");
 			user_manager.reload(user_manager.getHostElementID(element));
 			console.log(user_manager);
 		}
@@ -141,12 +141,12 @@ function _createData(host, users) {
 	return data;
 }
 
-const _showError = async error => { await monkshu_env.components['dialog-box'].showDialog(`${MODULE_PATH}/dialogs/error.html`, 
-	true, false, {error, CONF:conf}, "dialog", []); monkshu_env.components['dialog-box'].hideDialog("dialog"); }
-const _showMessage = async message => { await monkshu_env.components['dialog-box'].showDialog(`${MODULE_PATH}/dialogs/message.html`, 
-	true, false, {message, CONF:conf}, "dialog", []); monkshu_env.components['dialog-box'].hideDialog("dialog"); }
-const _execOnConfirm = (message, cb) => monkshu_env.components['dialog-box'].showDialog(`${MODULE_PATH}/dialogs/message.html`, 
-	true, true, {message, CONF:conf}, "dialog", [], _=>{monkshu_env.components['dialog-box'].hideDialog("dialog"); cb();});
+const _showError = async error => { await monkshu_env.components['display-box'].showDialog(`${MODULE_PATH}/dialogs/error.html`, 
+	true, false, {error, CONF:conf}, "dialog", []); monkshu_env.components['display-box'].hideDialog("dialog"); }
+const _showMessage = async message => { await monkshu_env.components['display-box'].showDialog(`${MODULE_PATH}/dialogs/message.html`, 
+	true, false, {message, CONF:conf}, "dialog", []); monkshu_env.components['display-box'].hideDialog("dialog"); }
+const _execOnConfirm = (message, cb) => monkshu_env.components['display-box'].showDialog(`${MODULE_PATH}/dialogs/message.html`, 
+	true, true, {message, CONF:conf}, "dialog", [], _=>{monkshu_env.components['display-box'].hideDialog("dialog"); cb();});
 
 export const user_manager = {trueWebComponentMode: true, elementConnected, userMenuClicked, addUser, editUser, 
 	searchModified, elementRendered}
