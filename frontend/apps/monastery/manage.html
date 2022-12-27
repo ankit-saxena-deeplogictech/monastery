@@ -33,12 +33,14 @@ span#header {
 	align-items: center;
 }
 img#textlogo {height: 3em;}
+img#reloadlogo {height: 2em;}
+
 span#middleheader {
-	background-color: #4FB4ED;
+	background-color: #DFF0FE;
 	width: 80%;
 	border-radius: 0px 0px 1em 1em;
 	box-shadow: 2px 2px 10px -2px rgba(0,0,0,0.25);
-	color: #FFFFFF;
+	color: #444;
 	padding: 1em 0 1em 0;
 	font-size: larger;
     cursor: default;
@@ -128,7 +130,9 @@ span#mobilefooter > img {
 <body style="margin: 0%">
 <span id="header">
 <img id="textlogo" src="./img/monastery.svg">
-<span id="middleheader"><span id="title">{{i18n.ManageUsers}}</span><span id="close" onclick="monkshu_env.frameworklibs.router.navigate(APP_CONSTANTS.MAIN_HTML)">X</span></span>
+<span id="middleheader"><span id="title">{{i18n.ManageUsers}}</span></span>
+<img id="reloadlogo" src="./img/reload.svg" onclick="location.reload()">
+
 <img id="logout" src="./img/exit.svg" onclick="loginmanager.loginmanager.logout()">
 </span>
 
@@ -136,18 +140,6 @@ span#mobilefooter > img {
 	<user-manager backendurl="{{APP_CONSTANTS.BACKEND}}/apps/{{APP_CONSTANTS.APP_NAME}}" 
 		org="{{#_org_monkshu_session}}{{APP_CONSTANTS.USERORG}}{{/_org_monkshu_session}}"></user-manager>
 </div>
-
-<span id="mobilefooter">
-	<img src="./img/mobilefooter_home.svg" onclick="monkshu_env.frameworklibs.router.navigate(APP_CONSTANTS.MAIN_HTML)">
-	<img src="./img/mobilefooter_reload.svg" onclick="location.reload()">
-	<span-with-menu id="gearmobile" bottommenu="true" styleBody="url(./pages/menu.stylebody.css)"><img src="./img/mobilefooter_settings.svg">
-		<menu-item onclick="main.changePassword(this)" label="{{i18n.ChangePassword}}"></menu-item>
-		<menu-item onclick="main.showOTPQRCode(this)" label="{{i18n.ChangePhone}}"></menu-item>
-		<menu-item onclick="main.changeProfile(this)" label="{{i18n.ChangeProfile}}"></menu-item>
-		{{#admin}}<menu-item onclick="monkshu_env.frameworklibs.router.navigate(APP_CONSTANTS.MANAGE_HTML)" label="{{i18n.ManageUsers}}"></menu-item>{{/admin}}
-	</span-with-menu>
-	<img src="./img/mobilefooter_logout.svg" onclick="main.logoutClicked()">
-</span>
 
 <dialog-box id="dialog"></dialog-box>
 
