@@ -131,13 +131,10 @@ span#header > button {min-width: 7em;}
 
 <div id="container">
     <span id="header">
-        <img src="{{componenturl}}/img/search.svg">
-        <input id="searchbox" type="text" placeholder="{{i18n.Search}}" onkeyup='monkshu_env.components["user-manager"].searchModified(this)'>
-        <button id="add" title="Add user" onclick='monkshu_env.components["user-manager"].addUser(this)'>{{i18n.AddUser}}</button>
     </span>
     <div id="userlist">
         {{#users}}
-        <div id="{{id}}" class="user" title="{{name}}&#10;{{id}}" ontouchend='event.preventDefault(); event.stopPropagation();
+        <div id="{{user_id}}" class="user" title="{{name}}&#10;{{user_id}}" ontouchend='event.preventDefault(); event.stopPropagation();
                     event.pageY = event.changedTouches[0].pageY; event.pageX = event.changedTouches[0].pageX; oncontextmenu(event)'
                 oncontextmenu='event.preventDefault(); event.stopPropagation(); monkshu_env.components["user-manager"].userMenuClicked(
                     event, this, "{{name}}", "{{user_id}}", "{{org}}", "{{role}}", "{{approved}}");'

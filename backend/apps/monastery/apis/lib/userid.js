@@ -98,12 +98,16 @@ exports.changepwph = async (id, pwph) => {
 }
 
 exports.getUsersForOrg = async org => {
-	const users = await db.getQuery("SELECT * FROM users_login INNER JOIN organizations WHERE organizations.org_name = ?", [org]);
+	const users = await db.getQuery("SELECT * FROM users_login WHERE org_id IN  ( SELECT org_id from organizations WHERE org_name = ? COLLATE NOCASE)", [org]);
 	if (users && users.length) return { result: true, users }; else return { result: false };
 }
 
 exports.getOrgsMatching = async org => {
 	const orgs = await db.getQuery("SELECT org_name FROM organizations WHERE org_name = ? COLLATE NOCASE", [org]);
+	if (orgs && orgs.length) return { result: true, ...(orgs[0]) }; else return { result: false, orgs: [] };
+}
+exports.getOrgsMatchingOnId = async org => {
+	const orgs = await db.getQuery("SELECT org_name FROM organizations WHERE org_id = ? COLLATE NOCASE", [org]);
 	if (orgs && orgs.length) return { result: true, ...(orgs[0]) }; else return { result: false, orgs: [] };
 }
 

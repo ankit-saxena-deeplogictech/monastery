@@ -40,7 +40,9 @@ exports.doService = async jsonReq => {
 	else LOG.error(`Bad PWPH, given for ID: ${jsonReq.id}.`);
 
 	if (result.result && result.org_id) {
-		const result1 = await userid.getOrgsMatching(result.org_name);
+		const result1 = await userid.getOrgsMatchingOnId(result.org_id);
+		LOG.info(JSON.stringify(result1))
+
 		if (result1.result) org_name = result1.org_name;
 		const result2 = await userid.getOrgsMatchingProducts(result.org_id);
 		if (result2 && result2.products && result2.products.length > 0) for (let product of result2.products) products.push(product.product_name);
