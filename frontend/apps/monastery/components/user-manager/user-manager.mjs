@@ -11,6 +11,7 @@ import "./subcomponents/dialog-box/dialog-box.mjs";
 import "./subcomponents/context-menu/context-menu.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
+import { APP_CONSTANTS } from "../../js/constants.mjs";
 
 const CONTEXT_MENU_ID = "usermanagerContextMenu", API_GETORGUSERS = "getorgusers", API_DELETEUSER = "deleteuser",
 	API_APPROVEUSER = "approveuser", API_EDITUSER = "updateuserbyadmin", API_RESETUSER = "resetuser", 
@@ -20,14 +21,16 @@ let conf;
 
 async function elementConnected(element) {
 	conf = await $$.requireJSON(`${MODULE_PATH}/conf/usermanager.json`);
-
+console.log(`${element.getAttribute("backendurl")}/${API_GETORGUSERS}`);
+console.log(element.getAttribute("org"));
 	const usersResult = await apiman.rest(`${element.getAttribute("backendurl")}/${API_GETORGUSERS}`, "GET", 
-		{org: element.getAttribute("org")}, true);
+		{org:"sasi"}, true);
 	if (!usersResult.result) {LOG.error("Can't fetch the list of users for the org, API returned false.");}
 
 	const users = usersResult?.users||[], data = _createData(element, users);
 	user_manager.setDataByHost(element, data);
-
+console.log(users);
+console.log(data);
 	user_manager.getMemory(element.id).users = users;
 }
 
@@ -88,13 +91,16 @@ async function editUser(name, id, role, approved, element) {
 		if (ret.approved.toLowerCase() == "true") ret.approved = true; else ret.approved = false;
 		const backendURL = user_manager.getHostElement(element).getAttribute("backendurl");
 		const editResult = await apiman.rest(`${backendURL}/${API_EDITUSER}`, "POST", ret, true);
+		console.log(editResult);
 		if (!editResult?.result) {
 			const err = router.getMustache().render(await i18n.get("EditError"), {name, id}); 
 			LOG.error(err); monkshu_env.components['dialog-box'].error("dialog", err);
 		} else {
 			monkshu_env.components['dialog-box'].hideDialog("dialog");
 			user_manager.reload(user_manager.getHostElementID(element));
+			console.log(user_manager);
 		}
+
 	});
 }
 

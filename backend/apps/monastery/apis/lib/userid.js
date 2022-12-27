@@ -27,8 +27,8 @@ exports.register = async (id, name, org, pwph, totpSecret, role, approved, domai
 					}
 					console.log(JSON.stringify(await db.getQuery(" SELECT * FROM organizations_products")));
 					return {
-						result: await db.runCmd("INSERT INTO users_login (user_id, name, org_id, pwph, totpsec, role, approved, domain, created_at) VALUES (?,?,?,?,?,?,?,?,?)",
-							[id, name, org_id, pwphHashed, totpSecret, role, approved ? 1 : 0, domain, created_at]), id, name, org_id, pwph: pwphHashed, totpsec: totpSecret, role, approved: approved ? 1 : 0, domain
+						result: await db.runCmd("INSERT INTO users_login (user_id,pwph, name, org_id, role, totpsec, approved, domain, created_at) VALUES (?,?,?,?,?,?,?,?,?)",
+							[id, pwphHashed, name, org_id, role, totpSecret, approved ? 1 : 0, domain, created_at]), id, name, org_id, pwph: pwphHashed, totpsec: totpSecret, role, approved: approved ? 1 : 0, domain
 					}
 				};
 			}
@@ -40,8 +40,8 @@ exports.register = async (id, name, org, pwph, totpSecret, role, approved, domai
 	if (rows && rows[0]) {
 		const org_id = rows[0]["org_id"];
 		return {
-			result: await db.runCmd("INSERT INTO users_login (user_id, name, org_id, pwph, totpsec, role, approved , domain,created_at) VALUES (?,?,?,?,?,?,?,?,?)",
-				[id, name, org_id, pwphHashed, totpSecret, role, approved ? 1 : 0, domain,created_at]), id, name, org_id, pwph: pwphHashed, totpsec: totpSecret, role, approved: approved ? 1 : 0, domain
+			result: await db.runCmd("INSERT INTO users_login (user_id, pwph, name, org_id,role, totpsec,  approved , domain,created_at) VALUES (?,?,?,?,?,?,?,?,?)",
+				[id, pwphHashed, name, org_id, role, totpSecret, approved ? 1 : 0, domain, created_at]), id, name, org_id, pwph: pwphHashed, totpsec: totpSecret, role, approved: approved ? 1 : 0, domain
 		}
 
 	}
@@ -58,16 +58,32 @@ exports.delete = async id => {
 	return { result: await db.runCmd("DELETE FROM users_login where id = ?", [id]) };
 }
 
-exports.update = async (oldid, id, name, org, pwph, totpSecret, role, approved, domain) => {
-	const pwphHashed = await getUserHash(pwph);
+exports.update = async (oldid, user_id, name, org_id, pwph, totpSecret, role, approved, domain) => {
+	LOG.info(`oldid : ${oldid}`) 
+	LOG.info(`user_id : ${user_id}`) 
+	LOG.info(`name : ${name}`) 
+	LOG.info(`org_id : ${org_id}`) 
+	LOG.info(`pwph : ${pwph}`) 
+	LOG.info(`totpSecret : ${totpSecret}`) 
+	LOG.info(`role : ${role}`) 
+	LOG.info(`approved : ${approved}`) 
+	LOG.info(`domain : ${domain}`)
 	return {
-		result: await db.runCmd("UPDATE users_login SET id=?, name=?, org=?, pwph=?, totpsec=?, role = ?, approved = ?, domain = ? WHERE id=?",
-			[id, name, org, pwphHashed, totpSecret, role, approved ? 1 : 0, oldid]), oldid, id, name, org, pwph, totpSecret, role, approved, domain
+		result: await db.runCmd("UPDATE users_login SET user_id=?, name=?, org_id=?,pwph =? ,totpsec=?, role = ?, approved = ?, domain = ? WHERE user_id = ?",
+			[user_id, name, org_id, pwph, totpSecret, role, approved ? 1 : 0, domain,user_id]), oldid, user_id, name, org_id, pwph, totpSecret, role, approved, domain
 	};
 }
 
 exports.checkPWPH = async (id, pwph) => {
-	const idEntry = await exports.existsID(id); if (!idEntry.result) return { result: false }; else delete idEntry.result;
+	const idEntry = await exports.existsID(id); 
+	LOG.info(idEntry);
+	LOG.info(JSON.stringify(idEntry));
+	LOG.info(idEntry.pwph);
+	LOG.info(pwph);
+
+
+	if (!idEntry.result) return { result: false }; else delete idEntry.result;
+	LOG.info( await (util.promisify(bcryptjs.compare)(pwph, idEntry.pwph)))
 	return { result: await (util.promisify(bcryptjs.compare))(pwph, idEntry.pwph), ...idEntry };
 }
 
@@ -82,7 +98,7 @@ exports.changepwph = async (id, pwph) => {
 }
 
 exports.getUsersForOrg = async org => {
-	const users = await db.getQuery("SELECT user_id FROM users_login INNER JOIN organizations WHERE organizations.org_name = ?", [org]);
+	const users = await db.getQuery("SELECT * FROM users_login INNER JOIN organizations WHERE organizations.org_name = ?", [org]);
 	if (users && users.length) return { result: true, users }; else return { result: false };
 }
 
@@ -92,7 +108,7 @@ exports.getOrgsMatching = async org => {
 }
 
 exports.getUsersForDomain = async domain => {
-	const users = await db.getQuery("SELECT id, name, org, role, approved FROM users_login WHERE domain = ? COLLATE NOCASE", [domain]);
+	const users = await db.getQuery("SELECT user_id, name, org_id, role, approved FROM users_login WHERE domain = ? COLLATE NOCASE", [domain]);
 	if (users && users.length) return { result: true, users }; else return { result: false };
 }
 exports.getOrgsMatchingOnName = async org => {
@@ -100,8 +116,13 @@ exports.getOrgsMatchingOnName = async org => {
 	if (orgs && orgs.length) return { result: true, ...(orgs[0]) }; else return { result: false, orgs: [] };
 }
 
+exports.getOrgsIdMatchingOnName = async org => {
+	const orgid = await db.getQuery("SELECT org_id FROM organizations WHERE org_name = ? COLLATE NOCASE", [org]);
+	if (orgid && orgid.length) return { result: true, ...(orgid[0]) }; else return { result: false, orgs: [] };
+}
+
 exports.getOrgForDomain = async domain => {
-	const users = await db.getQuery("SELECT org FROM users_login WHERE domain = ? COLLATE NOCASE", [domain]);
+	const users = await db.getQuery("SELECT org_name from organizations WHERE org_id IN ( SELECT org_id from users_login WHERE  domain = ? COLLATE NOCASE)", [domain]);
 	if (users && users.length) return users[0].org; else return null;
 }
 exports.getOrgsMatchingProducts = async org => {

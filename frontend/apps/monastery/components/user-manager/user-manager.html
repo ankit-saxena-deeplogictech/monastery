@@ -140,12 +140,12 @@ span#header > button {min-width: 7em;}
         <div id="{{id}}" class="user" title="{{name}}&#10;{{id}}" ontouchend='event.preventDefault(); event.stopPropagation();
                     event.pageY = event.changedTouches[0].pageY; event.pageX = event.changedTouches[0].pageX; oncontextmenu(event)'
                 oncontextmenu='event.preventDefault(); event.stopPropagation(); monkshu_env.components["user-manager"].userMenuClicked(
-                    event, this, "{{name}}", "{{id}}", "{{org}}", "{{role}}", "{{approved}}");'
+                    event, this, "{{name}}", "{{user_id}}", "{{org}}", "{{role}}", "{{approved}}");'
                 ondblclick='event.preventDefault(); event.stopPropagation();  monkshu_env.components["user-manager"].editUser(
-                    "{{name}}", "{{id}}","{{role}}", "{{approved}}", this)'>
+                    "{{name}}", "{{user_id}}","{{role}}", "{{approved}}", this)'>
             <img src="{{componenturl}}/img/user.svg">
             <span>{{name}}</span>
-            <span>{{id}}</span>
+            <span>{{user_id}}</span>
         </div>
         {{/users}}
     </div>

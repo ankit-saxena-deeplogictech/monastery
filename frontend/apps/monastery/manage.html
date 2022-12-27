@@ -114,10 +114,11 @@ span#mobilefooter > img {
 
 	<script type="module">
 	import {user_manager} from "./components/user-manager/user-manager.mjs";
+	import {monkshu_component} from "/framework/js/monkshu_component.mjs";
 	import "./components/span-with-menu/span-with-menu.mjs";
 	import "./components/dialog-box/dialog-box.mjs";
-	import {loginmanager} from "./js/loginmanager.mjs"; monkshu_env.apps[APP_CONSTANTS.APP_NAME].loginmanager = loginmanager;
-	import {main} from "./js/main.mjs"; monkshu_env.apps[APP_CONSTANTS.APP_NAME].main = main; 
+	import {loginmanager} from "./js/loginmanager.mjs"; 
+	import {main} from "./js/main.mjs"; 
 
 	</script>
 		
@@ -128,7 +129,7 @@ span#mobilefooter > img {
 <span id="header">
 <img id="textlogo" src="./img/monastery.svg">
 <span id="middleheader"><span id="title">{{i18n.ManageUsers}}</span><span id="close" onclick="monkshu_env.frameworklibs.router.navigate(APP_CONSTANTS.MAIN_HTML)">X</span></span>
-<img id="logout" src="./img/exit.svg" onclick="monkshu_env.apps[APP_CONSTANTS.APP_NAME].loginmanager.logout()">
+<img id="logout" src="./img/exit.svg" onclick="loginmanager.loginmanager.logout()">
 </span>
 
 <div id="maincontent">
@@ -140,12 +141,12 @@ span#mobilefooter > img {
 	<img src="./img/mobilefooter_home.svg" onclick="monkshu_env.frameworklibs.router.navigate(APP_CONSTANTS.MAIN_HTML)">
 	<img src="./img/mobilefooter_reload.svg" onclick="location.reload()">
 	<span-with-menu id="gearmobile" bottommenu="true" styleBody="url(./pages/menu.stylebody.css)"><img src="./img/mobilefooter_settings.svg">
-		<menu-item onclick="monkshu_env.apps[APP_CONSTANTS.APP_NAME].main.changePassword(this)" label="{{i18n.ChangePassword}}"></menu-item>
-		<menu-item onclick="monkshu_env.apps[APP_CONSTANTS.APP_NAME].main.showOTPQRCode(this)" label="{{i18n.ChangePhone}}"></menu-item>
-		<menu-item onclick="monkshu_env.apps[APP_CONSTANTS.APP_NAME].main.changeProfile(this)" label="{{i18n.ChangeProfile}}"></menu-item>
+		<menu-item onclick="main.changePassword(this)" label="{{i18n.ChangePassword}}"></menu-item>
+		<menu-item onclick="main.showOTPQRCode(this)" label="{{i18n.ChangePhone}}"></menu-item>
+		<menu-item onclick="main.changeProfile(this)" label="{{i18n.ChangeProfile}}"></menu-item>
 		{{#admin}}<menu-item onclick="monkshu_env.frameworklibs.router.navigate(APP_CONSTANTS.MANAGE_HTML)" label="{{i18n.ManageUsers}}"></menu-item>{{/admin}}
 	</span-with-menu>
-	<img src="./img/mobilefooter_logout.svg" onclick="monkshu_env.apps[APP_CONSTANTS.APP_NAME].main.logoutClicked()">
+	<img src="./img/mobilefooter_logout.svg" onclick="main.logoutClicked()">
 </span>
 
 <dialog-box id="dialog"></dialog-box>
