@@ -29,8 +29,7 @@ let _pendingRenderResolves;
  */
 async function showDialog(themeOrThemePath, templateOrTemplateURL, templateData, retValIDs, callback, hostID=DEFAULT_HOST_ID) {
     await _initDialogFramework(hostID); 
-    await dialog_box.bindData(await _processTheme((typeof themeOrThemePath == "string" || themeOrThemePath instanceof URL) ?
-        await $$.requireJSON(themeOrThemePath) : themeOrThemePath||DEFAULT_THEME), hostID );   // bind the theme data
+    await dialog_box.bindData(await _processTheme((typeof themeOrThemePath == "string" || themeOrThemePath instanceof URL) ? await $$.requireJSON(themeOrThemePath) : themeOrThemePath||DEFAULT_THEME), hostID );   // bind the theme data
 
     const shadowRoot = dialog_box.getShadowRootByHostId(hostID); _resetUI(shadowRoot);
     const templateHTML = typeof templateOrTemplateURL == "string" ? (templateData ? await router.expandPageData(
