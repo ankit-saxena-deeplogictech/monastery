@@ -10,8 +10,8 @@ import {session} from "/framework/js/session.mjs";
 import {securityguard} from "/framework/js/securityguard.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 import {blackboard} from "/framework/js/blackboard.mjs"; 
-
-const dialog = _ => monkshu_env.components['dialog-box'];
+import { dialog_box } from "../components/dialog-box/dialog-box.mjs";
+const dialog = dialog_box;
 
 
 async function init(viewURL) {
@@ -44,10 +44,11 @@ function toggleMenu() {
 }
 
 async function changePassword(_element) {
-    dialog().showDialog(`${APP_CONSTANTS.DIALOGS_PATH}/changepass.html`, true, true, {}, "dialog", ["p1","p2"], async result=>{
+    console.log(dialog);
+    dialog_box().showDialog(`${APP_CONSTANTS.DIALOGS_PATH}/changepass.html`, true, true, {}, "dialog", ["p1","p2"], async result=>{
         const done = await loginmanager.changepassword(session.get(APP_CONSTANTS.USERID), result.p1);
-        if (!done) dialog().error("dialog", await i18n.get("PWCHANGEFAILED"));
-        else { dialog().hideDialog("dialog"); _showMessage(await i18n.get("PWCHANGED")); }
+        if (!done) dialog_box().error("dialog", await i18n.get("PWCHANGEFAILED"));
+        else { dialog_box().hideDialog("dialog"); _showMessage(await i18n.get("PWCHANGED")); }
     });
 }
 
@@ -55,20 +56,20 @@ async function showOTPQRCode(_element) {
     const id = session.get(APP_CONSTANTS.USERID).toString(); 
     const totpSec = await apiman.rest(APP_CONSTANTS.API_GETTOTPSEC, "GET", {id}, true, false); if (!totpSec || !totpSec.result) return;
     const qrcode = await _getTOTPQRCode(totpSec.totpsec);
-    dialog().showDialog(`${APP_CONSTANTS.DIALOGS_PATH}/changephone.html`, true, true, {img:qrcode}, "dialog", ["otpcode"], async result => {
+    dialog_box().showDialog(`${APP_CONSTANTS.DIALOGS_PATH}/changephone.html`, true, true, {img:qrcode}, "dialog", ["otpcode"], async result => {
         const otpValidates = await apiman.rest(APP_CONSTANTS.API_VALIDATE_TOTP, "GET", {totpsec: totpSec.totpsec, otp:result.otpcode, id}, true, false);
-        if (!otpValidates||!otpValidates.result) dialog().error("dialog", await i18n.get("PHONECHANGEFAILED"));
-        else dialog().hideDialog("dialog");
+        if (!otpValidates||!otpValidates.result) dialog_box().error("dialog", await i18n.get("PHONECHANGEFAILED"));
+        else dialog_box().hideDialog("dialog");
     });
 }
 
 async function changeProfile(_element) {
     const sessionUser = loginmanager.getSessionUser();
-    dialog().showDialog(`${APP_CONSTANTS.DIALOGS_PATH}/resetprofile.html`, true, true, sessionUser, "dialog", 
+    dialog_box().showDialog(`${APP_CONSTANTS.DIALOGS_PATH}/resetprofile.html`, true, true, sessionUser, "dialog", 
             ["name", "id", "org"], async result => {
         
-        if (await loginmanager.registerOrUpdate(sessionUser.id, result.name, result.id, null, result.org)) dialog().hideDialog("dialog");
-        else dialog().error("dialog", await i18n.get("PROFILECHANGEFAILED"));
+        if (await loginmanager.registerOrUpdate(sessionUser.id, result.name, result.id, null, result.org)) dialog_box().hideDialog("dialog");
+        else dialog_box().error("dialog", await i18n.get("PROFILECHANGEFAILED"));
     });
 }
 
@@ -90,6 +91,6 @@ async function _getTOTPQRCode(key) {
 	    `otpauth://totp/${title}?secret=${key}&issuer=TekMonks&algorithm=sha1&digits=6&period=30`, (_, data_url) => resolve(data_url)));
 }
 
-const _showMessage = message => dialog().showMessage(`${APP_CONSTANTS.DIALOGS_PATH}/message.html`, {message}, "dialog");
+const _showMessage = message => dialog_box().showMessage(`${APP_CONSTANTS.DIALOGS_PATH}/message.html`, {message}, "dialog");
 export const main = {init,toggleMenu, changePassword, showOTPQRCode, showLoginMessages, changeProfile, logoutClicked, 
     interceptPageData}

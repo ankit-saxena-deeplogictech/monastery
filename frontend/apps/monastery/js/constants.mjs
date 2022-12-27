@@ -56,9 +56,9 @@ export const APP_CONSTANTS = {
     GUEST_ROLE: "guest",
     ADMIN_ROLE: "admin",
     PERMISSIONS_MAP: {
-        user:[APP_PATH+"/index.html", APP_PATH+"/login.html", APP_PATH+"/chooser.html", APP_PATH+"/main.html",APP_PATH+"/manage.html",APP_PATH+"/home.html", APP_PATH+"/exit.html",APP_PATH+"/register.html",APP_PATH+"/notappoved.html", APP_PATH+"/developer.html",  $$.MONKSHU_CONSTANTS.ERROR_HTML,"apiboss-designer"], 
-        admin:[APP_PATH+"/index.html", APP_PATH+"/login.html", APP_PATH+"/chooser.html", APP_PATH+"/main.html",APP_PATH+"/manage.html",APP_PATH+"/home.html", APP_PATH+"/exit.html",APP_PATH+"/register.html",APP_PATH+"/notappoved.html", APP_PATH+"/developer.html",  $$.MONKSHU_CONSTANTS.ERROR_HTML,"apiboss-designer"], 
-        guest:[APP_PATH+"/index.html", APP_PATH+"/login.html", APP_PATH+"/exit.html",APP_PATH+"/register.html",APP_PATH+"/notappoved.html",  APP_PATH+"/chooser.html",APP_PATH+"/home.html", $$.MONKSHU_CONSTANTS.ERROR_HTML],
+        user:[window.location.origin,APP_PATH+"/index.html", APP_PATH+"/login.html", APP_PATH+"/chooser.html", APP_PATH+"/main.html",APP_PATH+"/manage.html",APP_PATH+"/home.html", APP_PATH+"/exit.html",APP_PATH+"/register.html",APP_PATH+"/verify.html",APP_PATH+"/notappoved.html", APP_PATH+"/developer.html", APP_PATH+"/reset.html", APP_PATH+"/error.html",$$.MONKSHU_CONSTANTS.ERROR_HTML,"apiboss-designer"], 
+        admin:[window.location.origin,APP_PATH+"/index.html", APP_PATH+"/login.html", APP_PATH+"/chooser.html", APP_PATH+"/main.html",APP_PATH+"/manage.html",APP_PATH+"/home.html", APP_PATH+"/exit.html",APP_PATH+"/register.html",APP_PATH+"/verify.html",APP_PATH+"/notappoved.html", APP_PATH+"/developer.html", APP_PATH+"/reset.html", APP_PATH+"/error.html",$$.MONKSHU_CONSTANTS.ERROR_HTML,"apiboss-designer"], 
+        guest:[window.location.origin,APP_PATH+"/index.html", APP_PATH+"/login.html", APP_PATH+"/exit.html",APP_PATH+"/register.html",APP_PATH+"/notappoved.html",  APP_PATH+"/chooser.html",APP_PATH+"/home.html",APP_PATH+"/verify.html",APP_PATH+"/notappoved.html", $$.MONKSHU_CONSTANTS.ERROR_HTML],
         tekmonks:["*"],
         nus:["monkruls-designer",APP_PATH+"/register.html",APP_PATH+"/login.html", APP_PATH+"/chooser.html"]
     },

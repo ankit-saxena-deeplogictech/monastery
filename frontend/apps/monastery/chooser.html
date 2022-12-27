@@ -129,7 +129,7 @@
 	<title>{{i18n.Title}}</title>
 
 	<script type="module">
-			import {main} from "./js/main.mjs"; monkshu_env.apps[APP_CONSTANTS.APP_NAME].main = main; 
+			import {main} from "./js/main.mjs";
 
 		import "./components/dialog-box/dialog-box.mjs";
 		import "./components/span-with-menu/span-with-menu.mjs";
@@ -146,9 +146,9 @@
 			<img src="./img/user-square.svg" title="{{i18n.User}}">
 			<span id="username">Hi, Cool User</span>	
 			<span-with-menu id="gear" styleBody="url(./pages/menu.stylebody.css)"><img src="./img/settings.svg" style="height: 2em;width: 2em;vertical-align: middle;">
-				<menu-item onclick="monkshu_env.apps[APP_CONSTANTS.APP_NAME].main.changePassword(this)" label="{{i18n.ChangePassword}}"></menu-item>
-				<menu-item onclick="monkshu_env.apps[APP_CONSTANTS.APP_NAME].main.showOTPQRCode(this)" label="{{i18n.ChangePhone}}"></menu-item>
-				<menu-item onclick="monkshu_env.apps[APP_CONSTANTS.APP_NAME].main.changeProfile(this)" label="{{i18n.ChangeProfile}}"></menu-item>
+				<menu-item onclick="main.changePassword(this)" label="{{i18n.ChangePassword}}"></menu-item>
+				<menu-item onclick="main.showOTPQRCode(this)" label="{{i18n.ChangePhone}}"></menu-item>
+				<menu-item onclick="main.changeProfile(this)" label="{{i18n.ChangeProfile}}"></menu-item>
 				{{#admin}}<menu-item onclick="monkshu_env.frameworklibs.router.navigate(APP_CONSTANTS.MANAGE_HTML)" label="{{i18n.ManageUsers}}"></menu-item>{{/admin}}
 			</span-with-menu>
 		</div>
