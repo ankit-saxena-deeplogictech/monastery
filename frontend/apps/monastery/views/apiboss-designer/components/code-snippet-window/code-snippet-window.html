@@ -68,10 +68,10 @@
 </style>
 
 <div id="console">
-    <textarea id="consoleText" {{#error}}class="error" {{/error}} readonly>
+    <textarea id="consoleText" {{#error}}class="error" {{/error}}>
  const https = require("https");
 
- https.post("{{exposedpath}}, (resp)=>{
+ https.post("{{exposedpath}}", (resp)=>{
             
  // The whole response has been received. Print out the result
     resp.on("end", ()=>{

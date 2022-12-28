@@ -4,7 +4,8 @@
  */
  import { util } from "/framework/js/util.mjs";
  import { monkshu_component } from "/framework/js/monkshu_component.mjs";
- import { floating_window } from "../floating-window/floating-window.mjs"
+ import { floating_window } from "../floating-window/floating-window.mjs";
+ import { api_contents } from "../api-contents/api-contents.mjs";
  
  
  const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH;
@@ -14,25 +15,21 @@
     "var--window-height": "45vh", "var--window-background": "#DFF0FE",
     "var--window-border": "1px solid #4788C7", closeIcon: `${COMPONENT_PATH}/close.svg`
 }, CONSOLE_HTML_FILE = `${COMPONENT_PATH}/code-snippet-window.html`;
-let model,serverDetails,exposedpath;
+let exposedpath;
 
-const elementConnected = async (element) => {
-  model = await $$.requireJSON(`${VIEW_PATH}/metadata.json`),serverDetails = await $$.requireJSON(`${VIEW_PATH}/serverdetail.json`);
-  exposedpath = `${serverDetails.secure ?"https":"http"}://${serverDetails.hostname}:${serverDetails.port}${model.apis[0]["exposedpath"]}`
+
+function setExposedPath(path){
+  console.log(path)
+  exposedpath = path;
+  return;
 }
 
 
-
 async function codeSnippetWindow(element) {
+  console.log(exposedpath);
     if(element == "NodeJS Client"){
       const floatingWindowHTML = await $$.requireText(CONSOLE_HTML_FILE);
-      await floating_window.showWindow("NodeJS", CONSOLE_THEME, floatingWindowHTML);
-      console.log(document.querySelector("floating-window"));
-      console.log(code_snippet_window.getShadowRootByHostId(document.querySelector("floating-window").getAttribute("id")));
-      code_snippet_window.bindData({"exposedpath":exposedpath},document.querySelector("floating-window").getAttribute("id"));
-
-      console.log(document.querySelector("floating-window").getAttribute("id"));
-
+      await floating_window.showWindow("NodeJS", CONSOLE_THEME, Mustache.render(floatingWindowHTML, {exposedpath: `${exposedpath}`, error: undefined}));
     }
     else if(element == "Java Client"){
       const floatingWindowHTML = await $$.requireText(CONSOLE_HTML_FILE);
@@ -49,7 +46,7 @@ async function codeSnippetWindow(element) {
 
 
 export const code_snippet_window = {
-    trueWebComponentMode: true,  elementConnected , codeSnippetWindow 
+    trueWebComponentMode: true , codeSnippetWindow, setExposedPath
   }
   
   monkshu_component.register(
