@@ -7,10 +7,12 @@ import { router } from "/framework/js/router.mjs";
 import { session } from "/framework/js/session.mjs";
 import { securityguard } from "/framework/js/securityguard.mjs";
 import { apimanager as apiman } from "/framework/js/apimanager.mjs";
+import {APP_CONSTANTS as AUTO_APP_CONSTANTS} from "./constants.mjs";
 
 const APP_EXIT_FLAG = "__org_monkshu_app_exit";
 
 async function init() {
+	window.monkshu_env.apps[AUTO_APP_CONSTANTS.APP_NAME] = {};
 	window.APP_CONSTANTS = (await import("./constants.mjs")).APP_CONSTANTS;
 	window.LOG = (await import("/framework/js/log.mjs")).LOG;
 	apiman.registerAPIKeys(APP_CONSTANTS.API_KEYS, APP_CONSTANTS.KEY_HEADER);
