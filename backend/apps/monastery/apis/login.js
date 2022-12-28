@@ -36,7 +36,7 @@ exports.doService = async jsonReq => {
 		result.result = totp.verifyTOTP(result.totpsec, jsonReq.otp);;
 		if (!result.result) LOG.error(`Bad OTP given for: ${result.user_id}.`);
 		else result.tokenflag = true;
-	} else if (result.result && (!result.approved)) { LOG.info(`User not approved, ${result.id}.`); result.result = false; }
+	} else if (result.result && (!result.approved)) { LOG.info(`User not approved, ${result.id}.`); result.tokenflag = false; }
 	else LOG.error(`Bad PWPH, given for ID: ${jsonReq.id}.`);
 
 	if (result.result && result.org_id) {
@@ -49,7 +49,7 @@ exports.doService = async jsonReq => {
 	}
 
 
-	if (result.tokenflag) LOG.info(`User logged in: ${result.user_id}.`); else LOG.error(`Bad login for ID: ${jsonReq.id}.`);
+	if (result.tokenflag) LOG.info(`User logged in: ${result.user_id}.`); else LOG.error(`Bad login or not approved for ID: ${jsonReq.id}.`);
 
 	if (result.result) return { result: result.result, name: result.name, id: result.user_id, "org": org_name, role: result.role, "products": products, tokenflag: result.tokenflag };
 	else return CONSTANTS.FALSE_RESULT;

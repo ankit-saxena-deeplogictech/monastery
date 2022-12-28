@@ -11,6 +11,7 @@ import {router} from "/framework/js/router.mjs";
 import {loginmanager} from "../../js/loginmanager.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
+import { APP_CONSTANTS } from "../../js/constants.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta), DIALOGS_PATH = `${COMPONENT_PATH}/dialogs`;
 let API_GETMATCHINGORGS;
@@ -78,7 +79,7 @@ async function registerOrUpdate(element) {
 	switch (registerResult) {
 		case loginmanager.ID_OK: router.loadPage(routeOnSuccess, dataOnSuccess); break;
 		case loginmanager.ID_FAILED: shadowRoot.querySelector("span#error").style.display = "inline"; break;
-		case loginmanager.ID_NOT_YET_APPROVED: router.loadPage(routeOnNotApproved, dataOnSuccess); break;
+		case loginmanager.ID_NOT_YET_APPROVED: router.loadPage(routeOnNotApproved); break;
 		default: shadowRoot.querySelector("span#error").style.display = "inline"; break;
 	}
 }
