@@ -5,9 +5,10 @@
  import { util } from "/framework/js/util.mjs";
  import { monkshu_component } from "/framework/js/monkshu_component.mjs";
  import { APP_CONSTANTS } from "../../../../js/constants.mjs";
+ import { code_snippet_window } from "../code-snippet-window/code-snippet-window.mjs";
  
  const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH;
- let docData,model,serverDetails;
+ let docData,model,serverDetails, exposedpath;
  
  
  const elementConnected = async (element) => {
@@ -52,6 +53,8 @@
    if (element.getAttribute("styleBody")) data["styleBody"] = `<style>${element.getAttribute("styleBody")}</style>`;
    api_contents.setData(element.id, data);
    docData = data;
+   exposedpath = `${serverDetails.secure ?"https":"http"}://${serverDetails.hostname}:${serverDetails.port}${model.apis[0]["exposedpath"]}`;
+   code_snippet_window.setExposedPath(exposedpath);
  }
  
  function traverseObject(target, t, callback) {
@@ -102,7 +105,9 @@
  
    api_contents.bindData(data, "apicontent");
    docData = data;
- 
+   exposedpath = data["exposedpath"];
+   console.log(exposedpath)
+   code_snippet_window.setExposedPath(exposedpath);
  }
  
  async function downloadPDF(){
@@ -174,7 +179,8 @@
  }
  
  export const api_contents = {
-   trueWebComponentMode: true, elementConnected, bindApiContents, downloadPDF
+   trueWebComponentMode: true, elementConnected, bindApiContents, downloadPDF,
+   EXPOSED_PATH: exposedpath
  }
  
  monkshu_component.register(
