@@ -71,7 +71,7 @@
     <textarea id="consoleText" {{#error}}class="error" {{/error}} readonly>
  const https = require("https");
 
- https.post("https://domain.com/exposed/path", (resp)=>{
+ https.post("{{exposedpath}}, (resp)=>{
             
  // The whole response has been received. Print out the result
     resp.on("end", ()=>{

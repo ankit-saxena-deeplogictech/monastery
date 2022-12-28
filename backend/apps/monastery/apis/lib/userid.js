@@ -69,8 +69,8 @@ exports.update = async (oldid, user_id, name, org_id, pwph, totpSecret, role, ap
 	LOG.info(`approved : ${approved}`) 
 	LOG.info(`domain : ${domain}`)
 	return {
-		result: await db.runCmd("UPDATE users_login SET user_id=?, name=?, org_id=?,pwph =? ,totpsec=?, role = ?, approved = ?, domain = ? WHERE user_id = ?",
-			[user_id, name, org_id, pwph, totpSecret, role, approved ? 1 : 0, domain,user_id]), oldid, user_id, name, org_id, pwph, totpSecret, role, approved, domain
+		result: await db.runCmd("UPDATE users_login SET user_id=?, name=?,pwph =? ,totpsec=?, role = ?, approved = ?, domain = ? WHERE user_id = ?",
+			[user_id, name, pwph, totpSecret, role, approved ? 1 : 0, domain,oldid]), oldid, user_id, name, org_id, pwph, totpSecret, role, approved, domain
 	};
 }
 
