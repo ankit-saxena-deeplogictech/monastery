@@ -119,9 +119,8 @@ span#mobilefooter > img {
 	import {monkshu_component} from "/framework/js/monkshu_component.mjs";
 	import "./components/span-with-menu/span-with-menu.mjs";
 	import "./components/display-box/display-box.mjs";
-	import {loginmanager} from "./js/loginmanager.mjs"; 
 	import {main} from "./js/main.mjs"; 
-
+	import {application} from "./js/application.mjs"; window.monkshu_env.__application = application;
 	</script>
 		
 	<title>{{i18n.Title}}</title>
@@ -133,7 +132,7 @@ span#mobilefooter > img {
 <span id="middleheader"><span id="title">{{i18n.ManageUsers}}</span></span>
 <img id="reloadlogo" src="./img/reload.svg" onclick="location.reload()">
 
-<img id="logout" src="./img/exit.svg" onclick="loginmanager.loginmanager.logout()">
+<img id="logout" src="./img/exit.svg" onclick='window.monkshu_env.__application.exitToChooser()'>
 </span>
 
 <div id="maincontent">
