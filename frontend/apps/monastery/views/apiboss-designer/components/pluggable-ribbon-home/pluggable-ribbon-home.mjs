@@ -6,11 +6,14 @@ import {util} from "/framework/js/util.mjs";
 import {session} from "/framework/js/session.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
 import {securityguard} from "/framework/js/securityguard.mjs";
+import { loader } from "../../../../js/loader.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta);
 
 async function elementConnected(element) {
+	await loader.beforeLoading(); _disableButton(element);
     const data = await _instantiatePlugins(element);
+	if(data) await loader.afterLoading(); _enableButton(element);
 
 	if (element.getAttribute("styleBody")) data.styleBody = `<style>${element.getAttribute("styleBody")}</style>`;
 
@@ -37,7 +40,7 @@ async function _instantiatePlugins(element) {
 			pluggable_ribbon_home.extensions[element.id][plugin] = pluginModule;
 			const pluginObj = {img: pluginModule.getImage(), title: pluginModule.getHelpText(session.get($$.MONKSHU_CONSTANTS.LANG_ID)), 
 				id: element.id||"null", pluginName: plugin, name: pluginModule.getDescriptiveName(session.get($$.MONKSHU_CONSTANTS.LANG_ID)),
-				pluginCursor: pluginModule.getCursor?pluginModule.getCursor():undefined};
+				pluginCursor: pluginModule.getCursor?pluginModule.getCursor():"pointer"};
 			if (pluginModule.customEvents) {	// plug in custom event handlers if the plugin supports it
 				pluginObj.customEvents = []; for (const event of pluginModule.customEvents) 
 					pluginObj.customEvents.push({event, id: element.id||"null", pluginName: plugin}); 
@@ -47,6 +50,9 @@ async function _instantiatePlugins(element) {
 	}
 	return data;
 }
+
+function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 // convert this all into a WebComponent so we can use it
 export const pluggable_ribbon_home = {trueWebComponentMode: true, elementConnected, elementRendered}
