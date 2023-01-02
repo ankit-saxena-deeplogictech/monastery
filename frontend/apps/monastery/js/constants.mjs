@@ -49,6 +49,8 @@ export const APP_CONSTANTS = {
     PWPH: "pwph",
     TIMEOUT: 600000,
     USERNAME: "username",
+    API_PUBLISH:API_PATH+"/apis/api400publish",
+    API_MODEL_OBJECT:API_PATH+"/apis/api400modelobject",
     USERORG: "userorg",
     USER_ROLE: "user",
     BCRYPT_SALT: "$2a$10$VFyiln/PpFyZc.ABoi4ppf",

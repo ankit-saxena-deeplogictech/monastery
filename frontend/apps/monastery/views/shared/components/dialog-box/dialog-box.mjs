@@ -9,7 +9,7 @@ import {util} from "/framework/js/util.mjs";
 import {router} from "/framework/js/router.mjs";
 import {i18n as frameworki18n} from "/framework/js/i18n.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
-
+import { loader } from "../../../../js/loader.mjs";
 const DEFAULT_HOST_ID = "__org_monkshu_dialog_box", COMPONENT_PATH = util.getModulePath(import.meta), 
     LANG = frameworki18n.getSessionLang();
 const DEFAULT_THEME = {showOKIcon: true, showCancelIcon: true, showOKButton: true, showCancelButton: true};
@@ -211,6 +211,16 @@ async function _processTheme(theme) {
     if (theme.showOKButton) clone.showOKButton = true; else delete clone.showOKButton;
     if (theme.showCancelButton) clone.showCancelButton = true; else delete clone.showCancelButton;
     return clone;
+
+}
+function _validate(element) {
+    const shadowRoot = element instanceof Element ? dialog_box.getShadowRootByContainedElement(element) :
+        dialog_box.getShadowRootByHostId(element || DEFAULT_HOST_ID);
+    const toValidateList = shadowRoot.querySelectorAll('.validate'); 
+    for (const validate of toValidateList) {
+        if (!validate.checkValidity()) { validate.reportValidity(); return false; }
+    }
+    return true;
 }
 
 export const dialog_box = {showDialog, trueWebComponentMode: true, hideDialog, showError, hideError, 

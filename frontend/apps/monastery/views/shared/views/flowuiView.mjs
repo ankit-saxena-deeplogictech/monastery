@@ -19,12 +19,13 @@ const MSG_REGISTER_SHAPE = "REGISTER_SHAPE", MSG_SHAPE_INIT = "SHAPE_INIT_ON_RIB
     MSG_MODEL_LOAD_MODEL = "LOAD_MODEL", MSG_RESET = "RESET", MSG_FILE_UPLOADED = "FILE_UPLOADED", GRAPH_ID = "flowui", MODEL_OP_ADDED = "added", 
     MODEL_OP_REMOVED = "removed", MODEL_OP_MODIFIED = "modified", MSG_SHAPE_MOVED = "SHAPE_MOVED";
 const PAGE_GENERATOR_GRID_ITEM_CLASS = "grid-item-extension", HTML_INPUT_ELEMENTS = ["input","select",
-    "textarea","spread-sheet","text-editor", "drag-drop","input-table","drop-down", "input-output-fields"];
+    "textarea","spread-sheet","text-editor", "drag-drop","input-table","drop-down", "input-output-fields", "list-box",  "radio-button"];
 let ID_CACHE = {}, CONF, VIEW_PATH;
 
 const _generateShapeName = name => name.toLowerCase(), _generateShapeX = _ => 30, _generateShapeY = _ => 30;
 
 async function init(viewPath) {
+    
     VIEW_PATH = viewPath; CONF = await $$.requireJSON(`${VIEW_PATH}/conf/view.json`);
 
     blackboard.registerListener(MSG_SHAPE_INIT, message => blackboard.broadcastMessage(MSG_REGISTER_SHAPE, 
@@ -74,9 +75,27 @@ async function reset() {
 
 function shapeAdded(shapeName, id, label, connectable=true) {
     const shapeNameTweaked = _generateShapeName(shapeName);
-    blackboard.broadcastMessage(MSG_ADD_SHAPE, {name: shapeNameTweaked, id, graphID: GRAPH_ID, label:label||"", 
-        x:_generateShapeX(), y:_generateShapeY(), width:IMG_SIZE.width, height:IMG_SIZE.height, connectable});  // add to the flow diagram
-    blackboard.broadcastMessage(MSG_MODEL_NODES_MODIFIED, {type: MODEL_OP_ADDED, nodeName: shapeNameTweaked, id, properties: {description: label}}); // add to the model
+    if (shapeName == 'iftrue') {
+        blackboard.broadcastMessage(MSG_ADD_SHAPE, {
+            name: shapeNameTweaked, id, graphID: GRAPH_ID, label: label || "",
+            x: _generateShapeXForIfTrue(), y: _generateShapeYForIfTrue(), width: IMG_SIZE.width, height: IMG_SIZE.height, connectable
+        });
+        blackboard.broadcastMessage(MSG_MODEL_NODES_MODIFIED, { type: MODEL_OP_ADDED, nodeName: shapeNameTweaked, id, properties: { description: label } });
+    }
+    else if (shapeName == 'iffalse') {
+        blackboard.broadcastMessage(MSG_ADD_SHAPE, {
+            name: shapeNameTweaked, id, graphID: GRAPH_ID, label: label || "",
+            x: _generateShapeXForIfFalse(), y: _generateShapeYForIfFalse(), width: IMG_SIZE.width, height: IMG_SIZE.height, connectable
+        });
+        blackboard.broadcastMessage(MSG_MODEL_NODES_MODIFIED, { type: MODEL_OP_ADDED, nodeName: shapeNameTweaked, id, properties: { description: label } });
+    }
+    else {
+        blackboard.broadcastMessage(MSG_ADD_SHAPE, {
+            name: shapeNameTweaked, id, graphID: GRAPH_ID, label: label || "",
+            x: _generateShapeX(), y: _generateShapeY(), width: IMG_SIZE.width, height: IMG_SIZE.height, connectable
+        });  // add to the flow diagram
+        blackboard.broadcastMessage(MSG_MODEL_NODES_MODIFIED, { type: MODEL_OP_ADDED, nodeName: shapeNameTweaked, id, properties: { description: label } }); // add to the model
+    }
 }
 
 async function _shapeObjectClickedOnFlowDiagram(shapeName, id, shapelabel) {

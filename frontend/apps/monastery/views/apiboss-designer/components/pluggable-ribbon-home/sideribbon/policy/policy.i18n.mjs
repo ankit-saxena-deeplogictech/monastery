@@ -1,6 +1,6 @@
 export const i18n = {
     HELP_TEXTS: {
-        en:"Policy_Tag\nPolicy_Tag", 
+        en:"Policy Tag\nPolicy Tag", 
         hi: "डेटा\nनियमों में डेटा जोड़ें", 
         ja: "データ\nルールにデータを追加する"
     },
