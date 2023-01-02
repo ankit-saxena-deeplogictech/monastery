@@ -10,6 +10,7 @@ import {router} from "/framework/js/router.mjs";
 import {session} from "/framework/js/session.mjs";
 import {securityguard} from "/framework/js/securityguard.mjs";
 import {dialog_box} from "../views/shared/components/dialog-box/dialog-box.mjs";
+import { loader } from "./loader.mjs";
 
 const MODULE_PATH = util.getModulePath(import.meta);
 
@@ -24,13 +25,19 @@ async function interceptPageLoadData() {
     router.addOnLoadPageData(util.resolveURL(`${MODULE_PATH}/../chooser.html`), pageData => Object.assign(pageData, data));
 }
 
-async function loadView(view) {
+async function loadView(name) {
+    // await loader.beforeLoading()
+	 const view = (await import(`${APP_CONSTANTS.APP_PATH}/views/${name}/view.mjs`)).view; await view.init(); 
+
+    
     const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase(); 
-    if (securityguard.isAllowed(view, org)) router.loadPage(`${APP_CONSTANTS.MAIN_HTML}?view=${view}`);
-    else {
-        const theme = await $$.requireJSON(`${MODULE_PATH}/../views/shared/resources/dialogPropertiesPrompt.json`)
-        dialog_box.showMessage(await i18n.get("NotAuthorized"), "error", null, theme);
-    }
+    // if (securityguard.isAllowed(view, org))
+     router.loadPage(`${APP_CONSTANTS.MAIN_HTML}?view=${name}`);
+    //  await loader.afterLoading();
+    // else {
+    //     const theme = await $$.requireJSON(`${MODULE_PATH}/../views/shared/resources/dialogPropertiesPrompt.json`)
+    //     dialog_box.showMessage(await i18n.get("NotAuthorized"), "error", null, theme);
+    // }
 }
 
 const exitClicked = _ => application.exit();
