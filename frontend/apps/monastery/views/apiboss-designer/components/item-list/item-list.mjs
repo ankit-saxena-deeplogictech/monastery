@@ -21,7 +21,7 @@ async function elementConnected(element) {
 		set: value=>{
 			const newData = item_list.getData(element.id); newData.items = _addDBLClickHandlerToItems(JSON.parse(value), element.getAttribute("ondblclickHandler"));
 			item_list.bindData(newData, element.id) } });
-	const data = { items: _addDBLClickHandlerToItems(JSON.parse(element.getAttribute("value")||await window.monkshu_env['ITEMS'].getItemList() ? await window.monkshu_env['ITEMS'].getItemList() : "[]"), element.getAttribute("ondblclickHandler")), 
+	const data = { items: _addDBLClickHandlerToItems(JSON.parse(element.getAttribute("value")||await window.monkshu_env['ITEMS'].getItemList(element.parentElement.parentElement) ? await window.monkshu_env['ITEMS'].getItemList(element.parentElement.parentElement) : "[]"), element.getAttribute("ondblclickHandler")), 
 		styleBody: element.getAttribute("styleBody")?`<style>${element.getAttribute("styleBody")}</style>`:undefined,
 		label: element.getAttribute("label")||i18n.DefaultLabel[i18nFramework.getSessionLang()] }
 	item_list.setDataByHost(element, data);

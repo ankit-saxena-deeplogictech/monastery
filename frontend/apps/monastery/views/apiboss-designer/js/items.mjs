@@ -2,6 +2,7 @@ import { util } from "/framework/js/util.mjs";
 import { apimanager as apiman } from "/framework/js/apimanager.mjs";
 import { APP_CONSTANTS } from "../../../js/constants.mjs";
 import { serverManager } from "./serverManager.js";
+import { loader } from "../../../js/loader.mjs";
 
 const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/..`;
 
@@ -11,7 +12,7 @@ function init() {
     window.monkshu_env["ITEMS"] = items;
 }
 
-async function getItemList() {
+async function getItemList(element) {
     try {
       let  model = await $$.requireJSON(`${VIEW_PATH}/conf/metadata.json`);      // const serverDetails = JSON.parse(await apiman.rest(APP_CONSTANTS.API_GETAPPCONFIG, "POST", {}, true));
 
@@ -35,6 +36,7 @@ async function getItemList() {
         //     })
         //     console.log(methods);
         const items = [];
+        await loader.beforeLoading(); _disableButton(element)
         for (const api of model.apis){
             items.push({
                 id:api["apiname"],img: util.resolveURL(`${MODULE_PATH}/../dialogs/model.svg`),
@@ -43,6 +45,7 @@ async function getItemList() {
             //     id: models[i],
             //      label: models[i], method: methods[i]
             // });
+        if(items.length) await loader.afterLoading(); _enableButton(element);
             return JSON.stringify(items);
         // }
     }
@@ -51,6 +54,9 @@ async function getItemList() {
         return "[]";
     }
 }
+
+function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 
 export const items = { init, getItemList };

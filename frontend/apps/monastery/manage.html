@@ -97,6 +97,23 @@ span#mobilefooter > img {
 	height: 2.5em;
 }
 
+*::-webkit-scrollbar {
+    width: 0.5em !important;
+    scroll-behavior: smooth !important;
+}
+
+*::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 10px !important;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: darkgrey !important;
+    border-radius: 10px !important;
+    background-clip: padding-box;
+}
+
 </style>
 {{{APP_CONSTANTS.MOBILE_MEDIA_QUERY_START}}}
     div#maincontent {padding: 0 1em; height: calc(100% - 4em); position: inherit; top: 0;}

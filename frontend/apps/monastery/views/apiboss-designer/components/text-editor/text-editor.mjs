@@ -6,12 +6,12 @@
  import {util} from "/framework/js/util.mjs";
  import {monkshu_component} from "/framework/js/monkshu_component.mjs";
 
- const COMPONENT_PATH = util.getModulePath(import.meta);
+ const COMPONENT_PATH = util.getModulePath(import.meta), VIEW_PATH=APP_CONSTANTS.CONF_PATH;
  const P3_LIBS = [`${COMPONENT_PATH}/3p/codemirror/lib/codemirror.js`, `${COMPONENT_PATH}/3p/codemirror/addon/selection/active-line.js`,
 	 `${COMPONENT_PATH}/3p/codemirror/mode/javascript/javascript.js`, `${COMPONENT_PATH}/3p/codemirror/addon/edit/matchbrackets.js`,
 	 `${COMPONENT_PATH}/3p/codemirror/addon/lint/lint.js`, `${COMPONENT_PATH}/3p/codemirror/addon/lint/javascript-lint.js`,
 	 `${COMPONENT_PATH}/3p/jshint/jshint.js`,`${COMPONENT_PATH}/3p/codemirror/addon/lint/json-lint.js`,]
- 
+ let model;
  async function elementConnected(element) {
 	 Object.defineProperty(element, "value", {get: _=>_getValue(element), set: value=>_setValue(value, element)});
 	 
@@ -19,6 +19,7 @@
 		 `<style>${element.getAttribute("styleBody")}</style>`:undefined, 
 		 showToolbar:element.getAttribute("showToolbar")?.toLowerCase() == "false"?undefined:true };
  
+		model = await $$.requireJSON(`${VIEW_PATH}/metadata.json`);
 	 if (element.id) if (!text_editor.datas) {text_editor.datas = {}; text_editor.datas[element.id] = data;} 
 	 else text_editor.data = data;
  }
@@ -36,6 +37,13 @@
 	 }, 10);
  }
 
+ function updateResponseData() {
+	const element = text_editor.getHostElementByID("response");
+	const shadowRoot = text_editor.getShadowRootByHost(element);
+	shadowRoot.querySelector("div#statuscontainer").style.display = "none";
+	_setValue("", element);
+  }
+
   function getJsonData(json){
 	let data = JSON.stringify(json, null, 4);
 	const element = text_editor.getHostElementByID("response");
@@ -43,7 +51,13 @@
 	if(json && json.result){
 		shadowRoot.querySelector("div#statuscontainer").style.display = "block";
 	} else shadowRoot.querySelector("div#statuscontainer").style.display = "none";
-	_setValue(data, element);
+	if(json){
+		if(json.result) {_setValue(data, element);}
+		else {_setValue(`${json.status}: ${json.statusText}`, element); shadowRoot.querySelector("div#statuscontainer").style.display = "block";
+				shadowRoot.querySelector("#status").innerText = `${json.status}`; shadowRoot.querySelector("#dot").style.border = "red";
+				shadowRoot.querySelector("#dot").style.background = "red";
+			};
+	} else { let res = {}; _setValue(JSON.stringify(res),element); }
 	return;
  }
 
@@ -78,5 +92,5 @@
  }
  
  // convert this all into a WebComponent so we can use it
- export const text_editor = {trueWebComponentMode: true, elementConnected, elementRendered, open, save ,getJsonData, copyToClipboard}
+ export const text_editor = {trueWebComponentMode: true, elementConnected, elementRendered, open, save ,getJsonData, copyToClipboard, updateResponseData}
  monkshu_component.register("text-editor", `${COMPONENT_PATH}/text-editor.html`, text_editor);
