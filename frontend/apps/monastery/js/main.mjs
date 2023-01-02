@@ -17,8 +17,7 @@ const dialog = display_box;
 async function init(viewURL) {
     window.monkshu_env.frameworklibs.blackboard = blackboard;
 
-    const view = (await import(`${viewURL}/view.mjs`)).view; await view.init(); 
-
+console.log(viewURL);
     // doing this here instead of adding pageGenerator directly to the HTML ensures any i18n or 
     // other changes that the view page needs, are incorporated into the application before 
     // the pageGenerator runs as we await view.init() in the previous line.

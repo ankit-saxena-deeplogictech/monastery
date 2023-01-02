@@ -8,11 +8,13 @@
 
 	<style>
     	@import url('https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;display=swap');
+		@import './css/scrollbar.css';
+
 		body {
 			background-color: #DFF0FE;
 			display: flex;
 			flex-direction: row;
-			font-family: Raleway;
+			font-family: 'Red Hat Text';
 			margin: 0px;
 			padding: 10vh 5vw;
 			justify-content: center;
@@ -129,7 +131,11 @@
     background-clip: padding-box;
 }
 	</style>
-
+   <script type="text/javascript">history.pushState(null, document.title, location.href);
+	window.addEventListener('popstate', function (event)
+	{
+	  history.pushState(null, document.title, location.href);
+	});</script>
 	<title>{{i18n.Title}}</title>
 
 	<script type="module">
@@ -147,11 +153,11 @@
 			<span id="username">Hi, Cool User</span>	 -->
 		
 		<!-- </div> -->
-		<span-with-menu id="gear" styleBody="url(./pages/menu.stylebody.css)"><img src="./img/settings.svg" style="height: 2em;width: 2em;vertical-align: middle;">
+		<span-with-menu id="gear" styleBody="url(./pages/menu.stylebody.css)"><img src="./img/settings.svg" style="height: 2em;width: 2em;vertical-align: middle; cursor: pointer;">
 			<menu-item onclick="monkshu_env.frameworklibs.router.navigate(APP_CONSTANTS.MANAGE_HTML)" label="{{i18n.ManageUsers}}"></menu-item>
 		</span-with-menu>
 		{{/admin}}
-		<img src="./img/exit.svg" title="{{i18n.Exit}}" onclick="window.monkshu_env.__chooser.exitClicked()">
+		<img src="./img/exit.svg" title="{{i18n.Exit}}" style="cursor: pointer;" onclick="window.monkshu_env.__chooser.exitClicked()">
 	</div>
 	<div id="left">
 		<img src="./img/monastery.svg">

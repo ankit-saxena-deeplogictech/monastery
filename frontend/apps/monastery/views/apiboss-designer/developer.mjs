@@ -7,15 +7,16 @@
 
 
 async function init(viewURL) {
- 
+    // const developer_init = (await import(`${viewURL}/developer-init.mjs`)).developer_init; await developer_init.init(); 
+
     // doing this here instead of adding pageGenerator directly to the HTML ensures any i18n or 
     // other changes that the view page needs, are incorporated into the application before 
     // the pageGenerator runs as we await view.init() in the previous line.
     await import ("/framework/components/page-generator/page-generator.mjs");
     const pageGenerator = document.createElement("page-generator"); 
-    pageGenerator.setAttribute("file", `${viewURL}/page/home.page`);
+    pageGenerator.setAttribute("file", `${viewURL}/page/developer.page`);
     document.body.appendChild(pageGenerator);
 }
 
 
-export const home = {init}
+export const developer = {init}
