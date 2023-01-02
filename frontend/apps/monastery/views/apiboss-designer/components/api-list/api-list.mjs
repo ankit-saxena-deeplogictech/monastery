@@ -13,6 +13,7 @@ import { i18n } from "./api-list.i18n.mjs";
 import { util } from "/framework/js/util.mjs";
 import { i18n as i18nFramework } from "/framework/js/i18n.mjs";
 import { monkshu_component } from "/framework/js/monkshu_component.mjs";
+import { loader } from "../../../../js/loader.mjs";
 
 
 const COMPONENT_PATH = util.getModulePath(import.meta);
@@ -28,7 +29,7 @@ async function elementConnected(element) {
         }
     });
     const data = {
-        items: _addClickHandlerToItems(JSON.parse(element.getAttribute("value") || await window.monkshu_env['ITEMS'].getItemList() ? await window.monkshu_env['ITEMS'].getItemList() : "[]"), element.getAttribute("onclickHandler")),
+        items: _addClickHandlerToItems(JSON.parse(element.getAttribute("value") || await window.monkshu_env['ITEMS'].getItemList(element.parentElement.parentElement) ? await window.monkshu_env['ITEMS'].getItemList(element.parentElement.parentElement) : "[]"), element.getAttribute("onclickHandler")),
         styleBody: element.getAttribute("styleBody") ? `<style>${element.getAttribute("styleBody")}</style>` : undefined,
         label: element.getAttribute("label") || i18n.DefaultLabel[i18nFramework.getSessionLang()]
     }
@@ -45,7 +46,9 @@ function _addClickHandlerToItems(items, onclick) {
     for (const item of items) item.onclick = onclick;
     return items;
 }
-function openClicked(element, elementid) {
+async function openClicked(element, elementid) {
+   let thisElement = api_list.getHostElementByID("packages");
+    await loader.beforeLoading(); _disableButton(thisElement.parentElement.parentElement)
     const containerArray = Array.from(element.parentElement.children);
     for(let i=0;i<containerArray.length;i++){
         if(element.id == containerArray[i].id){
@@ -55,8 +58,14 @@ function openClicked(element, elementid) {
   window.monkshu_env.components["api-contents"].bindApiContents(elementid);
   window.monkshu_env.components["api-details"].updateExposedpathandMethod(elementid);
   window.monkshu_env.components["apiinput-apioutput"].bindApiInputOutputParameters(elementid);
+  window.monkshu_env.components["text-editor"].updateResponseData();
+  await loader.afterLoading(); _enableButton(thisElement.parentElement.parentElement);
+// setTimeout(()=>{loader.afterLoading(); _enableButton(thisElement.parentElement.parentElement);}, 500);
 
 }
+
+function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 export const api_list = { trueWebComponentMode: true, elementConnected,elementRendered, openClicked };
 monkshu_component.register("api-list", `${COMPONENT_PATH}/api-list.html`, api_list);
