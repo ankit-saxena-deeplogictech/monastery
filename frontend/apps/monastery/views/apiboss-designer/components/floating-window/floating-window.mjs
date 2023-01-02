@@ -81,7 +81,10 @@ function copyToClipboard(element) {
 const windowContentElement = shadowRoot.querySelector('#windowcontent');
 const texinClitpboard= windowContentElement.querySelector("textarea#consoleText").value;
 navigator.clipboard.writeText(texinClitpboard)
-
+shadowRoot.querySelector("span.tooltiptext").innerText = "Copied";
+setTimeout(()=>{
+	shadowRoot.querySelector("span.tooltiptext").innerText = "Copy";
+}, 2000);
 } 
 
 async function _processTheme(theme, header) {
