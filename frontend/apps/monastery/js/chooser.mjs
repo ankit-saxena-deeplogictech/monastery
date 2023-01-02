@@ -26,7 +26,7 @@ async function interceptPageLoadData() {
 }
 
 async function loadView(name) {
-    // await loader.beforeLoading()
+    await loader.beforeLoading();
 	 const view = (await import(`${APP_CONSTANTS.APP_PATH}/views/${name}/view.mjs`)).view; await view.init(); 
 
     
