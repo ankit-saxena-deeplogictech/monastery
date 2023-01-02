@@ -33,7 +33,7 @@
    const data = {};
    for (const api of model.apis) {
      if (api["apiname"] == elementid) {
-       target = JSON.parse(JSON.parse(model.apis[0]["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
+       target = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
        data["method"] = api["method"],
          data["exposedpath"] = api["exposedpath"]
          fetchBaseParameters(api_details.getHostElementByID("apidetails"), target)
@@ -186,7 +186,7 @@
      getParaVal(para, reqBody);
    })
    let path = shadowRoot.querySelector("span#path").innerText;
-   const jwtToken = shadowRoot.querySelector("input#jwt-token").value;
+   const jwtToken = shadowRoot.querySelector("input#token-input").value;
    const host = new URL(`http://localhost:9097`).host; // have to change the host for our dynamic case
    let sub = 'access'
    if (jwtToken) {
