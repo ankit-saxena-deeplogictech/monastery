@@ -124,7 +124,7 @@
     <div id="texteditordiv"><textarea id="texteditor"></textarea></div>
     <div id="copybox">
         <image-button img="{{{componentPath}}}/img/copy.svg" text="{{i18n.Copy}}" style="width:100%; height: 100%;"
-            onclickHandler='monkshu_env.components["text-editor"].copyToClipboard()' type="row"
+            onclickHandler='monkshu_env.components["text-editor"].copyToClipboard(this)' type="row"
             styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 5px 5px 5px 20px;} div#button>img.row {width: 2em;height: 100%;} div#button>span {color: #4788C7; font-weight: 700; margin-left:5px} div#button>span:hover {cursor: pointer}">
 
         </image-button>

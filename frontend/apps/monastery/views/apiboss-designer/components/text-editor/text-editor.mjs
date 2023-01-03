@@ -61,11 +61,15 @@
 	return;
  }
 
- function copyToClipboard(){
+ function copyToClipboard(element){
 	const host = text_editor.getHostElementByID("response");
 	if(_getValue(host)){
 		navigator.clipboard.writeText(_getValue(host));
 	}
+	element.querySelector("span.row").innerText = "Copied!";
+	setTimeout(()=>{
+		element.querySelector("span.row").innerText = "Copy";
+	}, 2000);
  }
  
  async function open(element) {

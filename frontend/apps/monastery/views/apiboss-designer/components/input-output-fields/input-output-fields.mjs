@@ -11,7 +11,7 @@ const COMPONENT_PATH = util.getModulePath(import.meta);
 
 // const FLOATING_WINDOW = window.monkshu_env.components["floating-window"];
 const CONSOLE_THEME = {
-  "var--window-top": "25vh", "var--window-left": "75vh", "var--window-width": "23vw",
+  "var--window-top": "25vh", "var--window-left": "75vh", "var--window-width": "25vw",
   "var--window-height": "45vh", "var--window-background": "#DFF0FE",
   "var--window-border": "1px solid #4788C7", closeIcon: `${COMPONENT_PATH}/img/close.svg`
     }, CONSOLE_HTML_FILE = `${COMPONENT_PATH}/json.html`;
