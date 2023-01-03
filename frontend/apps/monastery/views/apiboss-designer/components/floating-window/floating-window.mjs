@@ -76,15 +76,15 @@ function _initWindowFramework(hostID) {
 
 
 function copyToClipboard(element) {
-  const host = floating_window.getHostElement(element);	
-  const shadowRoot = floating_window.getShadowRootByHost(host);
-const windowContentElement = shadowRoot.querySelector('#windowcontent');
-const texinClitpboard= windowContentElement.querySelector("textarea#consoleText").value;
-navigator.clipboard.writeText(texinClitpboard)
-shadowRoot.querySelector("span.tooltiptext").innerText = "Copied";
-setTimeout(()=>{
-	shadowRoot.querySelector("span.tooltiptext").innerText = "Copy";
-}, 2000);
+	const host = floating_window.getHostElement(element);	
+	const shadowRoot = floating_window.getShadowRootByHost(host);
+	const windowContentElement = shadowRoot.querySelector('#windowcontent');
+	const texinClitpboard= windowContentElement.querySelector("#consoleText").value ? windowContentElement.querySelector("#consoleText").value : windowContentElement.querySelector("#consoleText").innerText;
+	navigator.clipboard.writeText(texinClitpboard)
+	shadowRoot.querySelector("span.tooltiptext").innerText = "Copied!";
+	setTimeout(()=>{
+		shadowRoot.querySelector("span.tooltiptext").innerText = "Copy";
+	}, 2000);
 } 
 
 async function _processTheme(theme, header) {
