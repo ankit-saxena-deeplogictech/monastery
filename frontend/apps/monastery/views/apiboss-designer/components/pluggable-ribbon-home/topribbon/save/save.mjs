@@ -61,7 +61,7 @@ function _convert18NtoRenderData() {
 }
 
 function _nomalizeName(name)  {
-    const fixedName = name.endsWith(".monkruls.json") ? name.substring(0, name.length-".monkruls.json".length) : name;
+    const fixedName = name.endsWith(".apiboss") ? name.substring(0, name.length-".apiboss".length) : name;
     return fixedName;
 }
 

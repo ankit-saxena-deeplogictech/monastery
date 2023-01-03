@@ -47,9 +47,9 @@
         border: 1px solid #98CCFD;
         border-radius: 10px;
         padding: 5px 20px;
-        display: flex;
-        justify-content: space-between;
+        display: grid;
         align-items: center;
+        grid-template-columns: 72% 28%;
         border-bottom-left-radius: 0%;
         border-bottom-right-radius: 0%;
     }
@@ -221,6 +221,14 @@
 
     span#path{
         margin-left: 10px;
+        overflow-wrap: break-word;
+
+    }
+
+    span#methodpath{
+    display: grid;
+    grid-template-columns: 20% 80%;
+    align-items: center;
     }
 
     *::-webkit-scrollbar {
@@ -244,12 +252,12 @@
 <div id="container">
 
     <div id="headcontainer">
-        <span>
+        <span id = "methodpath">
             <span id="{{method}}">{{method}}</span>
             <span id="path"> {{exposedpath}}</span>
         </span>
         <!-- onclickHandler="window.monkshu_env['OPEN_SERVER_HELPER'].connectServerClicked()" -->
-        <image-button img="{{{componentPath}}}/img/try.svg" text="{{i18n.try}}" style="width:8em; height: 100%;"
+        <image-button img="{{{componentPath}}}/img/try.svg" text="{{i18n.try}}" style="width:8em; height: 2.5em;"
             id="try"  type="row"
             styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 5px 5px 5px 20px;} div#button>img.row {width: 2em;height: 100%;} div#button>span {color: #4788C7; font-weight: 700; margin-left:5px}"
             color="#444444" border="0.5px solid #98CCFD" background-color="#F8FCFF" active-background-color="white"
