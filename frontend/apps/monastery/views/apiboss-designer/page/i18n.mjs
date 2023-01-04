@@ -3,7 +3,9 @@ export const i18n = {
         "Description": "APIBoss\nAPI Security ",
         "APIBossView":"APIBoss Developer - Connected",
         "DoubleClickToOpen":"Please doubleclick the API package to explore",
-        "TokenSubject":"Add Token Subject"
+        "TokenSubject":"Add Token Subject",
+        "SelectDropDown":"Please Select one",
+        "FillField":"Please fill out this field"
 
     },
 
