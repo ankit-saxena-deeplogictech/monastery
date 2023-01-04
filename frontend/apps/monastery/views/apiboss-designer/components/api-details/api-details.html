@@ -82,7 +82,7 @@
         border-radius: 5px;
     }
 
-    input#MyInput, input#token-input {
+    input#MyInput {
         margin: 0px 0.6em 0px 3em;
     }
 
@@ -276,9 +276,8 @@
             </div>
 
             <div id="text"> JWT Token</div>
-            <div id="jwt-token" class="input-fields">
-                <label for="token-input" style="text-align: center; color: #444444;
-               margin-left: 1.2em; ">Bearer</label>
+            <div id="jwt-token" class="input-form">
+                <span id="tokeninput" class="input-label">Bearer</span>
                 <input type="text" id="token-input" class="input-text">
             </div>
 

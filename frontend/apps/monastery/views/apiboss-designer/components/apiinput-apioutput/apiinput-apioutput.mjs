@@ -10,43 +10,48 @@
  
  const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH;
  
- let model ;
- 
+ let model, apiname;
  
  async function elementRendered(element) {
    model = await $$.requireJSON(`${VIEW_PATH}/metadata.json`);
-   const shadowRoot = apiinput_apioutput.getShadowRootByHostId(element.getAttribute("id"));
- 
-   let inputdata = JSON.parse(JSON.parse(model.apis[0]["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
-   let outputdata = JSON.parse(JSON.parse(model.apis[0]["input-output"])[1])["responses"]["200"]["content"]["application/json"]["schema"]["properties"];
- 
-   const tree = jsonview.create(convertJsonFormat(inputdata, {}));
-   jsonview.render(tree, shadowRoot.querySelector('.input-root'));
-   jsonview.expand(tree);
- 
-   const tree2 = jsonview.create(convertJsonFormat(outputdata, {}));
-   jsonview.render(tree2,shadowRoot.querySelector('.output-root'));
-   jsonview.expand(tree2);
+  for (const api of model.apis) {
+    if (api["apiname"] == apiname) {
+      const shadowRoot = apiinput_apioutput.getShadowRootByHostId("treeview");
+      shadowRoot.querySelector('.input-root').innerHTML="";
+      shadowRoot.querySelector('.output-root').innerHTML=""
+    let inputdata = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
+    let outputdata = JSON.parse(JSON.parse(api["input-output"])[1])["responses"]["200"]["content"]["application/json"]["schema"]["properties"];
+    const tree = jsonview.create(convertJsonFormat(inputdata, {}));
+    jsonview.render(tree, shadowRoot.querySelector('.input-root'));
+    jsonview.expand(tree);
+  
+    const tree2 = jsonview.create(convertJsonFormat(outputdata, {}));
+    jsonview.render(tree2,shadowRoot.querySelector('.output-root'));
+    jsonview.expand(tree2);
+    }
+  }
  }
  
- function bindApiInputOutputParameters(elementid){
-   for (const api of model.apis) {
-     if (api["apiname"] == elementid) {
-       const shadowRoot = apiinput_apioutput.getShadowRootByHostId("treeview");
-       shadowRoot.querySelector('.input-root').innerHTML="";
-       shadowRoot.querySelector('.output-root').innerHTML=""
-     let inputdata = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
-     let outputdata = JSON.parse(JSON.parse(api["input-output"])[1])["responses"]["200"]["content"]["application/json"]["schema"]["properties"];
-     const tree = jsonview.create(convertJsonFormat(inputdata, {}));
-     jsonview.render(tree, shadowRoot.querySelector('.input-root'));
-     jsonview.expand(tree);
-   
-     const tree2 = jsonview.create(convertJsonFormat(outputdata, {}));
-     jsonview.render(tree2,shadowRoot.querySelector('.output-root'));
-     jsonview.expand(tree2);
-     }
-   }
- 
+ function bindApiInputOutputParameters(elementid, updateParam){
+  apiname = elementid
+  if(updateParam){
+    for (const api of model.apis) {
+      if (api["apiname"] == elementid) {
+        const shadowRoot = apiinput_apioutput.getShadowRootByHostId("treeview");
+        shadowRoot.querySelector('.input-root').innerHTML="";
+        shadowRoot.querySelector('.output-root').innerHTML=""
+      let inputdata = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
+      let outputdata = JSON.parse(JSON.parse(api["input-output"])[1])["responses"]["200"]["content"]["application/json"]["schema"]["properties"];
+      const tree = jsonview.create(convertJsonFormat(inputdata, {}));
+      jsonview.render(tree, shadowRoot.querySelector('.input-root'));
+      jsonview.expand(tree);
+    
+      const tree2 = jsonview.create(convertJsonFormat(outputdata, {}));
+      jsonview.render(tree2,shadowRoot.querySelector('.output-root'));
+      jsonview.expand(tree2);
+      }
+    }
+  }
  }
  
  function pushObjInArray (json){
