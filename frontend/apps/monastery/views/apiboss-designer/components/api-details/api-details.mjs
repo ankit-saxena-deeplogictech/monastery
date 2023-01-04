@@ -12,25 +12,37 @@
  const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH;
  const APIMANAGER_SESSIONKEY = "__org_monkshu_APIManager";
  
- let model,target;
+ let model,target,apiname;
  
  const elementConnected = async (element) => {
-   model = await $$.requireJSON(`${VIEW_PATH}/metadata.json`);
-   // console.log(JSON.parse(JSON.parse(model.apis[0]["input-output"])[1]));
-   target = JSON.parse(JSON.parse(model.apis[0]["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
    const data = {
      componentPath: COMPONENT_PATH, styleBody: element.getAttribute("styleBody") ?
-       `<style>${element.getAttribute("styleBody")}</style>` : undefined, method: model.apis[0]["method"], exposedpath: model.apis[0]["exposedpath"]
+       `<style>${element.getAttribute("styleBody")}</style>` : undefined
    };
    api_details.setData(element.id, data);
  }
  
- async function elementRendered(element) {
-   fetchBaseParameters(element, target);
- }
- 
- function updateExposedpathandMethod(elementid) {
+ async function elementRendered(element, initialRender) {
    const data = {};
+  if(initialRender){
+    model = await $$.requireJSON(`${VIEW_PATH}/metadata.json`);
+   for (const api of model.apis) {
+     if (api["apiname"] == apiname) {
+       target = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
+       data["method"] = api["method"],
+         data["exposedpath"] = api["exposedpath"]
+     }
+ 
+   }
+  api_details.bindData(data, element.id);
+}
+fetchBaseParameters(element, target);
+}
+ 
+ function updateExposedpathandMethod(elementid, updateParam) {
+  apiname = elementid;
+  if(updateParam){
+     const data = {};
    for (const api of model.apis) {
      if (api["apiname"] == elementid) {
        target = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
@@ -38,10 +50,10 @@
          data["exposedpath"] = api["exposedpath"]
          fetchBaseParameters(api_details.getHostElementByID("apidetails"), target)
      }
- 
    }
    const element = api_details.getHostElementByID("apidetails")
-   api_details.bindData(data, element.id);
+   api_details.bindData(data, element.id);  
+  }
  }
  
  function toggle(element, event) {

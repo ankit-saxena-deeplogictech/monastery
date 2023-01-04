@@ -13,48 +13,7 @@
  
  const elementConnected = async (element) => {
  
-    model = await $$.requireJSON(`${VIEW_PATH}/metadata.json`),serverDetails = await $$.requireJSON(`${VIEW_PATH}/serverdetail.json`);
- 
-   let inputParams = [], outputParams = [];
-   traverseObject(JSON.parse(JSON.parse(model.apis[0]["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"], false, function (node, key) {
-     if (node && typeof node == "object") if (node.type) {
-       inputParams.push({ "name": key, "type": node.type, "desc": node.desc ? node.desc : "", "index": inputParams.length + 1 });
-     }
-   });
-   traverseObject(JSON.parse(JSON.parse(model.apis[0]["input-output"])[1])["responses"]["200"]["content"]["application/json"]["schema"]["properties"], false, function (node, key) {
-     if (node && typeof node == "object") if (node.type) {
-       outputParams.push({ "name": key, "type": node.type, "desc": node.desc ? node.desc : "", "index": outputParams.length + 1 });
-     }
-   });
-   let IdsOfPolicies = model.apis[0].dependencies, apikeys = [], jwtText, securityData = [];
-   for (const policy of model.policies) {
-     IdsOfPolicies.forEach(id => {
-       if (policy.id == id) {
-         apikeys.push(policy["apikey"]);
-         if (policy.yesorno2 == "YES") jwtText = "This api needs a valid JWT token"
-       }
-     })
-   }
- 
-   if(jwtText) securityData.push({"index":securityData.length + 1,"value": jwtText})
-   if(apikeys && apikeys.length>0) securityData.push({"index":securityData.length + 1,"value": `The following api keys is required - ${apikeys.join(",")}`})
- 
- 
-   const data = {
-     "description": model.apis[0]["apidescription"],
-     "exposedpath": `${serverDetails.secure ?"https":"http"}://${serverDetails.hostname}:${serverDetails.port}${model.apis[0]["exposedpath"]}`,
-     "method": model.apis[0]["method"],
-     "standard": model.apis[0]["yesorno"] == "YES" ? "REST" : "NOT REST",
-     "inputparams": inputParams,
-     "outputparams": outputParams,
-     "securitydata":securityData,
-     "apiname": model.apis[0]["apiname"]
-   };
-   if (element.getAttribute("styleBody")) data["styleBody"] = `<style>${element.getAttribute("styleBody")}</style>`;
-   api_contents.setData(element.id, data);
-   docData = data;
-   exposedpath = `${serverDetails.secure ?"https":"http"}://${serverDetails.hostname}:${serverDetails.port}${model.apis[0]["exposedpath"]}`;
-   code_snippet_window.setExposedPath(exposedpath);
+  model = await $$.requireJSON(`${VIEW_PATH}/metadata.json`),serverDetails = await $$.requireJSON(`${VIEW_PATH}/serverdetail.json`);
  }
  
  function traverseObject(target, t, callback) {
@@ -67,9 +26,9 @@
    }
  }
  
- function bindApiContents(elementid) {
+ async function bindApiContents(elementid) {
    const data = {}
- 
+   model = await $$.requireJSON(`${VIEW_PATH}/metadata.json`),serverDetails = await $$.requireJSON(`${VIEW_PATH}/serverdetail.json`);
    for (const api of model.apis) {
      let inputParams = [], outputParams = [];
  
@@ -106,7 +65,6 @@
    api_contents.bindData(data, "apicontent");
    docData = data;
    exposedpath = data["exposedpath"];
-   console.log(exposedpath)
    code_snippet_window.setExposedPath(exposedpath);
  }
  

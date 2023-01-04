@@ -17,7 +17,7 @@ import { loader } from "../../../../js/loader.mjs";
 
 
 const COMPONENT_PATH = util.getModulePath(import.meta);
-
+let apiname;
 
 
 async function elementConnected(element) {
@@ -37,8 +37,12 @@ async function elementConnected(element) {
 }
 
 async function elementRendered(element) {
-const items = Array.from(api_list.getShadowRootByHostId(element.id).querySelector("div#container").children)[0].style.background = "#F8FCFF";
-console.log(items);
+const items = Array.from(api_list.getShadowRootByHostId(element.id).querySelector("div#container").children);
+for(let i=0;i<items.length;i++){
+    if(apiname == items[i].id){
+        items[i].style.background = "#F8FCFF"
+    } else items[i].style.background = "none"
+}
 }
 
 function _addClickHandlerToItems(items, onclick) {
@@ -46,18 +50,23 @@ function _addClickHandlerToItems(items, onclick) {
     for (const item of items) item.onclick = onclick;
     return items;
 }
+function highlightApi(elementid){
+    apiname = elementid;
+}
+
 async function openClicked(element, elementid) {
    let thisElement = api_list.getHostElementByID("packages");
-    await loader.beforeLoading(); _disableButton(thisElement.parentElement.parentElement)
-    const containerArray = Array.from(element.parentElement.children);
+    await loader.beforeLoading(); _disableButton(thisElement.parentElement.parentElement);
+    const shadowRoot = api_list.getShadowRootByHost(thisElement);
+    const containerArray = Array.from(shadowRoot.querySelector("#container").children);
     for(let i=0;i<containerArray.length;i++){
         if(element.id == containerArray[i].id){
             containerArray[i].style.background = "#F8FCFF"
         } else containerArray[i].style.background = "none"
     }
   window.monkshu_env.components["api-contents"].bindApiContents(elementid);
-  window.monkshu_env.components["api-details"].updateExposedpathandMethod(elementid);
-  window.monkshu_env.components["apiinput-apioutput"].bindApiInputOutputParameters(elementid);
+  window.monkshu_env.components["api-details"].updateExposedpathandMethod(elementid, "update");
+  window.monkshu_env.components["apiinput-apioutput"].bindApiInputOutputParameters(elementid, "update");
   window.monkshu_env.components["text-editor"].updateResponseData();
   await loader.afterLoading(); _enableButton(thisElement.parentElement.parentElement);
 // setTimeout(()=>{loader.afterLoading(); _enableButton(thisElement.parentElement.parentElement);}, 500);
@@ -67,5 +76,5 @@ async function openClicked(element, elementid) {
 function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
 function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
-export const api_list = { trueWebComponentMode: true, elementConnected,elementRendered, openClicked };
+export const api_list = { trueWebComponentMode: true, elementConnected,elementRendered, openClicked, highlightApi };
 monkshu_component.register("api-list", `${COMPONENT_PATH}/api-list.html`, api_list);

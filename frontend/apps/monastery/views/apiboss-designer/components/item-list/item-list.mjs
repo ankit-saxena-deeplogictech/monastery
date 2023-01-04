@@ -13,6 +13,7 @@ import {util} from "/framework/js/util.mjs";
 import {i18n as i18nFramework} from "/framework/js/i18n.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
 import {router} from "/framework/js/router.mjs";
+import { loader } from "../../../../js/loader.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta);
 
@@ -32,8 +33,12 @@ function _addDBLClickHandlerToItems(items, ondblclick) {
 	for (const item of items) item.ondblclick = ondblclick;
 	return items;
 }
-function openClicked() {
-	 router.loadPage(`${APP_CONSTANTS.DEVELOPER_HTML}?view=apiboss-designer`);
+async function openClicked(element, elementid) {
+	router.loadPage(`${APP_CONSTANTS.DEVELOPER_HTML}?view=apiboss-designer`);
+	window.monkshu_env.components["api-contents"].bindApiContents(elementid);
+	window.monkshu_env.components["apiinput-apioutput"].bindApiInputOutputParameters(elementid);
+	window.monkshu_env.components["api-details"].updateExposedpathandMethod(elementid);
+	window.monkshu_env.components["api-list"].highlightApi(elementid);
 }
 
 export const item_list = {trueWebComponentMode: true, elementConnected,openClicked};
