@@ -67,6 +67,25 @@
    exposedpath = data["exposedpath"];
    code_snippet_window.setExposedPath(exposedpath);
  }
+
+ function downloadWord() {
+  let element = api_contents.getHostElementByID("apicontent");
+  const shadowRoot = api_contents.getShadowRootByHost(element);
+  var header = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head>
+  <style>.input-headers, .output-headers, .security-headers{font-size: 25px; margin-bottom: 10px;} .apidata-header{font-size:25px; background-color: white;} .output-headers, .security-headers{margin-top: 10px;}</style>
+  <body><div style="font-size:30px; font-weight:bold; text-decoration: underline; margin-bottom: 10px;">${docData.apiname}</div>`
+  var footer = "</body></html>";
+  const innerData = shadowRoot.querySelector("#container").innerHTML.replace(/<img\s+src=([" '])(.*)+/gm, "");
+
+  var sourceHTML = header + innerData.replace(/background-color:#98CCFD;/gm, "text-decoration: underline; font-weight: bold;") + footer;
+  var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+  var fileDownload = document.createElement("a");
+  document.body.appendChild(fileDownload);
+  fileDownload.href = source;
+  fileDownload.download = `${docData.apiname}.docx`;
+  fileDownload.click();
+  document.body.removeChild(fileDownload);
+ }
  
  async function downloadPDF(){
    await $$.require(`${COMPONENT_PATH}/dist/jspdf.debug.js`);
@@ -137,7 +156,7 @@
  }
  
  export const api_contents = {
-   trueWebComponentMode: true, elementConnected, bindApiContents, downloadPDF,
+   trueWebComponentMode: true, elementConnected, bindApiContents, downloadPDF, downloadWord,
    EXPOSED_PATH: exposedpath
  }
  
