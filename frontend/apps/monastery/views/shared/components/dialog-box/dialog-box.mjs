@@ -122,6 +122,8 @@ async function submit(element) {
     const memory = element instanceof Element ? dialog_box.getMemoryByContainedElement(element) : 
         dialog_box.getMemory(element||DEFAULT_HOST_ID);
     const retVals = _getRetVals(memory, dialog_box.getShadowRootByContainedElement(element));
+    if (!_validate(element)) return false;
+
     if (memory.callback && await memory.callback("submit", retVals, element)) hideDialog(element);
     else if (!memory.callback) hideDialog(element);
 } 
