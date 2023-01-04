@@ -62,6 +62,15 @@
         display: grid;
         grid-template-columns: 7% 93%; 
     }
+    div.download-icons {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    div.download-icons img {
+        cursor: pointer;
+    }
+
     *::-webkit-scrollbar {
     width: 0.5em !important;
     scroll-behavior: smooth !important;
@@ -84,10 +93,13 @@
 <div id="container">
     <div id="apidesc">
         <span>{{description}}</span>
-        <img src="./img/pdf.svg" onclick='monkshu_env.components["api-contents"].downloadPDF()'>
+        <div class="download-icons">
+            <img src="./img/word.svg" onclick='monkshu_env.components["api-contents"].downloadWord()'>
+            <img src="./img/pdf.svg" onclick='monkshu_env.components["api-contents"].downloadPDF()'>
+        </div>
     </div>
     <div style="height: 20%;">
-        <div style="background-color:#98CCFD; padding: 5px 32px;">
+        <div class="apidata-header" style="background-color:#98CCFD; padding: 5px 32px;">
             Calling this API
         </div>
         <div style="padding: 0px 32px;">
@@ -97,7 +109,7 @@
         </div>
     </div>
     <div>
-        <div style="background-color:#98CCFD; padding: 8px 32px;">The input parameters are</div>
+        <div class="input-headers" style="background-color:#98CCFD; padding: 8px 32px;">The input parameters are</div>
         <div style="max-height: 4.75em; padding: 10px 32px; overflow: auto;">
             <table style="border-collapse: separate; border-spacing: 0px 14px;">
                 <tbody>
@@ -114,7 +126,7 @@
         </div>
     </div>
     <div>
-        <div style="background-color:#98CCFD; padding: 8px 32px;">The output parameters are</div>
+        <div class="output-headers" style="background-color:#98CCFD; padding: 8px 32px;">The output parameters are</div>
         <div style="max-height: 9em; padding: 10px 32px; overflow: auto;">
             <table style="border-collapse: separate; border-spacing: 0px 14px;">
                 <tbody>
@@ -131,7 +143,7 @@
         </div>
     </div>
     <div style>
-        <div style="background-color:#98CCFD; padding: 5px 32px;">Security</div>
+        <div class="security-headers" style="background-color:#98CCFD; padding: 5px 32px;">Security</div>
         {{#securitydata}}
         <div style="padding: 8px 32px;" id ="securityinfo">
             <span>{{index}}</span>
