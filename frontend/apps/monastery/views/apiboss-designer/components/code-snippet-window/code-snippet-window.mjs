@@ -15,7 +15,7 @@
     "var--window-border": "1px solid #4788C7", closeIcon: `${COMPONENT_PATH}/close.svg`
 }, CONSOLE_HTML_FILE = `${COMPONENT_PATH}/code-snippet-window.html`, CONSOLE_HTML_JAVA_FILE = `${COMPONENT_PATH}/code-snippet-window-java.html`,
   CONSOLE_HTML_CURL_FILE = `${COMPONENT_PATH}/code-snippet-window-curl.html`;
-let exposedpath;
+let exposedpath, token, key;
 
 
 function setExposedPath(path){
@@ -23,11 +23,21 @@ function setExposedPath(path){
   return;
 }
 
+function ifAuthSetAuth(authToken){
+  token = authToken;
+  return;
+}
+
+function ifKeySetKey(apiKey){
+  key = apiKey;
+  return;
+}
+
 
 async function codeSnippetWindow(element) {
     if(element == "NodeJS Client"){
       const floatingWindowHTML = await $$.requireText(CONSOLE_HTML_FILE);
-      await floating_window.showWindow("NodeJS", CONSOLE_THEME, Mustache.render(floatingWindowHTML, {exposedpath: `${exposedpath}`, error: undefined}));
+      await floating_window.showWindow("NodeJS", CONSOLE_THEME, Mustache.render(floatingWindowHTML, {exposedpath: `${exposedpath}`, authHeader: `${token ? `authorization: Bearer`: ''}`, authorization: `${token ? token : ''}`, apiKeyHeader: `${key ? `api-key`: ''}`, apiKey: `${key ? key : ''}`, error: undefined}));
     }
     else if(element == "Java Client"){
       const floatingWindowHTML = await $$.requireText(CONSOLE_HTML_JAVA_FILE);
@@ -40,7 +50,7 @@ async function codeSnippetWindow(element) {
   }
 
 export const code_snippet_window = {
-    trueWebComponentMode: true , codeSnippetWindow, setExposedPath
+    trueWebComponentMode: true , codeSnippetWindow, setExposedPath, ifAuthSetAuth, ifKeySetKey
   }
   
   monkshu_component.register(

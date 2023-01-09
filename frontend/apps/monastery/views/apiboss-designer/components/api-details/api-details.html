@@ -273,14 +273,14 @@
             {{#isapineed}}
             <div id="api-key" class="input-form">
                 <span id="api-key" class="input-label"> API Key</span>
-                <input type="text" id="apikey" class="input-text validate" oninvalid="this.setCustomValidity('{{i18n.FillField}}')"  oninput="setCustomValidity('')"  required="true" class="validate" >
+                <input type="text" id="apikey" class="input-text validate" oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput='monkshu_env.components["api-details"].setApiKey(event)'  oninput="setCustomValidity('')"  required="true" class="validate" >
             </div>
             {{/isapineed}}
             {{#isjwtneed}}
             <div id="text"> JWT Token</div>
             <div id="jwt-token" class="input-form">
                 <span id="tokeninput" class="input-label">Bearer</span>
-                <input type="text" id="token-input" class="input-text validate"  oninvalid="this.setCustomValidity('{{i18n.FillField}}')"  oninput="setCustomValidity('')"  required="true" class="validate">
+                <input type="text" id="token-input" class="input-text validate"  oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput='monkshu_env.components["api-details"].setAuthorization(event)'  oninput="setCustomValidity('')"  required="true" class="validate">
             </div>
             {{/isjwtneed}}
             <div id="text"> HTTP Authentication</div>
