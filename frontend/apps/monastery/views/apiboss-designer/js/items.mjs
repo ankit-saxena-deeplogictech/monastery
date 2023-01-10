@@ -40,7 +40,7 @@ async function getItemList(element) {
         for (const api of model.apis){
             items.push({
                 id:api["apiname"],img: util.resolveURL(`${MODULE_PATH}/../dialogs/model.svg`),
-                label:api["apiname"],method:api["method"]})}
+                label:api["apiname"],exposedmethod:api["exposedmethod"]})}
             //  for (let i = 0; i < models.length; i++) items.push({
             //     id: models[i],
             //      label: models[i], method: methods[i]

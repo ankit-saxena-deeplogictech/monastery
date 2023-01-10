@@ -38,7 +38,7 @@
        IdsOfPolicies.forEach(id => {
          if (policy.id == id) {
            apikeys.push(policy["apikey"]);
-           if (policy.yesorno2 == "YES") jwtText = "This api needs a valid JWT token"
+           if (policy.isjwttokenneeded == "YES") jwtText = "This api needs a valid JWT token"
          }
        })
      }
@@ -51,8 +51,8 @@
      if (api["apiname"] == elementid) {
        data["description"] = api["apidescription"];
        data["exposedpath"] = `${serverDetails.secure ?"https":"http"}://${serverDetails.hostname}:${serverDetails.port}${api["exposedpath"]}`;
-       data["method"] = api["method"];
-       if (api["yesorno"] == "YES") data["standard"] = "REST";
+       data["exposedmethod"] = api["exposedmethod"];
+       if (api["isrestapi"] == "YES") data["standard"] = "REST";
        else data["standard"] = "NOT REST";
        data["inputparams"] = inputParams;
        data["outputparams"] = outputParams;
@@ -115,7 +115,7 @@
    })
    doc.autoTable({
      head: [{ content: "Calling this API" }],
-     body: [[`URL to call this API is ${docData.exposedpath}`], [`The HTTP action to call this API is ${docData.method}`], [`The API request and response is in ${docData.standard} standard`]]
+     body: [[`URL to call this API is ${docData.exposedpath}`], [`The HTTP action to call this API is ${docData.exposedmethod}`], [`The API request and response is in ${docData.standard} standard`]]
    })
    doc.autoTable({
      head: [{ content: "The input parameters are" }],
