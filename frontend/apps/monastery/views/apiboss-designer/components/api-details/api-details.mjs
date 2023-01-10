@@ -30,7 +30,7 @@ async function elementRendered(element, initialRender) {
     for (const api of model.apis) {
       if (api["apiname"] == apiname) {
         target = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
-        data["method"] = api["method"];
+        data["exposedmethod"] = api["exposedmethod"];
         data["exposedpath"] = api["exposedpath"];
 
         let IdsOfPolicies = api.dependencies, apikeys = [], jwtText = false;
@@ -39,7 +39,7 @@ async function elementRendered(element, initialRender) {
           IdsOfPolicies.forEach(id => {
             if (policy.id == id) {
               if(policy["apikey"]!="")   apikeys.push(policy["apikey"]);
-              if (policy.yesorno2 == "YES") jwtText = true
+              if (policy.isjwttokenneeded == "YES") jwtText = true
             }
           })
         }
@@ -62,7 +62,7 @@ function updateExposedpathandMethod(elementid, updateParam) {
     for (const api of model.apis) {
       if (api["apiname"] == elementid) {
         target = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
-        data["method"] = api["method"];
+        data["exposedmethod"] = api["exposedmethod"];
         data["exposedpath"] = api["exposedpath"];
         let IdsOfPolicies = api.dependencies, apikeys = [], jwtText = false;
 
@@ -70,7 +70,7 @@ function updateExposedpathandMethod(elementid, updateParam) {
           IdsOfPolicies.forEach(id => {
             if (policy.id == id) {
               if(policy["apikey"]!="")   apikeys.push(policy["apikey"]);
-              if (policy.yesorno2 == "YES") jwtText = true
+              if (policy.isjwttokenneeded == "YES") jwtText = true
             }
           })
         }
