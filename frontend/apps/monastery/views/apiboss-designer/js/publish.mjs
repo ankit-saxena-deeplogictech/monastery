@@ -9,10 +9,12 @@ import {serverManager} from "./serverManager.js";
 import {blackboard} from "/framework/js/blackboard.mjs";
 import {apibossmodel} from "../model/apibossmodel.mjs";
 import {page_generator} from "/framework/components/page-generator/page-generator.mjs";
+import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 
 const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/..`, MSG_GET_MODEL_NAME = "GET_MODEL_NAME", 
     MSG_RENAME_MODEL = "RENAME_MODEL", DIALOG_RET_PROPS = ["name", "server", "port", "adminid", "adminpassword"], 
     DIALOG = window.monkshu_env.components["dialog-box"];
+    const API_KEYS = {"*":"jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf"}, KEY_HEADER = "org_monkshu_apikey";
 
 let saved_props;
 
@@ -31,8 +33,9 @@ async function openDialog() {
     DIALOG.showDialog(dialogPropertiesPath, html, null, DIALOG_RET_PROPS, 
         async (typeOfClose, result, dialogElement) => { if (typeOfClose == "submit") {
             saved_props = util.clone(result, ["adminpassword"]); // don't save password, for security
-            const model = monkrulsmodel.getModel(); 
-            const pubResult = await serverManager.publishModel(model, result.name, result.server, result.port, result.adminid, result.adminpassword);
+            const parsedData = apibossmodel.getparsedData(); 
+            apiman.registerAPIKeys(API_KEYS, KEY_HEADER);
+            const pubResult = await serverManager.publishModel(parsedData, result.name, result.server, result.port, result.adminid, result.adminpassword);
             blackboard.broadcastMessage(MSG_RENAME_MODEL, {name: result.name});
             if (!pubResult.result) DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); 
             else {DIALOG.showMessage(await i18n.get("PublishSuccess"), null, null, messageTheme, "MSG_DIALOG");  return true;}
