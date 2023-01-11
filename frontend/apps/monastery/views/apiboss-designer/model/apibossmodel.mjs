@@ -85,7 +85,7 @@ function modelConnectorsModified(type, sourceName, targetName, sourceID, targetI
 
 function isConnectable(sourceName, targetName, sourceID, targetID) {    // are these nodes connectable
     if (sourceID == targetID) return false;
-    if (targetName == "policy_tag") return false;
+    if (targetName == "policy") return false;
     if (sourceName == targetName) return false;
 
     return true;
@@ -111,14 +111,18 @@ function getModel() {
 function getparsedData() {
     let parsedData = {},finalData = [];
     const retModel = util.clone(apibossmodelObj);
+    console.log(retModel);
     for (const policy of retModel.policies){
-        if(policy.apikey){
-         if(policy.israteenforcementneeded!="NO")parsedData["ratelimitsdata"]= _ratelimits(policy);
+        console.log(policy);
+        if(policy.apikey!=""){
+            console.log(policy.apikey);
+         if(policy.israteenforcementneeded!="NO") parsedData["ratelimitsdata"]= _ratelimits(policy);
          else parsedData["ratelimitsdata"]="";
+         finalData.push({[policy.apikey]:parsedData});
         }  
-        let apikey = policy.apikey;
-        finalData.push[{[apikey]:parsedData}]
+      
     }
+    console.log(finalData);
     return finalData;
 }
 
@@ -140,7 +144,7 @@ function _nodeAdded(nodeName, id, properties) {
     const name = _getNameFromDescription(node.description);
     node.name = name;
     if (nodeName == "api") { apibossmodelObj.apis.push(node); }
-    else if (nodeName == "policy_tag") { apibossmodelObj.policies.push(node); }
+    else if (nodeName == "policy") { apibossmodelObj.policies.push(node); }
     node.id = id; idCache[id] = node;   // transfer ID and cache the node
     return true;
 }
@@ -149,7 +153,7 @@ function _nodeRemoved(nodeName, id) {
     if (!idCache[id]) return;   // we don't know of this node
     const node = idCache[id];
     if (nodeName == "api") _arrayDelete(apibossmodelObj.apis, node);
-    else if (nodeName == "policy_tag") _arrayDelete(apibossmodelObj.policies, node);
+    else if (nodeName == "policy") _arrayDelete(apibossmodelObj.policies, node);
     delete idCache[id]; // uncache
     return true;
 }
