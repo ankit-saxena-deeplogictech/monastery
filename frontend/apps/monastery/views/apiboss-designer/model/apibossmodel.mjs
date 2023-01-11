@@ -104,47 +104,35 @@ function nodeDescriptionChanged(_nodeName, id, description) {
 
 function getModel() {
     const retModel = util.clone(apibossmodelObj);
-    // const sortedCommands = algos.sortDependencies(retModel.apicl[0]);  // sort apicl commands in the order of dependencies
-    // const NOPparams = saveCordinates(sortedCommands);
-    // let APICL = algos.convertIntoAPICL(sortedCommands); // converting into the final APICL
-    // const NOPcommand = `NOP PARAMS(${JSON.stringify({ "CORDINATES": NOPparams })})`;
-    // const lastCommand = APICL[Object.keys(APICL).length]
-    // if (lastCommand.includes("ENDAPI")) {
-    //     APICL[Object.keys(APICL).length] = NOPcommand;
-    //     APICL[Object.keys(APICL).length + 1] = lastCommand;
-    //     return APICL;
-    // }
-    // else {
-    //     APICL[Object.keys(APICL).length + 1] = NOPcommand;
-    //     return APICL;
-    // }
     return retModel;
 
 }
 
-function saveCordinates(modelObject) {
-    let visitedNodes = [], cordinates = [];
-    modelObject.forEach(node => {
-        if (!visitedNodes.includes(node.id)) {
-            const cordinate = { "description": node["description"], "x": node["x"] ? node["x"] : 30, "y": node["y"] ? node["y"] : 30 };
-            visitedNodes.push(node.id);
-            cordinates.push(cordinate);
-        }
-    })
-    return cordinates;
+function getparsedData() {
+    let parsedData = {},finalData = [];
+    const retModel = util.clone(apibossmodelObj);
+    for (const policy of retModel.policies){
+        if(policy.apikey){
+         if(policy.israteenforcementneeded!="NO")parsedData["ratelimitsdata"]= _ratelimits(policy);
+         else parsedData["ratelimitsdata"]="";
+        }  
+        let apikey = policy.apikey;
+        finalData.push[{[apikey]:parsedData}]
+    }
+    return finalData;
 }
 
+
+function _ratelimits(policy) {
+    return {  "persec": policy.persec,  "permin": policy.permin,  "perhour": policy.perhour,"perday": policy.perday, "permonth": policy.permonth,   "peryear": policy.peryear };
+
+}
 
 
 const getModelAsFile = name => { return { data: JSON.stringify(getModel(), null, 4), mime: "application/json", filename: `${name || "api400api"}.apiboss` } }
 
 const _getUniqueID = _ => `${Date.now()}${Math.random() * 100}`;
 
-function _findOrCreateApis(name = current_command_bundle, forceNew) {
-    if (!forceNew) for (const api of apibossmodelObj.apis)
-        if (api.name == name) return api;
-
-}
 
 function _nodeAdded(nodeName, id, properties) {
     const node = idCache[id] ? idCache[id] : JSON.parse(JSON.stringify(properties)); node.nodeName = nodeName;
@@ -183,5 +171,5 @@ const _getNameFromDescription = description => description.split(" ")[0].split("
 
 export const apibossmodel = {
     init, loadModel, modelNodesModified, modelConnectorsModified, isConnectable,
-    nodeDescriptionChanged, getModelAsFile, getModel,  ADDED: "added", REMOVED: "removed", MODIFIED: "modified"
+    nodeDescriptionChanged, getModelAsFile, getModel,getparsedData,  ADDED: "added", REMOVED: "removed", MODIFIED: "modified"
 };
