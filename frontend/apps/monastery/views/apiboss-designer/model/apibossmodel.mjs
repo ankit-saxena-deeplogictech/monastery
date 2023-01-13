@@ -109,7 +109,7 @@ function getModel() {
 }
 
 function getparsedData() {
-    let parsedData = {},finalData = [];
+    let parsedData = {},finalData = [], rateLimit = {}, inputoutput = {};
     const retModel = util.clone(apibossmodelObj);
     console.log(retModel);
     for (const policy of retModel.policies){
@@ -118,18 +118,27 @@ function getparsedData() {
             console.log(policy.apikey);
          if(policy.israteenforcementneeded!="NO") parsedData["ratelimitsdata"]= _ratelimits(policy);
          else parsedData["ratelimitsdata"]="";
-         finalData.push({[policy.apikey]:parsedData});
-        }  
-      
+        //  finalData.push({[policy.apikey]:parsedData});
+            rateLimit[policy.apikey] = parsedData.ratelimitsdata;
+        }
     }
-    console.log(finalData);
+    finalData.push({rateLimit: rateLimit});
+    parsedData = {};
+    for (const api of retModel.apis) {
+        parsedData["inputdata"] = JSON.parse(JSON.parse(api["input-output"])[0]);
+        parsedData["outputdata"] = JSON.parse(JSON.parse(api["input-output"])[1]);
+        inputoutput[api.exposedpath] = parsedData;
+    }
+    finalData.push({inputoutput: inputoutput});
     return finalData;
 }
 
 
 function _ratelimits(policy) {
+    if(policy.isauthenticationneeded == "YES") {
+        return {  "persec": policy.persec,  "permin": policy.permin,  "perhour": policy.perhour,"perday": policy.perday, "permonth": policy.permonth,   "peryear": policy.peryear, "userid": policy.userid, "password": policy.password };
+    }
     return {  "persec": policy.persec,  "permin": policy.permin,  "perhour": policy.perhour,"perday": policy.perday, "permonth": policy.permonth,   "peryear": policy.peryear };
-
 }
 
 

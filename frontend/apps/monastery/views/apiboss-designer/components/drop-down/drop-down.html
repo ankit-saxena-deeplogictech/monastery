@@ -119,7 +119,7 @@
 
 {{{styleBody}}}
 <div class="cselect">
-  <select name="choices" id="choices" required="true" class="validate" oninvalid="this.setCustomValidity('{{i18n.SelectDropDown}}')"  oninput="setCustomValidity('')">
+  <select name="choices" id="choices" required="true" class="validate" oninvalid="this.setCustomValidity('{{i18n.SelectDropDown}}')" onchange='monkshu_env.components["drop-down"].disableOrEnableInputField(this)'  oninput="setCustomValidity('')">
     <option value="" disabled selected hidden class="disabled">{{text}}</option>
     {{#values}}
     <option value="{{value}}" class="values" id="{{value}}">{{value}}</option>
