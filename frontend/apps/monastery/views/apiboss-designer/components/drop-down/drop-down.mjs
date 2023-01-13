@@ -6,6 +6,8 @@
  import { monkshu_component } from "/framework/js/monkshu_component.mjs";
  
  const COMPONENT_PATH = util.getModulePath(import.meta);
+ const diloagBoxComponent = window.monkshu_env.components['dialog-box'];
+
  
  const elementConnected = async (element) => {
    Object.defineProperty(element, "value", {
@@ -39,6 +41,7 @@
  function _setValue(value, element) {
    const shadowRoot = drop_down.getShadowRootByHostId(element.getAttribute("id"));
    shadowRoot.querySelector(`#${value}`).setAttribute("selected", "selected");
+   disableOrEnableInputField(element);
  };
 
  function _attachFormValidationControls(element) {
@@ -52,12 +55,62 @@
   element.reportValidity = _ => selectElement.reportValidity();
   element.getValidationMessage = _ => selectElement.validationMessage;
 }
- 
+
+function disableOrEnableInputField(element) {
+    const dropDownShadowRoot = drop_down.getShadowRootByHost(element) ? drop_down.getShadowRootByHost(element) : drop_down.getShadowRootByContainedElement(element);
+    const shadowRoot = diloagBoxComponent.getShadowRootByContainedElement(drop_down.getHostElement(dropDownShadowRoot));
+
+    if(drop_down.getHostElement(dropDownShadowRoot).id == "isauthenticationneeded") {
+      if(dropDownShadowRoot.querySelector('select').value == "NO"){
+        _setAttribute(shadowRoot, ['userid', 'password']);
+      }
+      else {
+        _removeAttribute(shadowRoot, ['userid', 'password']);
+      }
+    }
+    else if(drop_down.getHostElement(dropDownShadowRoot).id == "isjwttokenneeded") {
+      if(dropDownShadowRoot.querySelector('select').value == "NO"){
+        _setAttribute(shadowRoot, ['jwtsubject']);
+
+      }
+      else{
+        _removeAttribute(shadowRoot, ['jwtsubject']);
+      }
+    }
+    else if(drop_down.getHostElement(dropDownShadowRoot).id == "istokenneeded") {
+      if(dropDownShadowRoot.querySelector('select').value == "NO"){
+        _setAttribute(shadowRoot, ['tokensubject']);
+        }
+      else{
+        _removeAttribute(shadowRoot, ['tokensubject']);
+      }
+    }
+    else if(drop_down.getHostElement(dropDownShadowRoot).id == "israteenforcementneeded") {
+      if(dropDownShadowRoot.querySelector('select').value == "NO"){
+        _setAttribute(shadowRoot, ['persec', 'permin', 'perhour', 'perday', 'permonth', 'peryear']);
+        }
+      else{
+        _removeAttribute(shadowRoot, ['persec', 'permin', 'perhour', 'perday', 'permonth', 'peryear']); 
+      }
+    }
+}
+
+function _setAttribute (shadowRoot, elementidarray){
+  for(let id of elementidarray){
+    shadowRoot.querySelector(`#${id}`).setAttribute("disabled", "true");
+  }
+}
+
+function _removeAttribute (shadowRoot, elementidarray){
+  for(let id of elementidarray){
+    shadowRoot.querySelector(`#${id}`).removeAttribute("disabled");
+  }
+}
  
  export const drop_down = {
    trueWebComponentMode: true,
    elementConnected,
-   elementRendered
+   elementRendered, disableOrEnableInputField, _setAttribute, _removeAttribute
  };
  
  monkshu_component.register(
