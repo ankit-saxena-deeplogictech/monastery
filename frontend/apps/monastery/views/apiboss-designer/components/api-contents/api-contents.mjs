@@ -65,7 +65,7 @@
    api_contents.bindData(data, "apicontent");
    docData = data;
    exposedpath = data["exposedpath"];
-   code_snippet_window.setExposedPath(exposedpath);
+   code_snippet_window.setExposedPathAndMethod(exposedpath, `${data["exposedmethod"]}`);
  }
 
  function downloadWord() {
