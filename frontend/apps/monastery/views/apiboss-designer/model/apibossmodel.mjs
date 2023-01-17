@@ -109,13 +109,13 @@ function getModel() {
 }
 
 function getparsedData() {
-    let parsedData = {},finalData = [], rateLimit = {}, inputoutput = {};
+    let parsedData = {},finalData = [], rateLimit = {}, inputoutput = {}, apiregistrydata = {};
     const retModel = util.clone(apibossmodelObj);
-    console.log(retModel);
+    // console.log(retModel);
     for (const policy of retModel.policies){
-        console.log(policy);
+        // console.log(policy);
         if(policy.apikey!=""){
-            console.log(policy.apikey);
+            // console.log(policy.apikey);
          if(policy.israteenforcementneeded!="NO") parsedData["ratelimitsdata"]= _ratelimits(policy);
          else parsedData["ratelimitsdata"]="";
         //  finalData.push({[policy.apikey]:parsedData});
@@ -130,6 +130,41 @@ function getparsedData() {
         inputoutput[api.exposedpath] = parsedData;
     }
     finalData.push({inputoutput: inputoutput});
+    let i = 0;
+    for(const api of retModel.apis) {
+        parsedData = {};
+        console.log(api)
+        if(JSON.parse(api.passthrough).length){
+            console.log(JSON.parse(api.passthrough))
+            parsedData["passthrough"] = JSON.parse(api.passthrough);
+            // console.log(JSON.parse(JSON.parse(api.passthrough)))
+        }
+
+        if(JSON.parse(api.injected).length){
+            console.log(JSON.parse(api.injected))
+            parsedData["injected"] = JSON.parse(api.injected);
+            // console.log(JSON.parse(JSON.parse(api.passthrough)))
+        }
+
+        parsedData["exposedpath"] = api.exposedpath;
+        parsedData["backendurl"] = api.backendurl;
+        parsedData["backendurlmethod"] = api.backendurlmethod;
+        parsedData["isrestapi"] = api.isrestapi;
+        // for(const policy of retModel.policies) {
+            parsedData["apikey"] = retModel.policies[i].apikey;
+            parsedData["needsBasicAuth"] = retModel.policies[i].isauthenticationneeded;
+            parsedData["needsToken"] = retModel.policies[i].isjwttokenneeded;
+            parsedData["jwtsubject"] = retModel.policies[i].jwtsubject;
+            parsedData["addsToken"] = retModel.policies[i].istokenneeded;
+            parsedData["tokensubject"] = retModel.policies[i].tokensubject;
+            i++;
+            console.log(parsedData)
+        // }
+        apiregistrydata[api.exposedpath] = parsedData;
+    }
+    
+    finalData.push({ apiregistrydata: apiregistrydata });
+    console.log(finalData);
     return finalData;
 }
 
