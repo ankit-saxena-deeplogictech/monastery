@@ -29,7 +29,7 @@
  
  async function bindApiContents(elementid) {
    const data = {}
-   model = await $$.requireJSON(`${VIEW_PATH}/metadata.json`),serverDetails = await $$.requireJSON(`${VIEW_PATH}/serverdetail.json`);
+   model = session.get(ORG_METADATA),serverDetails = await $$.requireJSON(`${VIEW_PATH}/serverdetail.json`);
    for (const api of model.apis) {
      let inputParams = [], outputParams = [];
  
