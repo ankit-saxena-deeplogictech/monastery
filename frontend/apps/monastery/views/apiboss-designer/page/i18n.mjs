@@ -5,7 +5,8 @@ export const i18n = {
         "DoubleClickToOpen":"Please doubleclick the API package to explore",
         "TokenSubject":"Add Token Subject",
         "SelectDropDown":"Please Select one",
-        "FillField":"Please fill out this field"
+        "FillField":"Please fill out this field",
+        "PublishSuccess":"Published Successfully"
 
     },
 

@@ -10,8 +10,7 @@ import { APP_CONSTANTS } from "../../../../js/constants.mjs";
 import { session } from "../../../../../../framework/js/session.mjs";
 import { code_snippet_window } from "../code-snippet-window/code-snippet-window.mjs";
 
-const COMPONENT_PATH = util.getModulePath(import.meta), VIEW_PATH = APP_CONSTANTS.CONF_PATH;
-const APIMANAGER_SESSIONKEY = "__org_monkshu_APIManager";
+const COMPONENT_PATH = util.getModulePath(import.meta), VIEW_PATH = APP_CONSTANTS.CONF_PATH,ORG_METADATA = "__org_metadata", APIMANAGER_SESSIONKEY = "__org_monkshu_APIManager";
 
 let model, target, apiname;
 
@@ -26,7 +25,7 @@ const elementConnected = async (element) => {
 async function elementRendered(element, initialRender) {
   const data = {};
   if (initialRender) {
-    model = await $$.requireJSON(`${VIEW_PATH}/metadata.json`);
+    model = session.get(ORG_METADATA);
     for (const api of model.apis) {
       if (api["apiname"] == apiname) {
         target = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];

@@ -83,15 +83,23 @@ async function getModelList(server, port, adminid, adminpassword) {
  * @param {string} adminpassword Server admin password
  * @returns {result: true|false, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
- async function publishModel(parsedData, name, server, port, adminid, adminpassword) {
+async function publishModel(parsedData, name, server, port, adminid, adminpassword) {
     // const API_ADMIN_URL_FRAGMENT = `://${server}:${port}/apps/monkruls/admin`;
 
-    // const loginResult = await loginToServer(server, port, adminid, adminpassword);
-    // console.log(loginResult);
-    // if (!loginResult.result) return loginResult;    // failed to connect or login
+    const loginResult = await loginToServer(server, port, adminid, adminpassword);
+    console.log(loginResult);
+    if (!loginResult.result) return loginResult;    // failed to connect or login
     try {   // try to publish now
         return {result: (await apiman.rest(`http://${server}:${port}/apps/apiboss/admin/updateconf`, "POST", 
-            { data: parsedData}, false,true)).result, err: "Publishing failed at the server", 
+            { data: parsedData}, true,true)).result, err: "Publishing failed at the server", 
+            raw_err: "Publishing failed at the server", key: "PublishServerIssue"};
+    } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
+}
+
+async function publishMetaData(metaData, name, server, port, adminid, adminpassword) {
+    try {   // try to publish now
+        return {result: (await apiman.rest(`http://${server}:${port}/apps/monastery/createorupdatemeta`, "POST", 
+            { metadata: metaData}, false,true)).result, err: "Publishing failed at the server", 
             raw_err: "Publishing failed at the server", key: "PublishServerIssue"};
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
 }
@@ -113,5 +121,4 @@ async function loginToServer(server, port, adminid, adminpassword) {
         } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
     }
 }
-
-export const serverManager = {publishModel, unpublishModel, getModelList, getModel,loginToServer};
+export const serverManager = {publishModel, unpublishModel, getModelList, getModel,publishMetaData,loginToServer};

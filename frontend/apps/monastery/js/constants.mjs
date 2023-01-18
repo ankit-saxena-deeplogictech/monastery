@@ -44,6 +44,10 @@ export const APP_CONSTANTS = {
     API_GETTOTPSEC: API_PATH+"/gettotpsec",
     API_GETPROFILE: API_PATH+"/getprofile",
     API_GETAPPCONFIG: API_PATH+"/getappconfig",
+    API_GETMETADATA: API_PATH+"/getmetadata",
+
+    API_CREATEORUPDATEMETA: API_PATH+"/createorupdatemeta",
+
 
     USERID: "userid",
     PWPH: "pwph",
