@@ -133,17 +133,26 @@ function getparsedData() {
     let i = 0;
     for(const api of retModel.apis) {
         parsedData = {};
-        console.log(api)
         if(JSON.parse(api.passthrough).length){
-            console.log(JSON.parse(api.passthrough))
-            parsedData["passthrough"] = JSON.parse(api.passthrough);
-            // console.log(JSON.parse(JSON.parse(api.passthrough)))
+            let passthroughHeader = JSON.parse(api.passthrough);
+            let passthrough = ''
+            for(let item of passthroughHeader) {
+                if(item == passthroughHeader[passthroughHeader.length-1]){
+                    passthrough+=item[0];
+                } else {
+                    passthrough+= item[0]+',';
+                }
+            }
+            parsedData["passthrough"] = passthrough;
         }
 
         if(JSON.parse(api.injected).length){
-            console.log(JSON.parse(api.injected))
-            parsedData["injected"] = JSON.parse(api.injected);
-            // console.log(JSON.parse(JSON.parse(api.passthrough)))
+            let injectedHeader = JSON.parse(api.injected);
+            let injected = {};
+            for(let item of injectedHeader) {
+                injected[item[0]] = item[1];
+            }
+            parsedData["injected"] = injected;
         }
 
         parsedData["exposedpath"] = api.exposedpath;
@@ -158,13 +167,11 @@ function getparsedData() {
             parsedData["addsToken"] = retModel.policies[i].istokenneeded;
             parsedData["tokensubject"] = retModel.policies[i].tokensubject;
             i++;
-            console.log(parsedData)
         // }
         apiregistrydata[api.exposedpath] = parsedData;
     }
     
     finalData.push({ apiregistrydata: apiregistrydata });
-    console.log(finalData);
     return finalData;
 }
 
