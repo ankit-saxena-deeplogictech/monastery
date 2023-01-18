@@ -5,13 +5,14 @@
  */
  import {util} from "/framework/js/util.mjs";
  import {monkshu_component} from "/framework/js/monkshu_component.mjs";
+ import { session } from "/framework/js/session.mjs";
 
  const COMPONENT_PATH = util.getModulePath(import.meta), VIEW_PATH=APP_CONSTANTS.CONF_PATH;
  const P3_LIBS = [`${COMPONENT_PATH}/3p/codemirror/lib/codemirror.js`, `${COMPONENT_PATH}/3p/codemirror/addon/selection/active-line.js`,
 	 `${COMPONENT_PATH}/3p/codemirror/mode/javascript/javascript.js`, `${COMPONENT_PATH}/3p/codemirror/addon/edit/matchbrackets.js`,
 	 `${COMPONENT_PATH}/3p/codemirror/addon/lint/lint.js`, `${COMPONENT_PATH}/3p/codemirror/addon/lint/javascript-lint.js`,
 	 `${COMPONENT_PATH}/3p/jshint/jshint.js`,`${COMPONENT_PATH}/3p/codemirror/addon/lint/json-lint.js`,]
- let model;
+ let model, ORG_METADATA = "__org_metadata";
  async function elementConnected(element) {
 	 Object.defineProperty(element, "value", {get: _=>_getValue(element), set: value=>_setValue(value, element)});
 	 
@@ -19,7 +20,7 @@
 		 `<style>${element.getAttribute("styleBody")}</style>`:undefined, 
 		 showToolbar:element.getAttribute("showToolbar")?.toLowerCase() == "false"?undefined:true };
  
-		model = await $$.requireJSON(`${VIEW_PATH}/metadata.json`);
+		 model = session.get(ORG_METADATA);
 	 if (element.id) if (!text_editor.datas) {text_editor.datas = {}; text_editor.datas[element.id] = data;} 
 	 else text_editor.data = data;
  }
