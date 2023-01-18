@@ -226,14 +226,16 @@ async function tryIt(element, event) {
   targetNode.querySelectorAll(":scope>div").forEach((para) => {
     getParaVal(para, reqBody);
   })
-  let path = shadowRoot.querySelector("span#path").innerText;
-  const jwtToken = shadowRoot.querySelector("input#token-input").value;
-  const host = new URL(`http://localhost:9097`).host; // have to change the host for our dynamic case
+  let path = shadowRoot.querySelector("span#path").innerText, jwtToken;
+  if(shadowRoot.querySelector("input#token-input")){
+    jwtToken = shadowRoot.querySelector("input#token-input").value;
+  }
+  const host = new URL(`http://localhost:9090`).host; // have to change the host for our dynamic case
   let sub = 'access'
   if (jwtToken) {
     const storage = _getAPIManagerStorage(); storage.tokenManager[`${host}_${sub}`] = jwtToken; _setAPIManagerStorage(storage);
   }
-  let resp = await apiman.rest(`http://localhost:9097${path}`, "POST", reqBody, (jwtToken) ? true : false);
+  let resp = await apiman.rest(`http://localhost:9090/apps/apiboss${path}`, "POST", reqBody, (jwtToken) ? true : false);
   text_editor.getJsonData(resp);
 };
 
