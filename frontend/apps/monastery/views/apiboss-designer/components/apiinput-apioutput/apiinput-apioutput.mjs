@@ -6,14 +6,15 @@
  import { monkshu_component } from "/framework/js/monkshu_component.mjs";
  import { jsonview } from "./src/json-view.js";
  import { APP_CONSTANTS } from "../../../../js/constants.mjs";
+ import { session } from "/framework/js/session.mjs";
+
  
- 
- const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH;
+ const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH,ORG_METADATA = "__org_metadata";
  
  let model, apiname;
  
  async function elementRendered(element) {
-   model = await $$.requireJSON(`${VIEW_PATH}/metadata.json`);
+   model =  session.get(ORG_METADATA);
   for (const api of model.apis) {
     if (api["apiname"] == apiname) {
       const shadowRoot = apiinput_apioutput.getShadowRootByHostId("treeview");

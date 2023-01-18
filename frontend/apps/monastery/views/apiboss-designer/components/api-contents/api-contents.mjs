@@ -6,14 +6,15 @@
  import { monkshu_component } from "/framework/js/monkshu_component.mjs";
  import { APP_CONSTANTS } from "../../../../js/constants.mjs";
  import { code_snippet_window } from "../code-snippet-window/code-snippet-window.mjs";
+ import { session } from "/framework/js/session.mjs";
  
- const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH;
+ const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH,ORG_METADATA = "__org_metadata";
  let docData,model,serverDetails, exposedpath;
  
  
  const elementConnected = async (element) => {
  
-  model = await $$.requireJSON(`${VIEW_PATH}/metadata.json`),serverDetails = await $$.requireJSON(`${VIEW_PATH}/serverdetail.json`);
+  model = session.get(ORG_METADATA),serverDetails = await $$.requireJSON(`${VIEW_PATH}/serverdetail.json`);
  }
  
  function traverseObject(target, t, callback) {

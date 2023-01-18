@@ -34,6 +34,8 @@ async function openDialog() {
         async (typeOfClose, result, dialogElement) => { if (typeOfClose == "submit") {
             saved_props = util.clone(result, ["adminpassword"]); // don't save password, for security
             const parsedData = apibossmodel.getparsedData(); 
+            const metadata = apibossmodel.getModel();
+            const pubMetaResult = await serverManager.publishMetaData(metadata, result.name, result.server, result.port, result.adminid, result.adminpassword);
             apiman.registerAPIKeys(API_KEYS, KEY_HEADER);
             const pubResult = await serverManager.publishModel(parsedData, result.name, result.server, result.port, result.adminid, result.adminpassword);
             blackboard.broadcastMessage(MSG_RENAME_MODEL, {name: result.name});
