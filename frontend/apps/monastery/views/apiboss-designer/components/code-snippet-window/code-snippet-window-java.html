@@ -66,19 +66,10 @@
         height: 20px;
     }
 </style>
-
-<div id="console">
-    <textarea id="consoleText" {{#error}}class="error" {{/error}}>
-  OkHttpClient client = new OkHttpClient();
-
-  MediaType mediaType = MediaType.parse("application/json");
-  Request request = new Request.Builder()
-    .url("{{exposedpath}}")
-    .post(null)
-    .addHeader("accept", "application/json")
-    .addHeader("content-type", "application/json")
-    .build();
-        
-  Response response = client.newCall(request).execute();
-    </textarea>
-</div>
+<script type="module">
+    import {code_editor} from "../code-editor/code-editor.mjs"
+   </script>
+   
+   <div id="console">
+   <code-editor id="java" mode = "java" ></code-editor>
+   </div>

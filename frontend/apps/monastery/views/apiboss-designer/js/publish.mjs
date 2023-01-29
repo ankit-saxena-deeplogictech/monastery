@@ -10,6 +10,7 @@ import {blackboard} from "/framework/js/blackboard.mjs";
 import {apibossmodel} from "../model/apibossmodel.mjs";
 import {page_generator} from "/framework/components/page-generator/page-generator.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
+import { session } from "/framework/js/session.mjs";
 
 const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/..`, MSG_GET_MODEL_NAME = "GET_MODEL_NAME", 
     MSG_RENAME_MODEL = "RENAME_MODEL", DIALOG_RET_PROPS = ["name", "server", "port", "adminid", "adminpassword"], 
@@ -35,7 +36,10 @@ async function openDialog() {
             saved_props = util.clone(result, ["adminpassword"]); // don't save password, for security
             const parsedData = apibossmodel.getparsedData(); 
             const metadata = apibossmodel.getModel();
-            const pubMetaResult = await serverManager.publishMetaData(metadata, result.name, result.server, result.port, result.adminid, result.adminpassword);
+            const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase(); 
+            const userid = new String(session.get(APP_CONSTANTS.USERID)).toLowerCase(); 
+            console.log(org,userid);
+            const pubMetaResult = await serverManager.publishMetaData(metadata,org,userid, result.name, result.server, result.port, result.adminid, result.adminpassword);
             apiman.registerAPIKeys(API_KEYS, KEY_HEADER);
             const pubResult = await serverManager.publishModel(parsedData, result.name, result.server, result.port, result.adminid, result.adminpassword);
             blackboard.broadcastMessage(MSG_RENAME_MODEL, {name: result.name});

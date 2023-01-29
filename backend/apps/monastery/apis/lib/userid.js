@@ -134,6 +134,11 @@ exports.getOrgsMatchingProducts = async org => {
 	if (products && products.length) return { result: true, products }; else return { result: false, products: [] };
 }
 
+exports.getUserMatchingOnOrg = async org => {
+	const users = await db.getQuery("SELECT user_id, role from users_login WHERE org_id  IN ( SELECT org_id from organizations WHERE org_name = ?)", [org]);
+	if (users && users.length) return { result: true, users }; else return { result: false, users: [] };
+}
+
 exports.getProducts = async _ => {
 	const products = await db.getQuery("SELECT product_name from products ");
 	if (products && products.length) return { result: true, products }; else return { result: false, products: [] };

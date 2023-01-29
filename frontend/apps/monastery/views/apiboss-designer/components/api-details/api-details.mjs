@@ -32,18 +32,21 @@ async function elementRendered(element, initialRender) {
         data["exposedmethod"] = api["exposedmethod"];
         data["exposedpath"] = api["exposedpath"];
 
-        let IdsOfPolicies = api.dependencies, apikeys = [], jwtText = false;
+        let IdsOfPolicies = api.dependencies, apikeys = [], jwtText = false,userauths = false;;
 
         for (const policy of model.policies) {
           IdsOfPolicies.forEach(id => {
             if (policy.id == id) {
               if(policy["apikey"]!="")   apikeys.push(policy["apikey"]);
-              if (policy.isjwttokenneeded == "YES") jwtText = true
+              if (policy.isjwttokenneeded == "YES") jwtText = true;
+              if(policy.isauthenticationneeded == 'YES') userauths = true;
+
             }
           })
         }
         if(apikeys.length>0) data["isapineed"] = true; else data["isapineed"] = false;
         if (jwtText) data["isjwtneed"] = true; else data["isjwtneed"] = false;
+        if (userauths) data["isuserauthsneed"] = true; else data["isuserauthsneed"] = false;
 
       }
 
@@ -63,18 +66,21 @@ function updateExposedpathandMethod(elementid, updateParam) {
         target = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
         data["exposedmethod"] = api["exposedmethod"];
         data["exposedpath"] = api["exposedpath"];
-        let IdsOfPolicies = api.dependencies, apikeys = [], jwtText = false;
+        let IdsOfPolicies = api.dependencies, apikeys = [], jwtText = false, userauths = false;
 
         for (const policy of model.policies) {
           IdsOfPolicies.forEach(id => {
             if (policy.id == id) {
               if(policy["apikey"]!="")   apikeys.push(policy["apikey"]);
-              if (policy.isjwttokenneeded == "YES") jwtText = true
+              if (policy.isjwttokenneeded == "YES") jwtText = true ;
+              if(policy.isauthenticationneeded == 'YES') userauths = true;
             }
           })
         }
         if(apikeys.length>0) data["isapineed"] = true; else data["isapineed"] = false;
         if (jwtText) data["isjwtneed"] = true; else data["isjwtneed"] = false;
+        if (userauths) data["isuserauthsneed"] = true; else data["isuserauthsneed"] = false;
+
         fetchBaseParameters(api_details.getHostElementByID("apidetails"), target)
       }
     }
@@ -96,20 +102,43 @@ function fetchBaseParameters(element, target) {
   content.innerHTML = '';
 
   for (let key in target) {
+    console.log(target);
+    console.log(key);
     let child = document.createElement('div');
     child.innerHTML = `<div class="input-fields" style="padding-right: 10px" id=${target[key].type}>
      <label for="My${target[key].type}" id="my${key}" style="text-align: center; color: #444444;
     margin-left: 1.2em; ">${key}</label>
     <sub class="dataType">${target[key].type}</sub>
-     ${target[key].type == "array" || target[key].type == "object" ? ` <image-button img="./img/add.svg" text=${target[key].items.type} style=" width:6em; height: 100%; margin :0px 10px;"
+     ${target[key].type == "array" && target[key].type !== "object" ? ` <image-button img="./img/add.svg" text=${target[key].items.type} style=" width:6em; height: 100%; margin :0px 10px;"
      class=${target[key].items.type} id=${key} type="row"
      styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 3px 10px;} div#button>img.row {width: 1.5em;height: 100%;} div#button>span {color: #000000; font-weight: 700; margin-left:5px}"
      color="#444444" border="0.5px solid #98CCFD" background-color="#DFF0FE" active-background-color="white" margin = "0px 10px"
-     display="inline-block;" onclick='monkshu_env.components["api-details"].addMoreParameters(this, event)'></image-button>` : `<input type="text" style="margin: 0px 5px" id="My${key}" class="input-text" /></div>`}`
+     display="inline-block;" onclick='monkshu_env.components["api-details"].addMoreParameters(this, event);monkshu_env.components["api-details"].setAttrData();'></image-button>` : target[key].type !== "object" ? `<input type="text" oninput="monkshu_env.components['api-details'].setAttrData();" style="margin: 0px 5px" id="My${key}" class="input-text" />`:""}</div>`
     content.appendChild(child);
+    target[key].type == "object" ? addObjParam(child, target[key].properties) : null;
   }
 }
 
+function addObjParam(element, data) {
+  console.log(element);
+  console.log(data);
+  for(let key in data) {
+    let child = document.createElement('div');
+    child.classList.add('wrapper-div');
+    child.style.marginBottom = "0px";
+    child.innerHTML = `<div class="input-fields" style="padding-right: 10px" id=${data[key].type}>
+     <label for="My${data[key].type}" id="my${key}" style="text-align: center; color: #444444;
+    margin-left: 1.2em; ">${key}</label>
+    <sub class="dataType">${data[key].type}</sub>
+     ${data[key].type == "array" && data[key].type !== "object" ? `<image-button img="./img/add.svg" text=${data[key].items.type} style=" width:6em; height: 100%; margin :0px 10px;"
+     class=${data[key].items.type} id=${key} type="row"
+     styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 3px 10px;} div#button>img.row {width: 1.5em;height: 100%;} div#button>span {color: #000000; font-weight: 700; margin-left:5px}"
+     color="#444444" border="0.5px solid #98CCFD" background-color="#DFF0FE" active-background-color="white" margin = "0px 10px"
+     display="inline-block;" onclick='monkshu_env.components["api-details"].addMoreParameters(this, event);monkshu_env.components["api-details"].setAttrData()'></image-button>` : data[key].type !== "object" ? `<input type="text" oninput="monkshu_env.components['api-details'].setAttrData();" style="margin: 0px 5px" id="My${key}" class="input-text" />`:""}</div>`
+    element.appendChild(child);
+    data[key].type == "object" ? addObjParam(child, data[key].properties) : null;
+  }
+}
 
 
 function findAllByKey(obj, keyToFind) {
@@ -134,7 +163,7 @@ function addMoreParameters(element, event) {
     stringWrapper.style.paddingBottom = "0px";
     let inputContainer = document.createElement("div");
     inputContainer.classList.add("input-wrapper");
-    inputContainer.innerHTML = `<input class="input-text" style="padding:3px;" type="text" placeholder="string"/> <img class="deleteBtn" onclick='monkshu_env.components["api-details"].deleteParameters(this, event)' src=${COMPONENT_PATH}/img/delete.svg/>`
+    inputContainer.innerHTML = `<input class="input-text" oninput="monkshu_env.components['api-details'].setAttrData();" style="padding:3px;" type="text" placeholder="string"/> <img class="deleteBtn" onclick='monkshu_env.components["api-details"].deleteParameters(this, event);monkshu_env.components["api-details"].setAttrData();' src=${COMPONENT_PATH}/img/delete.svg/>`
     stringWrapper.appendChild(inputContainer);
     event.composedPath()[7].appendChild(stringWrapper);
   }
@@ -147,22 +176,22 @@ function addMoreParameters(element, event) {
     objectDiv.innerHTML = `<div class="array-object" style="padding-right: 15px">
      <label for="Object" style="text-align: center; color: #444444;
     margin-left: 1.2em;">Object</label>
-    <img class="deleteBtn" src="${COMPONENT_PATH}/img/delete.svg" onclick='monkshu_env.components["api-details"].deleteParameters(this, event)'/>
+    <img class="deleteBtn" src="${COMPONENT_PATH}/img/delete.svg" onclick='monkshu_env.components["api-details"].deleteParameters(this, event);monkshu_env.components["api-details"].setAttrData();'/>
     </div>`
     wrapperDiv.appendChild(objectDiv);
     for (let key in newData) {
       let child = document.createElement('div');
-      child.innerHTML = `<div class="input-fields" style="padding-right: 10px" id=${newData[key].type}>
-       <label for="My${newData[key].type}" style="text-align: center; color: #444444;
-      margin-left: 1.2em; ">${key}</label>
-      <sub class="dataType">${newData[key].type}</sub>
-       ${newData[key].type == "array" || newData[key].type == "object" ? `
-       <image-button img="./img/add.svg" text=${newData[key].items.type} style=" width:6em; height: 100%; margin :0px 10px;"
-       class=${newData[key].items.type} id=${key} type="row"
-       styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 3px 10px;} div#button>img.row {width: 1.5em;height: 100%;} div#button>span {color: #000000; font-weight: 700; margin-left:5px}"
-       color="#444444" border="0.5px solid #98CCFD" background-color="#DFF0FE; active-background-color="white"  margin = "0px 10px"
-       display="inline-block;" onclick='monkshu_env.components["api-details"].addMoreParameters(this, event)'></image-button>` : `<input type="text" style="margin: 0px 5px" id="My${newData[key].type}" class="input-text" /></div>`}`
-      wrapperDiv.appendChild(child);
+    child.innerHTML = `<div class="input-fields" style="padding-right: 10px" id=${newData[key].type}>
+     <label for="My${newData[key].type}" id="my${key}" style="text-align: center; color: #444444;
+    margin-left: 1.2em; ">${key}</label>
+    <sub class="dataType">${newData[key].type}</sub>
+     ${newData[key].type == "array" && newData[key].type !== "object" ? ` <image-button img="./img/add.svg" text=${newData[key].items.type} style=" width:6em; height: 100%; margin :0px 10px;"
+     class=${newData[key].items.type} id=${key} type="row"
+     styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 3px 10px;} div#button>img.row {width: 1.5em;height: 100%;} div#button>span {color: #000000; font-weight: 700; margin-left:5px}"
+     color="#444444" border="0.5px solid #98CCFD" background-color="#DFF0FE" active-background-color="white" margin = "0px 10px"
+     display="inline-block;" onclick='monkshu_env.components["api-details"].addMoreParameters(this, event);monkshu_env.components["api-details"].setAttrData();'></image-button>` : newData[key].type !== "object" ? `<input type="text"  oninput="monkshu_env.components['api-details'].setAttrData();"style="margin: 0px 5px" id="My${key}" class="input-text" />`:""}</div>`
+    wrapperDiv.appendChild(child);
+    newData[key].type == "object" ? addObjParam(child, newData[key].properties) : null;
     }
     event.composedPath()[7].appendChild(wrapperDiv);
   }
@@ -182,6 +211,22 @@ function deleteParameters(element, event) {
 function getParaVal(element, obj) {
   if (element.firstChild.querySelector(":scope>input")) {
     obj[element.firstChild.querySelector(":scope>label").innerText] = element.firstChild.querySelector(":scope>input").value;
+  }
+  else if (element.firstChild.querySelector("sub").innerText == "object") {
+    let child = element.children;
+    let target = child[0].querySelector("label").innerText;
+    let newChild = Array.from(child);
+    let resObj = {};
+    newChild.shift();
+    console.log(newChild);
+    newChild.forEach((each)=>{
+      // each.querySelectorAll(":scope>div").forEach((para)=>{
+      //   console.log(para);
+      //   console.log(para.querySelector(":scope>input"))
+      // })
+      getParaVal(each, resObj);
+    })
+    obj[`${target}`] = resObj;
   }
   else {
     let child = element.children;
@@ -226,6 +271,7 @@ async function tryIt(element, event) {
   targetNode.querySelectorAll(":scope>div").forEach((para) => {
     getParaVal(para, reqBody);
   })
+  console.log(reqBody);
   let path = shadowRoot.querySelector("span#path").innerText, jwtToken;
   if(shadowRoot.querySelector("input#token-input")){
     jwtToken = shadowRoot.querySelector("input#token-input").value;
@@ -241,10 +287,35 @@ async function tryIt(element, event) {
 
 function setAuthorization(event){
   code_snippet_window.ifAuthSetAuth(`${event.target.value}`);
+  code_snippet_window.setNodeJSValue();
+  code_snippet_window.setJavaValue();
+  code_snippet_window.setShellValue();
+
 }
 
 function setApiKey(event){
   code_snippet_window.ifKeySetKey(`${event.target.value}`);
+  code_snippet_window.setNodeJSValue();
+  code_snippet_window.setJavaValue();
+  code_snippet_window.setShellValue();
+}
+
+function setAttrData(){
+  code_snippet_window.setAttributeData(getAttributesData())
+}
+
+
+function getAttributesData(){
+  let thisElement = api_details.getHostElementByID("apidetails");
+  const shadowRoot = api_details.getShadowRootByHost(thisElement);
+  let node = shadowRoot.querySelector("#content");
+  let targetNode = node;
+  let reqBody = {}
+  targetNode.querySelectorAll(":scope>div").forEach((para) => {
+    getParaVal(para, reqBody);
+  })
+  console.log(reqBody);
+  return reqBody;
 }
 
 function _validate(shadowRoot) {
@@ -267,7 +338,7 @@ function _setAPIManagerStorage(storage) {
 }
 
 export const api_details = {
-  trueWebComponentMode: true, elementConnected, elementRendered, addMoreParameters, toggle, deleteParameters, _serachParamInSchema, tryIt, getParaVal, updateExposedpathandMethod, _getAPIManagerStorage, _setAPIManagerStorage, setAuthorization, setApiKey
+  trueWebComponentMode: true, elementConnected, elementRendered, addMoreParameters, toggle, deleteParameters, _serachParamInSchema, tryIt, getParaVal, updateExposedpathandMethod, _getAPIManagerStorage, _setAPIManagerStorage, setAuthorization, setApiKey, getAttributesData,setAttrData
 }
 
 monkshu_component.register(

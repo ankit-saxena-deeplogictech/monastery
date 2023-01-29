@@ -25,6 +25,8 @@ export const APP_CONSTANTS = {
     DEVELOPER_HTML: APP_PATH+"/developer.html",
     NOTAPPROVED_HTML: APP_PATH+"/notapproved.html",
     CONF_PATH: `${APP_PATH}/views/apiboss-designer/conf`,
+    IMG_SRC: `${APP_PATH}/img`,
+
 
     DIALOGS_PATH: APP_PATH+"/dialogs",
 
@@ -56,7 +58,6 @@ export const APP_CONSTANTS = {
     API_PUBLISH:API_PATH+"/apis/api400publish",
     API_MODEL_OBJECT:API_PATH+"/apis/api400modelobject",
     USERORG: "userorg",
-    USER_ROLE: "user",
     BCRYPT_SALT: "$2a$10$VFyiln/PpFyZc.ABoi4ppf",
     PWPH: "pwph",
     USER_ROLE: "user",

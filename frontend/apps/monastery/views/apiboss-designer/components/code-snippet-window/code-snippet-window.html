@@ -34,9 +34,7 @@
         box-sizing: border-box;
     }
 
-    div#console>textarea#consoleText {
-        background: #0D122B;
-
+    div#console>text-editor#nodejs {
         width: 100%;
         height: 100%;
         outline: none;
@@ -47,8 +45,6 @@
         border: 1px solid #4788C7;
         color: #BBB8B8;
     }
-
-
 
     .json-head {
         display: flex;
@@ -65,25 +61,13 @@
         width: 20px;
         height: 20px;
     }
+
+
 </style>
+<script type="module">
+ import {code_editor} from "../code-editor/code-editor.mjs"
+</script>
 
 <div id="console">
-    <textarea id="consoleText" {{#error}}class="error" {{/error}}>
- const https = require("https");
- const options = {
-    method: "{{method}}",
-    headers: {
-        accept: 'application/json',
-        {{authHeader}} {{authorization}}
-        {{apiKeyHeader}} {{apiKey}}
-    }
- }
- https.request("{{exposedpath}}", options, (resp)=>{
-            
- // The whole response has been received. Print out the result
-    resp.on("end", ()=>{
-       console.log(JSON.parse(data).explanation);
-        });
-     });    
-    </textarea>
+<code-editor id="nodejs" mode = "javascript" ></code-editor>
 </div>
