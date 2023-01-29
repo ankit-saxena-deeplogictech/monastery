@@ -110,11 +110,11 @@ async function codeSnippetWindow(element) {
 
     async function setShellValue(){
       if(document.querySelector(`floating-window`) && floatingWindowHTMLCurlID){
-        let data = `curl --request ${exposedmethod} \
-        --url ${exposedpath} \
-        --header 'accept: application/json' 
-        ${token?`--header 'authorization: Bearer ${token?token:""}'`:""} \
-        ${key?`--header 'apikey:${key?key:""}'`:""} \
+        let data = `curl --request ${exposedmethod} \\
+        --url ${exposedpath} \\
+        --header 'accept: application/json' \\
+        ${token?`--header 'authorization: Bearer ${token?token:""}' \\ `:""} 
+        ${key?`--header 'apikey:${key?key:""}'  \\`:""} 
         ${attrData?`--data '${attrData?JSON.stringify(attrData,null,4):""} e()'`:""} `
     
            data =data.replace(/^\s*\n/gm, "");
