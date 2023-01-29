@@ -16,6 +16,8 @@ async function signin(id, pass, otp) {
     logoutListeners = [];   // reset listeners on sign in
         
     const resp = await apiman.rest(APP_CONSTANTS.API_LOGIN, "POST", {pwph, otp, id}, false, true);
+    console.log(resp);
+
     if (resp && resp.result && resp.tokenflag) {
         session.set(APP_CONSTANTS.USERID, resp.id); 
         session.set(APP_CONSTANTS.USERNAME, resp.name);
@@ -25,6 +27,8 @@ async function signin(id, pass, otp) {
         const PERMISSIONS_MAP = securityguard.getPermissionsMap();
         PERMISSIONS_MAP[resp.org] = ["apiboss-designer", "monkruls-designer","api400-designer","asb-designer","monboss-designer"];
         securityguard.setPermissionsMap(PERMISSIONS_MAP);
+        console.log(session.get(APP_CONSTANTS.USERORG));
+
 
         LOG.info(`Login succeeded for ${id}`);
         return 1;

@@ -96,10 +96,10 @@ async function publishModel(parsedData, name, server, port, adminid, adminpasswo
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
 }
 
-async function publishMetaData(metaData, name, server, port, adminid, adminpassword) {
+async function publishMetaData(metaData,org,userid, name, server, port, adminid, adminpassword) {
     try {   // try to publish now
         return {result: (await apiman.rest(`http://${server}:${port}/apps/monastery/createorupdatemeta`, "POST", 
-            { metadata: metaData}, false,true)).result, err: "Publishing failed at the server", 
+            { metadata: metaData,org:org,id:userid}, false,true)).result, err: "Publishing failed at the server", 
             raw_err: "Publishing failed at the server", key: "PublishServerIssue"};
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
 }

@@ -14,7 +14,7 @@ import { util } from "/framework/js/util.mjs";
 import { i18n as i18nFramework } from "/framework/js/i18n.mjs";
 import { monkshu_component } from "/framework/js/monkshu_component.mjs";
 import { loader } from "../../../../js/loader.mjs";
-
+import { items } from "../../js/items.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta);
 let apiname;
@@ -29,7 +29,7 @@ async function elementConnected(element) {
         }
     });
     const data = {
-        items: _addClickHandlerToItems(JSON.parse(element.getAttribute("value") || await window.monkshu_env['ITEMS'].getItemList(element.parentElement.parentElement) ? await window.monkshu_env['ITEMS'].getItemList(element.parentElement.parentElement) : "[]"), element.getAttribute("onclickHandler")),
+        items: _addClickHandlerToItems(JSON.parse(element.getAttribute("value") || await items.getItemList(element.parentElement.parentElement) ? await items.getItemList(element.parentElement.parentElement) : "[]"), element.getAttribute("onclickHandler")),
         styleBody: element.getAttribute("styleBody") ? `<style>${element.getAttribute("styleBody")}</style>` : undefined,
         label: element.getAttribute("label") || i18n.DefaultLabel[i18nFramework.getSessionLang()]
     }
