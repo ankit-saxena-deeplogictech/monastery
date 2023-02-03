@@ -15,7 +15,6 @@ import { session } from "/framework/js/session.mjs";
 const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/..`, MSG_GET_MODEL_NAME = "GET_MODEL_NAME", 
     MSG_RENAME_MODEL = "RENAME_MODEL", DIALOG_RET_PROPS = ["name", "server", "port", "adminid", "adminpassword"], 
     DIALOG = window.monkshu_env.components["dialog-box"];
-    const API_KEYS = {"*":"jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf"}, KEY_HEADER = "org_monkshu_apikey";
 
 let saved_props;
 
@@ -38,13 +37,16 @@ async function openDialog() {
             const metadata = apibossmodel.getModel();
             const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase(); 
             const userid = new String(session.get(APP_CONSTANTS.USERID)).toLowerCase(); 
-            console.log(org,userid);
-            const pubMetaResult = await serverManager.publishMetaData(metadata,org,userid, result.name, result.server, result.port, result.adminid, result.adminpassword);
-            apiman.registerAPIKeys(API_KEYS, KEY_HEADER);
-            const pubResult = await serverManager.publishModel(parsedData, result.name, result.server, result.port, result.adminid, result.adminpassword);
-            blackboard.broadcastMessage(MSG_RENAME_MODEL, {name: result.name});
-            if (!pubResult.result) DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); 
-            else {DIALOG.showMessage(await i18n.get("PublishSuccess"), null, null, messageTheme, "MSG_DIALOG");  return true;}
+            const pubResult = await serverManager.publishModel(parsedData, result.server, result.port, result.adminid, result.adminpassword);
+            console.log(pubResult);
+            if (!pubResult.result) {DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); return ;}
+            else{
+                const pubMetaResult = await serverManager.publishMetaData(metadata,org,userid,  result.server, result.port);
+                blackboard.broadcastMessage(MSG_RENAME_MODEL, {name: result.name});
+                if ( !pubMetaResult.result) DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); 
+                else {DIALOG.showMessage(await i18n.get("PublishSuccess"), null, null, messageTheme, "MSG_DIALOG");  return true;}
+            }
+
         } });
 }
 

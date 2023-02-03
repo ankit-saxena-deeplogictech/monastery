@@ -6,8 +6,13 @@ export const i18n = {
         "TokenSubject":"Add Token Subject",
         "SelectDropDown":"Please Select one",
         "FillField":"Please fill out this field",
-        "PublishSuccess":"Published Successfully"
-
+        "PublishSuccess":"Published Successfully",
+        "APIBossHome":"API Manager and Developer",
+        "APIBossDeveloper":"Developer Call API",
+        "Publish":"Publish",
+        "MetaDataReadServerIssue":"Metadata read failed at the server",
+        "ConnectIssue" :"Unable to connect to the server",
+        "LoginIssue":"Login failed at the server"
     },
 
     hi: {

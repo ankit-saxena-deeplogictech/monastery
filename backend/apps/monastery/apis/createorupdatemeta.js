@@ -16,17 +16,20 @@ exports.doService = async jsonReq => {
 }
 
 function _generateMetadata(jsonReq) {
-    if(!fs.existsSync(`${APP_CONSTANTS.CONF_DIR}/${jsonReq.org}.metadata.json`)){
-        fs.writeFileSync(`${APP_CONSTANTS.CONF_DIR}/${jsonReq.org}.metadata.json`, JSON.stringify({}));
-        _writeFile(jsonReq.metadata,jsonReq.org);
+    if(!fs.existsSync(APP_CONSTANTS.META_DIR)) fs.mkdirSync(APP_CONSTANTS.META_DIR);
+    if(!fs.existsSync(`${APP_CONSTANTS.META_DIR}/${jsonReq.org}`)) fs.mkdirSync(`${APP_CONSTANTS.META_DIR}/${jsonReq.org}`)
+    if(!fs.existsSync(`${APP_CONSTANTS.META_DIR}/${jsonReq.org}/${jsonReq.server}_${jsonReq.port}.json`)){
+        fs.writeFileSync(`${APP_CONSTANTS.META_DIR}/${jsonReq.org}/${jsonReq.server}_${jsonReq.port}.json`, JSON.stringify({}));
+        _writeFile(jsonReq);
     } else {
-        _writeFile(jsonReq.metadata,jsonReq.org);
+        _writeFile(jsonReq);
     }
+}
+ 
+
+ function _writeFile(jsonReq){
+    fs.writeFileSync(`${APP_CONSTANTS.META_DIR}/${jsonReq.org}/${jsonReq.server}_${jsonReq.port}.json`, JSON.stringify(jsonReq.metadata, null, 4));
+
  }
 
- function _writeFile(metadata,org){
-    fs.writeFileSync(`${APP_CONSTANTS.CONF_DIR}/${org}.metadata.json`, JSON.stringify(metadata, null, 4));
-
- }
-
-const validateRequest = jsonReq => jsonReq.metadata && jsonReq.org && jsonReq.id ? true : false;
+const validateRequest = jsonReq => jsonReq.metadata && jsonReq.org && jsonReq.id &&jsonReq.server && jsonReq.port? true : false;

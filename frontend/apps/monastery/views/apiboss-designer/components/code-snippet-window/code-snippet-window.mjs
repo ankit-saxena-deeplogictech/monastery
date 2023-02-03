@@ -6,7 +6,9 @@
  import { monkshu_component } from "/framework/js/monkshu_component.mjs";
  import { floating_window } from "../floating-window/floating-window.mjs";
  import { code_editor } from "../code-editor/code-editor.mjs";
+ import { api_details } from "../api-details/api-details.mjs";
  const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH;
+
 
  const CONSOLE_THEME = {
     "var--window-top": "25vh", "var--window-left": "75vh", "var--window-width": "50vw",
@@ -14,7 +16,7 @@
     "var--window-border": "1px solid #4788C7", closeIcon: `${COMPONENT_PATH}/close.svg`
 }, CONSOLE_HTML_FILE = `${COMPONENT_PATH}/code-snippet-window.html`, CONSOLE_HTML_JAVA_FILE = `${COMPONENT_PATH}/code-snippet-window-java.html`,
   CONSOLE_HTML_CURL_FILE = `${COMPONENT_PATH}/code-snippet-window-curl.html`;
-let exposedpath, token, key, exposedmethod,floatingWindowID,floatingWindowHTMLJavaID,floatingWindowHTMLCurlID,attrData;
+let exposedpath, token, key, exposedmethod,floatingWindowID,floatingWindowHTMLJavaID,floatingWindowHTMLCurlID,attrData,currentFloatingWindow;
 
 
 function setExposedPathAndMethod(path, method){
@@ -43,25 +45,41 @@ async function codeSnippetWindow(element) {
       if(floatingWindowID)  floating_window.hideWindow(floatingWindowID)
       const floatingWindowHTML = await $$.requireText(CONSOLE_HTML_FILE); 
       floatingWindowID =  await floating_window.showWindow("NodeJS", CONSOLE_THEME, Mustache.render(floatingWindowHTML,{}));
+      currentFloatingWindow = "nodejs"
+      updateData();
     setNodeJSValue();
     }
     else if(element == "Java Client"){
      const floatingWindowHTMLJava  = await $$.requireText(CONSOLE_HTML_JAVA_FILE);
      floatingWindowHTMLJavaID = await floating_window.showWindow("JAVA", CONSOLE_THEME, Mustache.render(floatingWindowHTMLJava, {}));
+     currentFloatingWindow = "java";
+
+     updateData();
      setJavaValue();
+
     }    
     else if(element == "Curl Client"){
       const floatingWindowHTMLCurl = await $$.requireText(CONSOLE_HTML_CURL_FILE);
       floatingWindowHTMLCurlID = await floating_window.showWindow("Curl", CONSOLE_THEME, Mustache.render(floatingWindowHTMLCurl, {}));
+      currentFloatingWindow = "curl";
+      updateData();
       setShellValue();
     }
   }
 
+function updateData(){
+  attrData = api_details.getAttributesData();
+      let thisElement = api_details.getHostElementByID("apidetails");
+      const shadowRoot = api_details.getShadowRootByHost(thisElement);
+      let apikey = shadowRoot.querySelector("input#apikey");
+      let jwtToken = shadowRoot.querySelector("input#token-input");
+      if(apikey) key = apikey.value; else key = false;
+      if(jwtToken) token = jwtToken.value;else token = false;
 
+}
 
  async function setNodeJSValue(){
-  console.log(attrData);
-  if(document.querySelector(`floating-window`) && floatingWindowID){
+  if(document.querySelector(`floating-window`) && floatingWindowID && currentFloatingWindow=="nodejs"){
     let data = ` const https = require("https");
     const options = {
       method: ${exposedmethod},
@@ -86,8 +104,7 @@ async function codeSnippetWindow(element) {
   }
 
   async function setJavaValue(){
-    console.log(attrData);
-    if(document.querySelector(`floating-window`) && floatingWindowHTMLJavaID){
+    if(document.querySelector(`floating-window`) && floatingWindowHTMLJavaID && currentFloatingWindow=="java"){
       let data = `OkHttpClient client = new OkHttpClient();
 
       MediaType mediaType = MediaType.parse("application/json");
@@ -109,7 +126,7 @@ async function codeSnippetWindow(element) {
     }
 
     async function setShellValue(){
-      if(document.querySelector(`floating-window`) && floatingWindowHTMLCurlID){
+      if(document.querySelector(`floating-window`) && floatingWindowHTMLCurlID && currentFloatingWindow=="curl"){
         let data = `curl --request ${exposedmethod} \\
         --url ${exposedpath} \\
         --header 'accept: application/json' \\

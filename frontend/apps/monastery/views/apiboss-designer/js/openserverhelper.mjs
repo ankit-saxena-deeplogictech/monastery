@@ -16,26 +16,17 @@ function init() {
 }
 
 async function connectServerClicked() {
-    const server = DIALOG.getElementValue("server"), port = DIALOG.getElementValue("port"), 
-        adminid = DIALOG.getElementValue("adminid"), adminpassword = DIALOG.getElementValue("adminpassword");
-    const listResult = await serverManager.getModelList(server, port, adminid, adminpassword);
-    if (!listResult.result) {DIALOG.showError(null, await i18n.get(listResult.key)); LOG.error("Model list fetch failed"); return;}
-    else DIALOG.hideError();
-    const items = []; for (const modelName of listResult.models) items.push({id: modelName, 
-        img: util.resolveURL(`${MODULE_PATH}/../dialogs/model.svg`), label: modelName});
-    DIALOG.getElement("packages").value = (JSON.stringify(items));
-}
-
-async function openClicked(_elementSendingTheEvent, idOfPackageToOpen) {
-    const server = DIALOG.getElementValue("server"), port = DIALOG.getElementValue("port"), 
-        adminid = DIALOG.getElementValue("adminid"), adminpassword = DIALOG.getElementValue("adminpassword");
-    const modelResult = await serverManager.getModel(idOfPackageToOpen, server, port, adminid, adminpassword);
-    if (!modelResult.result) {DIALOG.showError(null, await i18n.get(modelResult.key)); LOG.error("Model fetch failed"); return;}
-    else {
-        DIALOG.hideError();
-        blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: modelResult.name, data: modelResult.model});
+    const server = DIALOG.getElementValue("server"), port = DIALOG.getElementValue("port"),
+    adminid = DIALOG.getElementValue("adminid"), adminpassword = DIALOG.getElementValue("adminpassword");
+    const metaDataResult = await serverManager.getMetaData(server, port, adminid,adminpassword);
+    if (!metaDataResult.result) {DIALOG.showError(null, await i18n.get(metaDataResult.key)); LOG.error("MetaData fetch failed"); return;}
+    else{
+         DIALOG.hideError();
+        blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: metaDataResult.name, data: JSON.stringify(metaDataResult.model)});
         DIALOG.hideDialog();
     }
+   
 }
 
-export const openserverhelper = {init, connectServerClicked, openClicked};
+
+export const openserverhelper = {init, connectServerClicked};

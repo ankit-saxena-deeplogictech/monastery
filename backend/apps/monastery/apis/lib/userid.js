@@ -11,6 +11,10 @@ exports.register = async (id, name, org, pwph, totpSecret, role, approved, domai
 	const existsID = await exports.existsID(id);
 	if (existsID.result) return ({ result: false });
 	const pwphHashed = await getUserHash(pwph);
+	LOG.info(`pwph : ${pwph}`) ;
+	LOG.info(`pwph : ${pwphHashed}`) ;
+
+
 	const created_at = new Date().toISOString();
 	if (role == "admin") {
 		const insertOrganization = await db.runCmd("INSERT INTO organizations (org_name) VALUES (?)", [org]);
@@ -58,19 +62,22 @@ exports.delete = async id => {
 	return { result: await db.runCmd("DELETE FROM users_login where id = ?", [id]) };
 }
 
-exports.update = async (oldid, user_id, name, org_id, pwph, totpSecret, role, approved, domain) => {
+exports.update = async (oldid, user_id, name, org_id,oldPwphHashed, newPwph, totpSecret, role, approved, domain) => {
 	LOG.info(`oldid : ${oldid}`) 
 	LOG.info(`user_id : ${user_id}`) 
 	LOG.info(`name : ${name}`) 
 	LOG.info(`org_id : ${org_id}`) 
-	LOG.info(`pwph : ${pwph}`) 
 	LOG.info(`totpSecret : ${totpSecret}`) 
 	LOG.info(`role : ${role}`) 
 	LOG.info(`approved : ${approved}`) 
-	LOG.info(`domain : ${domain}`)
+	LOG.info(`domain : ${domain}`);
+	const pwphHashed = newPwph?await getUserHash(newPwph):oldPwphHashed;
+
+	LOG.info(`pwph : ${pwphHashed}`) 
+
 	return {
 		result: await db.runCmd("UPDATE users_login SET user_id=?, name=?,pwph =? ,totpsec=?, role = ?, approved = ?, domain = ? WHERE user_id = ?",
-			[user_id, name, pwph, totpSecret, role, approved ? 1 : 0, domain,oldid]), oldid, user_id, name, org_id, pwph, totpSecret, role, approved, domain
+			[user_id, name, pwphHashed, totpSecret, role, approved ? 1 : 0, domain,oldid]), oldid, user_id, name, org_id, pwph: pwphHashed, totpSecret, role, approved, domain
 	};
 }
 

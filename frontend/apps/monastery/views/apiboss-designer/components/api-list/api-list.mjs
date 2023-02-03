@@ -55,6 +55,7 @@ function highlightApi(elementid){
 }
 
 async function openClicked(element, elementid) {
+    if(document.querySelector("floating-window")) document.querySelector("floating-window").remove();
    let thisElement = api_list.getHostElementByID("packages");
     await loader.beforeLoading(); _disableButton(thisElement.parentElement.parentElement);
     const shadowRoot = api_list.getShadowRootByHost(thisElement);

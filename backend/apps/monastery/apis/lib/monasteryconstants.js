@@ -10,6 +10,8 @@
  exports.APP_ROOT = APP_ROOT;
  exports.API_DIR = `${APP_ROOT}/apis`;
  exports.CONF_DIR = `${APP_ROOT}/conf`;
+ exports.META_DIR = `${APP_ROOT}/conf/meta`;
+
  exports.LIB_DIR = `${APP_ROOT}/apis/lib`;
  
  /* Constants for the Login subsystem */

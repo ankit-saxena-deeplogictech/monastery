@@ -81,12 +81,13 @@ CSS
 .grid-item-extension > input, .grid-item-extension > input:focus {
     width: 100%;
     border-radius: 10px;
-    border: 0px;
+    border: 0.5px solid #98CCFD;
     outline: none;
     padding: 12px;
     resize: none;
     font-family: inherit;
     box-sizing: border-box;
+    
 }
 
 ::placeholder {opacity: 0.8;}
