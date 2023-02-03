@@ -14,6 +14,7 @@ import {i18n as i18nFramework} from "/framework/js/i18n.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
 import {router} from "/framework/js/router.mjs";
 import { items } from "../../js/items.mjs";
+import { loader } from "../../../../js/loader.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta);
 
@@ -34,12 +35,16 @@ function _addDBLClickHandlerToItems(items, ondblclick) {
 	return items;
 }
 async function openClicked(element, elementid) {
+	await loader.beforeLoading();_disableButton(element);
 	router.loadPage(`${APP_CONSTANTS.DEVELOPER_HTML}?view=apiboss-designer`);
 	window.monkshu_env.components["api-contents"].bindApiContents(elementid);
 	window.monkshu_env.components["apiinput-apioutput"].bindApiInputOutputParameters(elementid);
 	window.monkshu_env.components["api-details"].updateExposedpathandMethod(elementid);
 	window.monkshu_env.components["api-list"].highlightApi(elementid);
-}
+	await loader.afterLoading();
 
+}
+function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 export const item_list = {trueWebComponentMode: true, elementConnected,openClicked};
 monkshu_component.register("item-list", `${COMPONENT_PATH}/item-list.html`, item_list);

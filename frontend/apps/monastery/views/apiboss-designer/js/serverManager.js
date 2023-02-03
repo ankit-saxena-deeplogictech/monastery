@@ -3,8 +3,12 @@
  * (C) 2020 TekMonks. All rights reserved.
  * License: See enclosed LICENSE file.
  */
+import { APP_CONSTANTS } from "../../../js/constants.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
+import { session } from "/framework/js/session.mjs";
 
+const API_KEYS = {"*":"jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf"}, KEY_HEADER = "org_monkshu_apikey";
+const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase(),userid = new String(session.get(APP_CONSTANTS.USERID)).toLowerCase();
 /**
  * Returns the list of models present on the server
  * @param {string} server Server IP or Hostname
@@ -36,17 +40,18 @@ async function getModelList(server, port, adminid, adminpassword) {
  * @param {string} adminpassword Server admin password
  * @returns {result: true|false, model: Model object on success, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
- async function getModel(name, server, port, adminid, adminpassword) {
-    const API_ADMIN_URL_FRAGMENT = `://${server}:${port}/apps/monkruls/admin`;
-
+ async function getMetaData( server, port,adminid,adminpassword) {
+   
     const loginResult = await loginToServer(server, port, adminid, adminpassword);
+    console.log(loginResult);
     if (!loginResult.result) return loginResult;    // failed to connect or login
+    apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
 
     try {   // try to read the model now
-        const result = await apiman.rest(loginResult.scheme+API_ADMIN_URL_FRAGMENT, "POST", 
-        {op: "read", name}, true);
-        return {result: result.result, model: result.result?result.data:null, err: "Model read failed at the server", 
-            name: result.result?result.name:null, raw_err: "Model read failed at the server", key: "ModelReadServerIssue"};
+        const result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, id: userid ,server,port}, false, true);
+        console.log(result);
+        return {result: result.result, model: result.result?result.data:null, err: "Metadata read failed at the server", 
+            name: result.result?result.name:null, raw_err: "Metadata read failed at the server", key: "MetaDataReadServerIssue"};
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
 }
 
@@ -83,11 +88,10 @@ async function getModelList(server, port, adminid, adminpassword) {
  * @param {string} adminpassword Server admin password
  * @returns {result: true|false, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
-async function publishModel(parsedData, name, server, port, adminid, adminpassword) {
-    // const API_ADMIN_URL_FRAGMENT = `://${server}:${port}/apps/monkruls/admin`;
-
+async function publishModel(parsedData, server, port, adminid, adminpassword) {
     const loginResult = await loginToServer(server, port, adminid, adminpassword);
     console.log(loginResult);
+
     if (!loginResult.result) return loginResult;    // failed to connect or login
     try {   // try to publish now
         return {result: (await apiman.rest(`http://${server}:${port}/apps/apiboss/admin/updateconf`, "POST", 
@@ -96,15 +100,19 @@ async function publishModel(parsedData, name, server, port, adminid, adminpasswo
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
 }
 
-async function publishMetaData(metaData,org,userid, name, server, port, adminid, adminpassword) {
+async function publishMetaData(metaData,org,userid,server, port) {
+    apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
+
     try {   // try to publish now
-        return {result: (await apiman.rest(`http://${server}:${port}/apps/monastery/createorupdatemeta`, "POST", 
-            { metadata: metaData,org:org,id:userid}, false,true)).result, err: "Publishing failed at the server", 
+        return {result: (await apiman.rest(APP_CONSTANTS.API_CREATEORUPDATEMETA, "POST", 
+            { metadata: metaData,org:org,id:userid,server,port}, false,true)).result, err: "Publishing failed at the server", 
             raw_err: "Publishing failed at the server", key: "PublishServerIssue"};
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
 }
 
 async function loginToServer(server, port, adminid, adminpassword) {
+    apiman.registerAPIKeys(API_KEYS, KEY_HEADER);
+
     const API_LOGIN_SECURE = `https://${server}:${port}/apps/apiboss/admin/login`;
     const API_LOGIN_INSECURE = `http://${server}:${port}/apps/apiboss/admin/login`;
 
@@ -121,4 +129,4 @@ async function loginToServer(server, port, adminid, adminpassword) {
         } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
     }
 }
-export const serverManager = {publishModel, unpublishModel, getModelList, getModel,publishMetaData,loginToServer};
+export const serverManager = {publishModel, unpublishModel, getModelList, getMetaData,publishMetaData,loginToServer};

@@ -11,7 +11,7 @@ import {router} from "/framework/js/router.mjs";
 import {loginmanager} from "../../js/loginmanager.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
-import { APP_CONSTANTS } from "../../js/constants.mjs";
+import { loader } from "../../js/loader.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta), DIALOGS_PATH = `${COMPONENT_PATH}/dialogs`;
 let API_GETMATCHINGORGS;
@@ -62,7 +62,10 @@ async function initialRender(host) {
 }
 
 async function registerOrUpdate(element) {	
+	console.log(element);
 	const shadowRoot = register_box.getShadowRootByContainedElement(element); if (!_validateForm(shadowRoot)) return;
+	await loader.beforeLoading();_disableButton(element);
+
 	const memory = register_box.getMemoryByContainedElement(element);
 
 	const nameSelector = shadowRoot.querySelector("input#name"); const name = nameSelector.value;
@@ -76,6 +79,8 @@ async function registerOrUpdate(element) {
 	const dataOnSuccess = JSON.parse(register_box.getHostElement(element).getAttribute("dataOnSuccess")||"{}");
 
 	const registerResult = await loginmanager.registerOrUpdate(id_old, name, id, pass, org, totpCode?memory.totpKey:null, totpCode);
+	await loader.afterLoading();_enableButton(element);
+
 	switch (registerResult) {
 		case loginmanager.ID_OK: router.loadPage(routeOnSuccess, dataOnSuccess); break;
 		case loginmanager.ID_FAILED: shadowRoot.querySelector("span#error").style.display = "inline"; break;
@@ -131,6 +136,9 @@ const _getTOTPURL = async (key, host) => {
 	const id = host?register_box.getShadowRootByHost(host).querySelector("input#id").value:undefined; 
 	return `${$$.getOS()=="ios"?"totp":"otpauth"}://totp/${await i18n.get("Title")+(id?`:${id}`:"")}?secret=${key}&issuer=TekMonks&algorithm=sha1&digits=6&period=30`;
 } 
+
+function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 async function _checkAndFillAccountProfile(data, email, time) {
 	const profileData = await loginmanager.getProfileData(email, time);

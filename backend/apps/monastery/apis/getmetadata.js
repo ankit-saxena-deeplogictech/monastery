@@ -7,7 +7,8 @@ exports.doService = async jsonReq => {
     const userslist = await userid.getUserMatchingOnOrg(jsonReq.org);
     if (userslist.result && userslist.users.length > 0) {
       const result = userslist.users.some(user => user.user_id == jsonReq.id);
-      if (result) return  { result: true, data: _getMetadata(jsonReq.org) }
+      if(!fs.existsSync(`${APP_CONSTANTS.META_DIR}/${jsonReq.org}/${jsonReq.server}_${jsonReq.port}.json`)) return { result: false }
+      if (result) return  { result: true, data: _getMetadata(jsonReq),name:jsonReq.org}
       else return { result: false };
 
     }
@@ -15,13 +16,12 @@ exports.doService = async jsonReq => {
   }
 }
 
-function _getMetadata(org) {
-  if (!fs.existsSync(`${APP_CONSTANTS.CONF_DIR}/${org}.metadata.json`)) fs.writeFileSync(`${APP_CONSTANTS.CONF_DIR}/${org}.metadata.json`, JSON.stringify({}));
-  let filedata = fs.readFileSync(`${APP_CONSTANTS.CONF_DIR}/${org}.metadata.json`);
+function _getMetadata(jsonReq) {
+  let filedata = fs.readFileSync(`${APP_CONSTANTS.META_DIR}/${jsonReq.org}/${jsonReq.server}_${jsonReq.port}.json`);
   return JSON.parse(filedata);
 }
 
 
 
 
-const validateRequest = jsonReq => jsonReq.org && jsonReq.id ? true : false;
+const validateRequest = jsonReq => jsonReq.org && jsonReq.id && jsonReq.server && jsonReq.port ? true : false;

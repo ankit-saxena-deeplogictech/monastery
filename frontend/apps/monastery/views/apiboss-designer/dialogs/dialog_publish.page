@@ -5,7 +5,7 @@ SCHEMA
     "server": {"html":"input", "type":"text", "placeholder":"{{i18n.Server}}", "required":"true", "spellcheck":"false"},
     "port": {"html":"input", "type":"number", "placeholder":"{{i18n.Port}}", "required":"true"},
     "adminid": {"html":"input", "type":"text", "placeholder":"{{i18n.AdminID}}", "required":"true", "spellcheck":"false"},
-    "adminpassword": {"html":"input", "type":"password", "placeholder":"{{i18n.AdminPassword}}", "required":"true"}
+    "adminpassword": {"html":"password-box", "style":"width:100%; ", "placeholder":"{{i18n.AdminPassword}}", "required":"true","customValidity":"{{i18n.FillField}}", "styleBody":"span#container{width: 100%;} img.pwimg {width: 2em;} input#pwinput{padding:1em 1em 0.5em 3em;border-radius:10px;border:0.5px solid #98CCFD;}","class":"validate"}
 }
 ======
 
@@ -51,7 +51,7 @@ CSS
         .grid-item-extension > textarea, .grid-item-extension > textarea:focus {
     width: 100%;
     border-radius: 10px;
-    border: 0px;
+    border: 0.5px solid #98CCFD;
     outline: none;
     padding: 10px;
     resize: none;

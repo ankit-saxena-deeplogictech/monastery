@@ -67,11 +67,10 @@ async function _getFromServer() {
     DIALOG.showDialog(dialogPropertiesPath, html, null, DIALOG_RET_PROPS, 
         async (typeOfClose, result) => { if (typeOfClose == "submit") {
             saved_props = util.clone(result, ["adminpassword"]); // don't save password, for security
-            const selectedModel = result.packages, readModelResult = serverManager.getModel(selectedModel, result.server,
-                result.port, result.adminid, result.adminpassword);
-            if (!pubResult.result) DIALOG.showError(dialogElement, await i18n.get(readModelResult.key)); 
-            else blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: selectedModel, 
-                data: readModelResult.model});
+            const  readModelResult = serverManager.getModel( result.server, result.port);
+            if (!readModelResult.result) DIALOG.showError(dialogElement, await i18n.get(readModelResult.key)); 
+            else blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: readModelResult.name, 
+                data: readModelResult.data});
         } 
     });
 }

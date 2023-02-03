@@ -11,20 +11,21 @@ const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH = `${MODULE_PATH}
 
 
 
-async function getItemList(element) {
+async function getItemList() {
     try {
+       const serverDetails = await $$.requireJSON(`${VIEW_PATH}/conf/serverdetail.json`);
         let metadata;
         const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase();
         const userid = new String(session.get(APP_CONSTANTS.USERID)).toLowerCase();
         const role = securityguard.getCurrentRole();
+        await loader.beforeLoading();
         
-        let result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, id: userid }, false, true);
+        let result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, id: userid,server:serverDetails.hostname,port:serverDetails.port }, false, true);
         if (result.result&& result.data && Object.keys(result.data).length > 0 ) {
             metadata = result.data;
             session.set(ORG_METADATA, metadata);
         } 
         const items = [];
-        await loader.beforeLoading(); _disableButton(element);
         if (metadata) {
             for (const api of metadata.apis) {
                 items.push({
@@ -32,11 +33,11 @@ async function getItemList(element) {
                     label: api["apiname"], exposedmethod: api["exposedmethod"]
                 })
             }
-            await loader.afterLoading(); _enableButton(element);
+            await loader.afterLoading(); 
             return JSON.stringify(items);
         }
         else {
-            await loader.afterLoading(); _enableButton(element);
+            await loader.afterLoading();
             if(role==APP_CONSTANTS.ADMIN_ROLE) await dialog.adminDialog();
             else if(role==APP_CONSTANTS.USER_ROLE) await dialog.userDialog();
             return "[]";
@@ -45,7 +46,7 @@ async function getItemList(element) {
     }
     catch (err) {
         LOG.error(`User apis list fetch failed and the error is ${err}`);
-        if (document.querySelector('.spinner')) await loader.afterLoading(); _enableButton(element);
+        if (document.querySelector('.spinner')) await loader.afterLoading();
         return "[]";
     }
 }
