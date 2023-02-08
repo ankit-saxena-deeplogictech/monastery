@@ -27,8 +27,8 @@ async function signin(id, pass, otp) {
         const PERMISSIONS_MAP = securityguard.getPermissionsMap();
         PERMISSIONS_MAP[resp.org] = ["apiboss-designer", "monkruls-designer","api400-designer","asb-designer","monboss-designer"];
         securityguard.setPermissionsMap(PERMISSIONS_MAP);
-        console.log(session.get(APP_CONSTANTS.USERORG));
-
+        const serverDetails= await apiman.rest(APP_CONSTANTS.API_GETAPPCONFIG, "GET", {},true);
+        session.set("__org_server_details", serverDetails);
 
         LOG.info(`Login succeeded for ${id}`);
         return 1;
@@ -54,11 +54,16 @@ async function registerOrUpdate(old_id, name, id, pass, org, totpSecret, totpCod
         const PERMISSIONS_MAP = securityguard.getPermissionsMap();
         PERMISSIONS_MAP[org] = resp.products;
         securityguard.setPermissionsMap(PERMISSIONS_MAP);
+        const serverDetails= await apiman.rest(APP_CONSTANTS.API_GETAPPCONFIG, "GET", {},true);
+        session.set("__org_server_details", serverDetails);
+
+        
  return loginmanager.ID_OK;
     } else if (resp.result && (!resp.tokenflag)) {
         LOG.warn(`${old_id?"Update":"Registration"} done but not approved yet for ${id}`); return loginmanager.ID_NOT_YET_APPROVED;
     }
     else {LOG.error(`${old_id?"Update":"Registration"} failed for ${id}`); return loginmanager.ID_FAILED;}
+    
 }
 
 async function changepassword(id, pass) {
