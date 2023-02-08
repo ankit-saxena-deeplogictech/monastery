@@ -32,9 +32,8 @@ async function signin(signInButton) {
 	const otp = shadowRoot.querySelector("#otp").value;
 	const routeOnSuccess = login_box.getHostElement(signInButton).getAttribute("routeOnSuccess");
 	const routeOnNotApproved = login_box.getHostElement(signInButton).getAttribute("routeOnNotApproved");
-	await loader.afterLoading();_enableButton(signInButton);
 
-	_handleLoginResult(await loginmanager.signin(userid, pass, otp), shadowRoot, routeOnSuccess, routeOnNotApproved);
+	_handleLoginResult(await loginmanager.signin(userid, pass, otp), shadowRoot, routeOnSuccess, routeOnNotApproved,signInButton);
 }
 
 async function resetAccount(element) {
@@ -59,7 +58,9 @@ function _hideErrors(shadowRoot) {
 	shadowRoot.getElementById("notifier2").style.display = "none";
 }
 
-function _handleLoginResult(result, shadowRoot, routeOnSuccess, routeOnNotApproved) {
+function _handleLoginResult(result, shadowRoot, routeOnSuccess, routeOnNotApproved,signInButton) {
+	 loader.afterLoading();_enableButton(signInButton);
+
 	switch (result) {
 		case loginmanager.ID_OK: router.loadPage(routeOnSuccess); break;
 		case loginmanager.ID_FAILED: shadowRoot.getElementById("notifier").style.display = "inline"; break;
@@ -67,7 +68,7 @@ function _handleLoginResult(result, shadowRoot, routeOnSuccess, routeOnNotApprov
 		default: shadowRoot.getElementById("notifier").style.display = "inline"; break;
 	}
 }
-function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _disableButton(element){console.log(element); element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
 function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 const trueWebComponentMode = true;	// making this false renders the component without using Shadow DOM

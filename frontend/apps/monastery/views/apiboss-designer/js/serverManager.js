@@ -48,7 +48,7 @@ async function getModelList(server, port, adminid, adminpassword) {
     apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
 
     try {   // try to read the model now
-        const result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, id: userid ,server,port}, false, true);
+        const result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, id: userid ,server,port}, true, true);
         console.log(result);
         return {result: result.result, model: result.result?result.data:null, err: "Metadata read failed at the server", 
             name: result.result?result.name:null, raw_err: "Metadata read failed at the server", key: "MetaDataReadServerIssue"};
@@ -105,7 +105,7 @@ async function publishMetaData(metaData,org,userid,server, port) {
 
     try {   // try to publish now
         return {result: (await apiman.rest(APP_CONSTANTS.API_CREATEORUPDATEMETA, "POST", 
-            { metadata: metaData,org:org,id:userid,server,port}, false,true)).result, err: "Publishing failed at the server", 
+            { metadata: metaData,org:org,id:userid,server,port}, true,true)).result, err: "Publishing failed at the server", 
             raw_err: "Publishing failed at the server", key: "PublishServerIssue"};
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
 }
