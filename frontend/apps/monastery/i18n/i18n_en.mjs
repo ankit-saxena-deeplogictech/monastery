@@ -140,7 +140,7 @@ export const i18n = {
 "Port": "Port",
 "AdminID": "Admin ID",
 "AdminPassword":"Admin Password",
-"Upload":"Upload OpenAPI Spec",
+"UploadOpenAPI":"Upload OpenAPI Spec",
 "Injected":"Injected Headers",
 "Passthrough":"Passthrough Headers",
 "Nodejs":"NodeJS Client",

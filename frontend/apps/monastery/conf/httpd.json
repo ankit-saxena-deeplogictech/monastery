@@ -10,13 +10,13 @@
     ],
     "redirects": [
         {
-            "^http(.*)://([^/]+?)/index.html$": "http{{{$1}}}://{{{$2}}}/apps/xbin/index.html"
+            "^http(.*)://([^/]+?)/index.html$": "http{{{$1}}}://{{{$2}}}/apps/monastery/index.html"
         },
         {
-            "^http(.*)://([^/]+?)/$": "http{{{$1}}}://{{{$2}}}/apps/xbin/index.html"
+            "^http(.*)://([^/]+?)/$": "http{{{$1}}}://{{{$2}}}/apps/monastery/index.html"
         },
         {
-            "^http(.*)://([^/]+?)$": "http{{{$1}}}://{{{$2}}}/apps/xbin/index.html"
+            "^http(.*)://([^/]+?)$": "http{{{$1}}}://{{{$2}}}/apps/monastery/index.html"
         }
     ],
     "diskCache": {
