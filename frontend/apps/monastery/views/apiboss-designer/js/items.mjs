@@ -13,14 +13,14 @@ const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH = `${MODULE_PATH}
 
 async function getItemList() {
     try {
-       const serverDetails = await $$.requireJSON(`${VIEW_PATH}/conf/serverdetail.json`);
+       const serverDetails = JSON.parse(session.get("__org_server_details"));
         let metadata;
         const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase();
         const userid = new String(session.get(APP_CONSTANTS.USERID)).toLowerCase();
         const role = securityguard.getCurrentRole();
         await loader.beforeLoading();
         
-        let result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, id: userid,server:serverDetails.hostname,port:serverDetails.port }, false, true);
+        let result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, id: userid,server:serverDetails.host,port:serverDetails.port }, true, true);
         if (result.result&& result.data && Object.keys(result.data).length > 0 ) {
             metadata = result.data;
             session.set(ORG_METADATA, metadata);
