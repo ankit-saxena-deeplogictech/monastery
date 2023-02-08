@@ -276,11 +276,22 @@ async function tryIt(element, event) {
   if(shadowRoot.querySelector("input#token-input")){
     jwtToken = shadowRoot.querySelector("input#token-input").value;
   }
-  const host = new URL(`http://localhost:9090`).host; // have to change the host for our dynamic case
+  if(shadowRoot.querySelector("#apikey")){
+    let xapikey = {"*": shadowRoot.querySelector("#apikey").value}
+    console.log(xapikey)
+    apiman.registerAPIKeys(xapikey, "x-api-key");
+  }
+  const host = new URL(`http://localhost:9092`).host; // have to change the host for our dynamic case
   let sub = 'access'
+  if(shadowRoot.querySelector("#userid") && shadowRoot.querySelector("#password")){
+    const storage = _getAPIManagerStorage(); storage.tokenManager[`basic_auth`] = `Basic ${btoa(`${shadowRoot.querySelector("#MyInput").value}:${shadowRoot.querySelector("#Mypwd").value}`)}`; _setAPIManagerStorage(storage);
+  }
+
   if (jwtToken) { const storage = _getAPIManagerStorage(); storage.tokenManager[`${host}_${sub}`] = jwtToken; _setAPIManagerStorage(storage); }
-  let resp = await apiman.rest(`http://localhost:9090/apps/apiboss${path}`, "POST", reqBody, (jwtToken) ? true : false);
+  let resp = await apiman.rest(`http://localhost:9092${path}`, "POST", reqBody, (jwtToken) ? true : false);
+  console.log(resp)
   text_editor.getJsonData(resp);
+  apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
 };
 
 function setAuthorization(event){

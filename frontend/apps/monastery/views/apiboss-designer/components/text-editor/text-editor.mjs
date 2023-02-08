@@ -46,19 +46,18 @@
   }
 
   function getJsonData(json){
-	let data = JSON.stringify(json, null, 4);
-	const element = text_editor.getHostElementByID("response");
-	const shadowRoot = text_editor.getShadowRootByHost(element);
-	if(json && json.result){
-		shadowRoot.querySelector("div#statuscontainer").style.display = "block";
-	} else shadowRoot.querySelector("div#statuscontainer").style.display = "none";
-	if(json){
-		if(json.result) {_setValue(data, element);}
-		else {_setValue(`${json.status}: ${json.statusText}`, element); shadowRoot.querySelector("div#statuscontainer").style.display = "block";
-				shadowRoot.querySelector("#status").innerText = `${json.status}`; shadowRoot.querySelector("#dot").style.border = "red";
-				shadowRoot.querySelector("#dot").style.background = "red";
-			};
-	} else { let res = {}; _setValue(JSON.stringify(res),element); }
+	if(json) {
+		let data = JSON.stringify(json, null, 4);
+		const element = text_editor.getHostElementByID("response");
+		const shadowRoot = text_editor.getShadowRootByHost(element);
+		if(data){
+			shadowRoot.querySelector("div#statuscontainer").style.display = "block";
+			_setValue(data, element);
+		} else {
+			shadowRoot.querySelector("div#statuscontainer").style.display = "none";
+			let res = {}; _setValue(JSON.stringify(res),element);
+		}
+	}
 	return;
  }
 

@@ -110,7 +110,7 @@ function _removeAttribute (shadowRoot, elementidarray){
  export const drop_down = {
    trueWebComponentMode: true,
    elementConnected,
-   elementRendered, disableOrEnableInputField, _setAttribute, _removeAttribute
+   elementRendered, disableOrEnableInputField, _setAttribute, _removeAttribute, _setValue
  };
  
  monkshu_component.register(

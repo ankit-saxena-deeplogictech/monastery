@@ -152,6 +152,6 @@ const _getelementMemory = hostOrHostID => {
 // convert this all into a WebComponent so we can use it
 export const input_table = {
 	trueWebComponentMode: true, elementConnected, elementRendered,
-	rowop, resizeRowInputsForLargestScroll
+	rowop, resizeRowInputsForLargestScroll, _setValue
 }
 monkshu_component.register("input-table", `${COMPONENT_PATH}/input-table.html`, input_table);
