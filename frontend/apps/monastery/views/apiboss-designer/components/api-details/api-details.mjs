@@ -12,7 +12,7 @@ import { code_snippet_window } from "../code-snippet-window/code-snippet-window.
 
 const COMPONENT_PATH = util.getModulePath(import.meta), VIEW_PATH = APP_CONSTANTS.CONF_PATH,ORG_METADATA = "__org_metadata", APIMANAGER_SESSIONKEY = "__org_monkshu_APIManager";
 
-let model, target, apiname;
+let model, target, apiname, serverDetails, method;
 
 const elementConnected = async (element) => {
   const data = {
@@ -20,6 +20,7 @@ const elementConnected = async (element) => {
       `<style>${element.getAttribute("styleBody")}</style>` : undefined
   };
   api_details.setData(element.id, data);
+  serverDetails = JSON.parse(session.get("__org_server_details"));
 }
 
 async function elementRendered(element, initialRender) {
@@ -31,7 +32,7 @@ async function elementRendered(element, initialRender) {
         target = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
         data["exposedmethod"] = api["exposedmethod"];
         data["exposedpath"] = api["exposedpath"];
-
+        method = api["exposedmethod"];
         let IdsOfPolicies = api.dependencies, apikeys = [], jwtText = false,userauths = false;;
 
         for (const policy of model.policies) {
@@ -66,6 +67,7 @@ function updateExposedpathandMethod(elementid, updateParam) {
         target = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
         data["exposedmethod"] = api["exposedmethod"];
         data["exposedpath"] = api["exposedpath"];
+        method = api["exposedmethod"];
         let IdsOfPolicies = api.dependencies, apikeys = [], jwtText = false, userauths = false;
 
         for (const policy of model.policies) {
@@ -281,17 +283,18 @@ async function tryIt(element, event) {
     console.log(xapikey)
     apiman.registerAPIKeys(xapikey, "x-api-key");
   }
-  const host = new URL(`http://localhost:9092`).host; // have to change the host for our dynamic case
+  const host = new URL(`http://${serverDetails.host}:${serverDetails.port}`).host; // have to change the host for our dynamic case
   let sub = 'access'
   if(shadowRoot.querySelector("#userid") && shadowRoot.querySelector("#password")){
     const storage = _getAPIManagerStorage(); storage.tokenManager[`basic_auth`] = `Basic ${btoa(`${shadowRoot.querySelector("#MyInput").value}:${shadowRoot.querySelector("#Mypwd").value}`)}`; _setAPIManagerStorage(storage);
   }
 
   if (jwtToken) { const storage = _getAPIManagerStorage(); storage.tokenManager[`${host}_${sub}`] = jwtToken; _setAPIManagerStorage(storage); }
-  let resp = await apiman.rest(`http://localhost:9092${path}`, "POST", reqBody, (jwtToken) ? true : false);
+  let resp = await apiman.rest(`http://${serverDetails.host}:${serverDetails.port}${path}`, `${method.toUpperCase()}`, reqBody, (jwtToken) ? true : false);
   console.log(resp)
   text_editor.getJsonData(resp);
   apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
+  const storage = _getAPIManagerStorage(); if(storage.tokenManager[`basic_auth`]) delete storage.tokenManager[`basic_auth`]; _setAPIManagerStorage(storage);
 };
 
 function setAuthorization(event){
