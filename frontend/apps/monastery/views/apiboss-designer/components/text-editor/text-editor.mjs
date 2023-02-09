@@ -46,12 +46,14 @@
   }
 
   function getJsonData(json){
+	  const element = text_editor.getHostElementByID("response");
+	  const shadowRoot = text_editor.getShadowRootByHost(element);
 	if(json) {
 		let data = JSON.stringify(json, null, 4);
-		const element = text_editor.getHostElementByID("response");
-		const shadowRoot = text_editor.getShadowRootByHost(element);
 		if(data){
 			shadowRoot.querySelector("div#statuscontainer").style.display = "block";
+			shadowRoot.querySelector("#status").innerText = `200`; shadowRoot.querySelector("#dot").style.border = "#0E9B71";
+			shadowRoot.querySelector("#dot").style.background = "#12CA93";
 			_setValue(data, element);
 		} else {
 			shadowRoot.querySelector("div#statuscontainer").style.display = "none";
