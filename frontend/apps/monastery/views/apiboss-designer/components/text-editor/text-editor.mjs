@@ -58,6 +58,11 @@
 			let res = {}; _setValue(JSON.stringify(res),element);
 		}
 	}
+	else {_setValue(`500: Internal Error`,element);
+			shadowRoot.querySelector("div#statuscontainer").style.display = "block";
+			shadowRoot.querySelector("#status").innerText = `500`; shadowRoot.querySelector("#dot").style.border = "red";
+			shadowRoot.querySelector("#dot").style.background = "red";
+		}
 	return;
  }
 
