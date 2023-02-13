@@ -9,6 +9,7 @@ import { apimanager as apiman } from "/framework/js/apimanager.mjs";
 import { APP_CONSTANTS } from "../../../../js/constants.mjs";
 import { session } from "../../../../../../framework/js/session.mjs";
 import { code_snippet_window } from "../code-snippet-window/code-snippet-window.mjs";
+import { loader } from "../../../../js/loader.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta), VIEW_PATH = APP_CONSTANTS.CONF_PATH,ORG_METADATA = "__org_metadata", APIMANAGER_SESSIONKEY = "__org_monkshu_APIManager";
 
@@ -263,6 +264,7 @@ function getParaVal(element, obj) {
 }
 
 async function tryIt(element, event) {
+  await loader.beforeLoading();
   let thisElement = api_details.getHostElementByID("apidetails");
   const shadowRoot = api_details.getShadowRootByHost(thisElement);
   if (!_validate(shadowRoot)) return false;
@@ -293,6 +295,7 @@ async function tryIt(element, event) {
   let resp = await apiman.rest(`http://${serverDetails.host}:${serverDetails.port}${path}`, `${method.toUpperCase()}`, reqBody, (jwtToken) ? true : false);
   console.log(resp)
   text_editor.getJsonData(resp);
+  await loader.afterLoading();
   apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
   const storage = _getAPIManagerStorage(); if(storage.tokenManager[`basic_auth`]) delete storage.tokenManager[`basic_auth`]; _setAPIManagerStorage(storage);
 };

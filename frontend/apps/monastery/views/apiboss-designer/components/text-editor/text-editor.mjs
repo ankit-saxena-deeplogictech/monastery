@@ -48,7 +48,7 @@
   function getJsonData(json){
 	  const element = text_editor.getHostElementByID("response");
 	  const shadowRoot = text_editor.getShadowRootByHost(element);
-	if(json) {
+	if(json && !json.status) {
 		let data = JSON.stringify(json, null, 4);
 		if(data){
 			shadowRoot.querySelector("div#statuscontainer").style.display = "block";
@@ -60,10 +60,15 @@
 			let res = {}; _setValue(JSON.stringify(res),element);
 		}
 	}
-	else {_setValue(`500: Internal Error`,element);
+	else if (json.status) {_setValue(`${json.status}: ${json.statusText}`,element);
 			shadowRoot.querySelector("div#statuscontainer").style.display = "block";
-			shadowRoot.querySelector("#status").innerText = `500`; shadowRoot.querySelector("#dot").style.border = "red";
+			shadowRoot.querySelector("#status").innerText = `${json.status}`; shadowRoot.querySelector("#dot").style.border = "red";
 			shadowRoot.querySelector("#dot").style.background = "red";
+		}
+	else {_setValue(`500: Internal Error`,element);
+	shadowRoot.querySelector("div#statuscontainer").style.display = "block";
+	shadowRoot.querySelector("#status").innerText = `500`; shadowRoot.querySelector("#dot").style.border = "red";
+	shadowRoot.querySelector("#dot").style.background = "red";
 		}
 	return;
  }

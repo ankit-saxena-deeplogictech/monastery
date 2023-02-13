@@ -159,6 +159,7 @@ function getparsedData() {
         parsedData["backendurl"] = api.backendurl;
         parsedData["backendurlmethod"] = api.backendurlmethod;
         parsedData["isrestapi"] = api.isrestapi;
+        parsedData["customContentType"] = api.contentinput;
         // for(const policy of retModel.policies) {
             parsedData["apikey"] = retModel.policies[i].apikey;
             parsedData["needsBasicAuth"] = retModel.policies[i].isauthenticationneeded;
@@ -172,6 +173,7 @@ function getparsedData() {
     }
     
     finalData.push({ apiregistrydata: apiregistrydata });
+    console.log(finalData);
     return finalData;
 }
 
