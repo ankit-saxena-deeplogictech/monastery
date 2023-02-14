@@ -20,7 +20,7 @@ async function getItemList() {
         const role = securityguard.getCurrentRole();
         await loader.beforeLoading();
         
-        let result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, id: userid,server:serverDetails.host,port:serverDetails.port }, true, true);
+        let result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org,name:serverDetails.name, id: userid,server:serverDetails.host,port:serverDetails.port }, true, true);
         if (result.result&& result.data && Object.keys(result.data).length > 0 ) {
             metadata = result.data;
             session.set(ORG_METADATA, metadata);
