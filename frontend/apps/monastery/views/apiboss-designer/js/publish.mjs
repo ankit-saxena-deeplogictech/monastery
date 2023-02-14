@@ -41,7 +41,7 @@ async function openDialog() {
             console.log(pubResult);
             if (!pubResult.result) {DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); return ;}
             else{
-                const pubMetaResult = await serverManager.publishMetaData(metadata,org,userid,  result.server, result.port);
+                const pubMetaResult = await serverManager.publishMetaData(metadata,org,userid, result.name, result.server, result.port);
                 blackboard.broadcastMessage(MSG_RENAME_MODEL, {name: result.name});
                 if ( !pubMetaResult.result) DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); 
                 else {DIALOG.showMessage(await i18n.get("PublishSuccess"), null, null, messageTheme, "MSG_DIALOG");  return true;}

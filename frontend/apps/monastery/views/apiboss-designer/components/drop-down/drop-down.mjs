@@ -98,6 +98,7 @@ function disableOrEnableInputField(element) {
 function _setAttribute (shadowRoot, elementidarray){
   for(let id of elementidarray){
     shadowRoot.querySelector(`#${id}`).setAttribute("disabled", "true");
+    shadowRoot.querySelector(`#${id}`).value = "";
   }
 }
 

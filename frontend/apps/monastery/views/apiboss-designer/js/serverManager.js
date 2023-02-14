@@ -40,7 +40,7 @@ async function getModelList(server, port, adminid, adminpassword) {
  * @param {string} adminpassword Server admin password
  * @returns {result: true|false, model: Model object on success, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
- async function getMetaData( server, port,adminid,adminpassword) {
+ async function getMetaData(name, server, port,adminid,adminpassword) {
    
     const loginResult = await loginToServer(server, port, adminid, adminpassword);
     console.log(loginResult);
@@ -48,7 +48,7 @@ async function getModelList(server, port, adminid, adminpassword) {
     apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
 
     try {   // try to read the model now
-        const result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, id: userid ,server,port}, true, true);
+        const result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org, name, id: userid ,server,port}, true, true);
         console.log(result);
         return {result: result.result, model: result.result?result.data:null, err: "Metadata read failed at the server", 
             name: result.result?result.name:null, raw_err: "Metadata read failed at the server", key: "MetaDataReadServerIssue"};
@@ -100,12 +100,12 @@ async function publishModel(parsedData, server, port, adminid, adminpassword) {
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
 }
 
-async function publishMetaData(metaData,org,userid,server, port) {
+async function publishMetaData(metaData,org,userid,name,server, port) {
     apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
 
     try {   // try to publish now
         return {result: (await apiman.rest(APP_CONSTANTS.API_CREATEORUPDATEMETA, "POST", 
-            { metadata: metaData,org:org,id:userid,server,port}, true,true)).result, err: "Publishing failed at the server", 
+            { metadata: metaData,org,id:userid,server,port,name}, true,true)).result, err: "Publishing failed at the server", 
             raw_err: "Publishing failed at the server", key: "PublishServerIssue"};
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
 }

@@ -3,8 +3,11 @@
  * (C) 2020 TekMonks. All rights reserved.
  * License: See enclosed LICENSE file.
  */
+import { serverManager } from "./js/serverManager.js"
+import { session } from "/framework/js/session.mjs";
+import {blackboard} from "/framework/js/blackboard.mjs";
 
-
+const MSG_FILE_UPLOADED = "FILE_UPLOADED";
 
 async function init(viewURL) {
  
@@ -16,7 +19,15 @@ async function init(viewURL) {
     const pageGenerator = document.createElement("page-generator"); 
     pageGenerator.setAttribute("file", `${viewURL}/page/home.page`);
     document.body.appendChild(pageGenerator);
+
+   
+}
+
+async function loadDefaultMeta(){
+    const serverDetails = JSON.parse(session.get("__org_server_details"));
+   const metaDataResult = await serverManager.getMetaData(serverDetails.name,serverDetails.host,serverDetails.port, serverDetails.adminid,serverDetails.adminpassword);
+   if (metaDataResult.result) blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: serverDetails.name, data: JSON.stringify(metaDataResult.model)});
 }
 
 
-export const home = {init}
+export const home = {init,loadDefaultMeta}

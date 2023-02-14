@@ -3,7 +3,7 @@
  */
 import {util} from "/framework/js/util.mjs";
 import {application} from "../../../../../../js/application.mjs";
-
+import { home } from "../../../../home.mjs";
 const PLUGIN_PATH = util.getModulePath(import.meta);
 let IMAGE, I18N;
 
@@ -11,6 +11,7 @@ async function init() {
     const svgSource64 = btoa(await (await fetch(`${PLUGIN_PATH}/exit.svg`)).text());
     IMAGE = "data:image/svg+xml;base64," + svgSource64;
     I18N = (await import(`${PLUGIN_PATH}/exit.i18n.mjs`)).i18n; 
+    home.loadDefaultMeta()
     return true;
 }
 
