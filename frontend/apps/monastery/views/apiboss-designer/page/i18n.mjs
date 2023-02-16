@@ -12,7 +12,11 @@ export const i18n = {
         "Publish":"Publish",
         "MetaDataReadServerIssue":"Metadata read failed at the server",
         "ConnectIssue" :"Unable to connect to the server",
-        "LoginIssue":"Login failed at the server"
+        "LoginIssue":"Login failed at the server",
+        "NotAvailable":"Require data is not available to publish",
+        "AttachPolicy":"Please attach policy to the api",
+        "FillAPIKey":"Please fill apikey in policy",
+        "FillRequiredApi":"Please fill required fields in api"
     },
 
     hi: {

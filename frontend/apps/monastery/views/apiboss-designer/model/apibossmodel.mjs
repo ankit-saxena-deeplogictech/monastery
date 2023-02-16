@@ -57,7 +57,8 @@ function loadModel(jsonModel) {
 }
 
 function modelNodesModified(type, nodeName, id, properties) {
-
+console.log(type);
+console.log(nodeName);
     if (type == apibossmodel.ADDED) return _nodeAdded(nodeName, id, properties);
     if (type == apibossmodel.REMOVED) return _nodeRemoved(nodeName, id);
     if (type == apibossmodel.MODIFIED) return _nodeModified(nodeName, id, properties);
@@ -75,7 +76,8 @@ function modelConnectorsModified(type, sourceName, targetName, sourceID, targetI
         } else if (type == apibossmodel.REMOVED && targetNode) {
             const dependencies = targetNode.dependencies;
             if ((!dependencies) || (!dependencies.length) || dependencies.indexOf(sourceNode.id) == -1) return;
-            else _arrayDelete(dependencies, sourceNode.id);
+            else{const newD = _arrayDelete(dependencies, sourceNode.id);console.log(newD);}
+            console.log(dependencies);
             if (dependencies.length == 0) delete targetNode.dependencies;    // no longer required
         }
     }
@@ -111,20 +113,27 @@ function getModel() {
 function getparsedData() {
     let parsedData = {},finalData = [], rateLimit = {}, inputoutput = {}, apiregistrydata = {};
     const retModel = util.clone(apibossmodelObj);
-    // console.log(retModel);
+    console.log(retModel);
+    if(!(retModel.apis.length>0 && retModel.policies.length>0)) return {result:false,key:"Require data is not available to publish"};
     for (const policy of retModel.policies){
-        // console.log(policy);
+        if(!("apikey" in policy)) return {result:false,key:`Please fill apikey in ${policy.description}`};
         if(policy.apikey!=""){
-            // console.log(policy.apikey);
          if(policy.israteenforcementneeded!="NO") parsedData["ratelimitsdata"]= _ratelimits(policy);
          else parsedData["ratelimitsdata"]="";
         //  finalData.push({[policy.apikey]:parsedData});
             rateLimit[policy.apikey] = parsedData.ratelimitsdata;
         }
+        else return {result:false,key:`Please fill apikey in ${policy.description}`};
     }
     finalData.push({rateLimit: rateLimit});
     parsedData = {};
     for (const api of retModel.apis) {
+        console.log("dependencies" in api);
+        if(!("dependencies" in api) ) return {result:false,key:`Please attach policy to the ${api.description}`};
+        if(api.dependencies.length<1) return {result:false,key:`Please attach policy to the ${api.description}`};
+        const keys = ["exposedpath", "backendurl","backendurlmethod","isrestapi","apiname","exposedmethod"];
+        const hasAllKeys = keys.every(key => api.hasOwnProperty(key));
+        if(!hasAllKeys) return {result:false,key:`Please fill required fields in ${api.description}`}
         parsedData["inputdata"] = JSON.parse(JSON.parse(api["input-output"])[0]);
         parsedData["outputdata"] = JSON.parse(JSON.parse(api["input-output"])[1]);
         inputoutput[api.exposedpath] = parsedData;
@@ -132,6 +141,8 @@ function getparsedData() {
     finalData.push({inputoutput: inputoutput});
     let i = 0;
     for(const api of retModel.apis) {
+
+        console.log(api);
         parsedData = {};
         if(JSON.parse(api.passthrough).length){
             let passthroughHeader = JSON.parse(api.passthrough);
@@ -154,7 +165,6 @@ function getparsedData() {
             }
             parsedData["injected"] = injected;
         }
-
         parsedData["exposedpath"] = api.exposedpath;
         parsedData["backendurl"] = api.backendurl;
         parsedData["backendurlmethod"] = api.backendurlmethod;
@@ -174,7 +184,7 @@ function getparsedData() {
     
     finalData.push({ apiregistrydata: apiregistrydata });
     console.log(finalData);
-    return finalData;
+    return {result:true,data:finalData};
 }
 
 
@@ -208,6 +218,7 @@ function _nodeRemoved(nodeName, id) {
     if (nodeName == "api") _arrayDelete(apibossmodelObj.apis, node);
     else if (nodeName == "policy") _arrayDelete(apibossmodelObj.policies, node);
     delete idCache[id]; // uncache
+    console.log(apibossmodelObj);
     return true;
 }
 
@@ -221,6 +232,13 @@ function _nodeModified(nodeName, id, properties) {
 }
 
 const _arrayDelete = (array, element) => {
+    if(element.nodeName == "policy"){
+        for (const api of apibossmodelObj.apis)
+        if (api.dependencies)  if (api.dependencies.includes(element.id)) api.dependencies.splice(api.dependencies.indexOf(element.id), 1);
+        console.log(apibossmodelObj.apis);
+        console.log(idCache);
+    }
+ 
     if (array.includes(element)) array.splice(array.indexOf(element), 1); return element;
 }
 

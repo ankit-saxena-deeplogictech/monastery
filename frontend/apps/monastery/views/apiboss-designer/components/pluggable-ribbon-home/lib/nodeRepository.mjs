@@ -30,11 +30,11 @@ function registerNode(name, type) {
  */
 function getNodeUniquePrefix(type) {
     if (!NODE_REPOSITORY[type]) NODE_REPOSITORY[type] = {names:[]};
-    const counter = NODE_REPOSITORY[type].names.length+1;
+    let counter = NODE_REPOSITORY[type].names.length+1;
     while (_arrayContainsCaseInsensitive(NODE_REPOSITORY[type].names, type+counter)) counter++;
     return counter;
 }
 
-const _arrayContainsCaseInsensitive = (array, string) => {for (const stringThis of array) if (string.toLowerCase() == stringThis.toLowerCase()) return true; return false;}
+const _arrayContainsCaseInsensitive = (array, string) => {for (const stringThis of array) if (string.toLowerCase() == stringThis.toLowerCase()) {console.log(stringThis,string); return true;} return false;}
 
 export const nodeRepository = {init, registerNode, getNodeUniquePrefix};
