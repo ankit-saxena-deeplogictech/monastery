@@ -35,7 +35,7 @@ async function elementConnected(host) {
 	data.totpURL = await _getTOTPURL(memory.totpKey);
 	data.AuthenticatorMsg = await i18n.get(type == "reset"?"ResetAuthenticatorMsg":"DownloadAuthenticatorMsg");
 	data.Password = await i18n.get(type == "reset"?"NewPassword":"Password");
-	data.PasswordAgain = await i18n.get(type == "reset"?"NewPasswordAgain":"PasswordAgain");
+	data.PasswordAgain = await i18n.get(type == "reset"?"NewPasswordAgain":"ConfirmPassword");
 	data.Submit = await i18n.get(type == "reset"?"Modify" : type=="initial" ? "SignIn" : "Register");
 	data.minlength = host.getAttribute("minlength"); data.initial = type == "initial"?true:undefined;
 	data.reset = type == "reset"?true:undefined; data.SUBCOMPONENTS_PATH = `${COMPONENT_PATH}/subcomponents`;
