@@ -136,8 +136,8 @@ span#otp > button {display: none;}
 <span id="error">{{i18n.RegisterError}}</span>
 <input type="text" id="name" placeholder="{{i18n.Name}}" value="{{name}}" required spellcheck="false"
     oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput="setCustomValidity('')">
-<input type="email" id="id" placeholder="{{i18n.Email}}" value="{{id}}" required 
-    oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput="setCustomValidity('')" {{#reset}}readonly{{/reset}} {{#initial}}readonly{{/initial}}>
+<input type="email" id="id" placeholder="{{i18n.Email}}" value="{{id}}" required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+    oninvalid="this.setCustomValidity('{{i18n.EMVALID}}')" oninput="setCustomValidity('')" {{#reset}}readonly{{/reset}} {{#initial}}readonly{{/initial}}>
 <input type="hidden" id="oldid" value="{{id}}">
 <input type="text" id="org" placeholder="{{i18n.Org}}" value="{{org}}" required 
     oninvalid="this.setCustomValidity('{{i18n.FillField}}')" spellcheck="false"
@@ -146,9 +146,9 @@ span#otp > button {display: none;}
 <datalist id="orgsearchlist"></datalist>
 <span id="password">
     <password-box style="width:45%; padding: 10px 0px 10px 0px; height: 2em;" id="pass1" placeholder="{{Password}}" 
-        required="true" minlength="{{minlength}}" customValidity="{{i18n.FillField}}" styleBody = "img.pwimg{display:none}"></password-box>
+        required="true" minlength="{{minlength}}" pattern="^(?=.*\d)(?=.*[^\p{L}\d\s])(?=.*[a-z])(?=.*[A-Z]).{8,}$" customValidity="{{i18n.PWMUST}}" styleBody = "img.pwimg{display:none}"></password-box>
     <password-box style="width:45%; padding: 10px 0px 10px 0px; height: 2em;" id="pass2" placeholder="{{PasswordAgain}}" 
-        required="true" minlength="{{minlength}}" customValidity="{{i18n.FillField}}" styleBody = "img.pwimg{display:none}"></password-box>
+        required="true" minlength="{{minlength}}" pattern="^(?=.*\d)(?=.*[^\p{L}\d\s])(?=.*[a-z])(?=.*[A-Z]).{8,}$" customValidity="{{i18n.PWMUST}}" styleBody = "img.pwimg{display:none}"></password-box>
 </span>
 <span id="otp">
     <img src="{{totpQRCodeData}}">
