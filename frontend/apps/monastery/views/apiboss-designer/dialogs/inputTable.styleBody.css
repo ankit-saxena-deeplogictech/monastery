@@ -1,6 +1,6 @@
 table {
     font-size: smaller;
-    font-family: sans-serif;
+    font-family: inherit;
     border-radius: 5px 5px 5px 0px;
     border: 0.5px solid #4788C7;
     overflow-y: scroll;
@@ -50,7 +50,7 @@ td>textarea {
 tr:first-child > td {
     background-color: #98CCFD; 
     padding: 10px;
-    font-family: 'Red Hat Text';
+    font-family: inherit;
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
