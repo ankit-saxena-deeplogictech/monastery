@@ -9,7 +9,7 @@
 
     "styleBody": "div#buttonbar {justify-content: flex-end;} span#ok {margin-top: 10px;}",
     
-    "var--dialog-font": "Raleway",
+    "var--dialog-font": "inherit",
     "var--dialog-background": "#DFF0FE",
     "var--dialog-left": "80px",
     "var--dialog-width": "calc(100% - 164px)",
