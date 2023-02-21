@@ -16,6 +16,10 @@ export const i18n = {
         "NotAvailable":"Require data is not available to publish",
         "AttachPolicy":"Please attach policy to the api",
         "FillAPIKey":"Please fill apikey in policy",
+        "ExposedPath":"Exposed Path like, /exposed-endpoint",
+        "BackendURL":"Backend URL like, http(s)://domain-name/endpoint",
+         "ValidPath": "Path should start from / character",
+
         "FillRequiredApi":"Please fill required fields in api"
     },
 

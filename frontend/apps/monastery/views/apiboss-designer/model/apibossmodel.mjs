@@ -168,6 +168,7 @@ function getparsedData() {
         parsedData["exposedpath"] = api.exposedpath;
         parsedData["backendurl"] = api.backendurl;
         parsedData["backendurlmethod"] = api.backendurlmethod;
+        parsedData["exposedmethod"] = api.exposedmethod;
         parsedData["isrestapi"] = api.isrestapi;
         parsedData["customContentType"] = api.contentinput;
         // for(const policy of retModel.policies) {

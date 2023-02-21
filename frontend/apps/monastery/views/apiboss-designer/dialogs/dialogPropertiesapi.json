@@ -6,6 +6,8 @@
     "closeIcon": "./views/{{url.view}}/dialogs/close.svg",
     "showOKIcon": true,
     "showCancelIcon": true,
+    "showErrorNotifier": true,
+
 
     "styleBody": "div#buttonbar {justify-content: flex-end;} span#ok {margin-top: 10px;}",
     
