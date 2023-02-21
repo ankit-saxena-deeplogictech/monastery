@@ -264,10 +264,19 @@ function getParaVal(element, obj) {
 }
 
 async function tryIt(element, event) {
-  await loader.beforeLoading();
   let thisElement = api_details.getHostElementByID("apidetails");
   const shadowRoot = api_details.getShadowRootByHost(thisElement);
-  if (!_validate(shadowRoot)) return false;
+
+  if (!_validate(shadowRoot)) {
+    shadowRoot.querySelector(".error-hit").innerText = "Please fill all field to try the API";
+    shadowRoot.querySelector(".error-hit").style.display = "block";
+    shadowRoot.querySelector("#headcontainer").style.borderRadius = "0px";
+    setTimeout(()=>{shadowRoot.querySelector(".error-hit").style.display = "none";
+    shadowRoot.querySelector("#headcontainer").style.borderRadius = "10px 10px 0px 0px";
+    }, 3000);
+    return false
+  };
+  await loader.beforeLoading();
 
   let node = shadowRoot.querySelector("#content");
   let targetNode = node;
