@@ -18,8 +18,7 @@ export const i18n = {
         "FillAPIKey":"Please fill apikey in policy",
         "ExposedPath":"Exposed Path like, /exposed-endpoint",
         "BackendURL":"Backend URL like, http(s)://domain-name/endpoint",
-         "ValidPath": "Path should start from / character",
-
+        "ValidPath": "Path should start from / character",
         "FillRequiredApi":"Please fill required fields in api"
     },
 
