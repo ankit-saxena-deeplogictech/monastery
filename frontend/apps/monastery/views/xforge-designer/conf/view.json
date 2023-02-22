@@ -9,7 +9,9 @@
         "text-editor": "components/text-editor",
         "context-menu": "components/context-menu",
         "item-list": "components/item-list",
-        "drop-down": "components/drop-down"
+        "drop-down": "components/drop-down",
+        "text-div": "components/text-div"
+
        
     },
     "initModules": {

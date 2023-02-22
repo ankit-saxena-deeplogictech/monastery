@@ -7,7 +7,9 @@ export const i18n = {
         "xforgeview": "Build Script Designer",
         "Description": "xForge Build Scripts",
         "Name":"Build Script Name",
-        "PublishSuccess":"Published Successfully"
+        "PublishSuccess":"Published Successfully",
+        "Time":"4:00pm",
+        "Date":"23rd February, 2023"
     },
 
     hi: {

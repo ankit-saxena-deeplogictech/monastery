@@ -62,6 +62,7 @@ async function elementRendered(element) {
           mode: "javascript",
           lint: { selfContain: true },
           gutters: ["CodeMirror-lint-markers"],
+          theme: "ambiance",
           matchBrackets: true,
           placeholder: "// JS script"
         }

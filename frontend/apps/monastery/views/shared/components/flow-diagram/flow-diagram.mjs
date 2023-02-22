@@ -147,8 +147,8 @@ async function _getGraph(hostID) {
 			if (cell.vertex) menu.addItem('Rename', null, _ => graph.startEditingAtCell(cell));
 			if (cell.vertex) menu.addSeparator();
 			menu.addItem('Delete', null, _ => graph.removeCells([cell]));
-			if (cell.vertex && cell.style == "scripts") menu.addSeparator();
-			if (cell.style == "scripts") menu.addItem('Run', null, _ => console.log("Runs script"));
+			if (cell.vertex && cell.style == "script") menu.addSeparator();
+			if (cell.style == "script") menu.addItem('Run', null, _ => console.log("Runs script"));
 
 		}
 	};
