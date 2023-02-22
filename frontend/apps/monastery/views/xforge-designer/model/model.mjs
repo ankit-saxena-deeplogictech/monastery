@@ -84,7 +84,7 @@ function modelConnectorsModified(type, sourceName, targetName, sourceID, targetI
 
 function isConnectable(sourceName, targetName, sourceID, targetID) {    // are these nodes connectable
     if (sourceID == targetID) return false;
-    if (targetName == "scripts") return false;
+    if (targetName == "script") return false;
     if (sourceName == targetName) return false;
 
     return false;
@@ -134,7 +134,7 @@ function _nodeAdded(nodeName, id, properties) {
     if (idCache[id]) { _nodeModified(nodeName, id, properties); return; }  // node properties modified
     const name = _getNameFromDescription(node.description);
     node.name = name;
-    if (nodeName == "scripts") { apibossmodelObj.scripts.push(node); }
+    if (nodeName == "script") { apibossmodelObj.scripts.push(node); }
     node.id = id; idCache[id] = node;   // transfer ID and cache the node
     return true;
 }
@@ -142,7 +142,7 @@ function _nodeAdded(nodeName, id, properties) {
 function _nodeRemoved(nodeName, id) {
     if (!idCache[id]) return;   // we don't know of this node
     const node = idCache[id];
-    if (nodeName == "scripts") _arrayDelete(apibossmodelObj.scripts, node);
+    if (nodeName == "script") _arrayDelete(apibossmodelObj.scripts, node);
     delete idCache[id]; // uncache
     console.log(apibossmodelObj);
     return true;

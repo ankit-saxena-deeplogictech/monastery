@@ -1,0 +1,92 @@
+SCHEMA
+======
+{
+    "result": {"html":"input", "type":"text", "placeholder":"{{i18n.Name}}",  "spellcheck":"false", "required":"true","spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","class":"validate"},
+     "code": {"html":"text-editor","showToolbar":"true","mode":"javascript"},
+     "recurring": {"html":"text-div","text":"Recurring?"},
+     "isrecurringneeded": {"html":"drop-down","style":"width:100%; height:100%;","list":"[{'value':'YES'},{'value':'NO'}]","text":"NO","styleBody":"select#choices{padding:12px}","value":"NO"},
+     "at": {"html":"text-div","text":"at"},
+    "time": {"html":"input", "type":"text", "placeholder":"{{i18n.Time}}",  "spellcheck":"false", "required":"true","spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","class":"validate"},
+    "date": {"html":"input", "type":"text", "placeholder":"{{i18n.Date}}",  "spellcheck":"false", "required":"true","spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","class":"validate"},
+   "period": {"html":"drop-down","style":"width:100%; height:100%;","list":"[{'value':'Dialy'},{'value':'Weekly'},{'value':'Monthly'},{'value':'Yearly'},{'value':'Custom..'}]","text":"NO","styleBody":"select#choices{padding:12px}"}
+}
+======
+
+LAYOUT
+=================
+-----------------------------------------------------------------------
+|                                 result                              |
+-----------------------------------------------------------------------
+|                                  code                               |
+-----------------------------------------------------------------------
+|    recurring   |  isrecurringneeded  | at  | time  | date | period  |
+-----------------------------------------------------------------------
+
+=================
+Row Heights = 4em,calc(100vh - 152px - 4em  - 4em), 4em
+Col Widths = 15%, 10%, 5%, 10%, 20%, 40%
+=================
+
+
+CSS CLASSES
+===========
+CONTAINER CLASSES = grid-container-extension
+ITEM CLASSES = grid-item-extension
+PER ITEM CLASS = class
+===========
+
+CSS
+=======
+.grid-container-extension {
+    height100%;
+    width:100%;
+}
+
+.grid-item-extension {
+    background-color: var(--dialog-background, white);
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row;
+    box-sizing: border-box;
+}
+
+::placeholder {opacity: 0.7;}
+
+body {
+    margin: 0%;
+    display: inline-block;
+    width: 100%;
+}
+
+.class-isrecurringneeded,  class-period{
+    padding: 3px 25px 0px 11px;
+}
+
+input[type=text]#result {
+    width: 100%;
+    margin: 12px 20px 20px 2px;
+    outline: none;
+    padding: 6px;
+    resize: none;
+    border: none;
+    border-radius: 4px;
+    font-family: inherit;
+}
+
+.grid-item-extension > input, .grid-item-extension > input:focus {
+    width: 100%;
+    border-radius: 10px;
+    border: 0.5px solid #98CCFD;
+    outline: none;
+    padding: 12px;
+    resize: none;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+::placeholder {opacity: 0.8;}
+
+
+text-editor#code{position: relative;}
+
+=======
