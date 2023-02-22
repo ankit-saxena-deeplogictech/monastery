@@ -1,0 +1,12 @@
+{
+    "scripts": [
+        {
+            "description": "Scripts1",
+            "nodeName": "scripts",
+            "name": "Scripts1",
+            "id": "167703582384573.95723374192565",
+            "result": "treaverse",
+            "code": "function traverseObject(target, t, callback) {\n \n   callback(target, t);\n   if (typeof target === 'object') {\n     for (let key in target) {\n       traverseObject(target[key], key, callback);\n     }\n   }\n }"
+        }
+    ]
+}

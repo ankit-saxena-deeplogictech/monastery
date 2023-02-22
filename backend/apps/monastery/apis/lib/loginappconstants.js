@@ -13,6 +13,10 @@ exports.LIB_DIR = path.resolve(__dirname);
 exports.API_DIR = path.resolve(`${__dirname}/../`);
 exports.DB_DIR = `${APP_ROOT}/db`;
 exports.META_DIR = `${APP_ROOT}/conf/meta`;
+exports.XFORGE_META_DIR = `${APP_ROOT}/conf/xforgemeta`;
+exports.XFORGE_SCRIPTS_DIR = `${APP_ROOT}/conf/scripts`;
+
+
 
 exports.ROOMSKEY = "__com_tekmonks_telemeet_rooms";
 exports.IP_FW_MAPPINGS_KEY = "__com_tekmonks_telemeet_fw_ip_mappings";

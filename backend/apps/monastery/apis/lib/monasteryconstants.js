@@ -11,6 +11,9 @@
  exports.API_DIR = `${APP_ROOT}/apis`;
  exports.CONF_DIR = `${APP_ROOT}/conf`;
  exports.META_DIR = `${APP_ROOT}/conf/meta`;
+ exports.XFORGE_META_DIR = `${APP_ROOT}/conf/xforgemeta`;
+ exports.XFORGE_SCRIPTS_DIR = `${APP_ROOT}/conf/scripts`;
+
 
  exports.LIB_DIR = `${APP_ROOT}/apis/lib`;
  
