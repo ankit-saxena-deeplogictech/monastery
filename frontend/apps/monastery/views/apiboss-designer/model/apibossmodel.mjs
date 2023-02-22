@@ -171,18 +171,20 @@ function getparsedData() {
         parsedData["exposedmethod"] = api.exposedmethod;
         parsedData["isrestapi"] = api.isrestapi;
         parsedData["customContentType"] = api.contentinput;
-        // for(const policy of retModel.policies) {
-            parsedData["apikey"] = retModel.policies[i].apikey;
-            parsedData["needsBasicAuth"] = retModel.policies[i].isauthenticationneeded;
-            parsedData["needsToken"] = retModel.policies[i].isjwttokenneeded;
-            parsedData["jwtsubject"] = retModel.policies[i].jwtsubject;
-            parsedData["addsToken"] = retModel.policies[i].istokenneeded;
-            parsedData["tokensubject"] = retModel.policies[i].tokensubject;
-            i++;
-        // }
+         for(const policy of retModel.policies) {
+            console.log(policy.id in api.dependencies);
+            if(api.dependencies.includes(policy.id)){
+            parsedData["apikey"] =policy.apikey;
+            parsedData["needsBasicAuth"] = policy.isauthenticationneeded;
+            parsedData["needsToken"] = policy.isjwttokenneeded;
+            parsedData["jwtsubject"] = policy.jwtsubject;
+            parsedData["addsToken"] = policy.istokenneeded;
+            parsedData["tokensubject"] = policy.tokensubject;   
+         }
+        }
         apiregistrydata[api.exposedpath] = parsedData;
     }
-    
+    console.log(apiregistrydata);
     finalData.push({ apiregistrydata: apiregistrydata });
     console.log(finalData);
     return {result:true,data:finalData};
