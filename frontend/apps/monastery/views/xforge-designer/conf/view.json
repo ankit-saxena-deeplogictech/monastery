@@ -1,0 +1,19 @@
+{
+    "__comment": "/** All paths in this file are required to be relative to the view's folder **/",
+    "components": {
+        "dialog-box": "../shared/components/dialog-box",
+        "flow-diagram": "../shared/components/flow-diagram",
+        "html-fragment": "../shared/components/html-fragment",
+        "image-button": "../shared/components/image-button",
+        "pluggable-ribbon": "components/pluggable-ribbon",
+        "text-editor": "components/text-editor",
+        "context-menu": "components/context-menu",
+        "item-list": "components/item-list",
+        "drop-down": "components/drop-down"
+       
+    },
+    "initModules": {
+        "model": "model/model.mjs",
+        "nodeRepository": "components/pluggable-ribbon/lib/nodeRepository.mjs"
+    }
+}
