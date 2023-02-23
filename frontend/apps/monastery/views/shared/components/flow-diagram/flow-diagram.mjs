@@ -5,6 +5,7 @@
 import { util } from "/framework/js/util.mjs";
 import { blackboard } from "/framework/js/blackboard.mjs";
 import { monkshu_component } from "/framework/js/monkshu_component.mjs";
+import { APP_CONSTANTS } from "../../../../js/constants.mjs";
 
 const GRAPHS = {}, STYLE_CACHE = {};
 const GRAPH_CONNECTABLE = true, COMPONENT_PATH = util.getModulePath(import.meta);
@@ -148,7 +149,7 @@ async function _getGraph(hostID) {
 			if (cell.vertex) menu.addSeparator();
 			menu.addItem('Delete', null, _ => graph.removeCells([cell]));
 			if (cell.vertex && cell.style == "script") menu.addSeparator();
-			if (cell.style == "script") menu.addItem('Run', null, _ => console.log("Runs script"));
+			if (cell.style == "script") menu.addItem('Run', null,async _ => (await import(`${APP_CONSTANTS.XFORGE_PATH}/js/serverManager.js`))['serverManager'].runScript());
 
 		}
 	};

@@ -25,6 +25,8 @@ export const APP_CONSTANTS = {
     DEVELOPER_HTML: APP_PATH+"/developer.html",
     NOTAPPROVED_HTML: APP_PATH+"/notapproved.html",
     CONF_PATH: `${APP_PATH}/views/apiboss-designer/conf`,
+    XFORGE_PATH: `${APP_PATH}/views/xforge-designer`,
+
     IMG_SRC: `${APP_PATH}/img`,
 
 
@@ -47,6 +49,7 @@ export const APP_CONSTANTS = {
     API_GETPROFILE: API_PATH+"/getprofile",
     API_GETAPPCONFIG: API_PATH+"/getappconfig",
     API_GETMETADATA: API_PATH+"/getmetadata",
+    API_RUNSCRIPT: API_PATH+"/runscript",
 
     API_CREATEORUPDATEMETA: API_PATH+"/createorupdatemeta",
 

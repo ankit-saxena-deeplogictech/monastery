@@ -22,6 +22,8 @@
     "/apps/{{app}}/createorupdatemeta" : "/apis/createorupdatemeta.js?keys=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true",
     "/apps/{{app}}/createxforgemeta" : "/apis/createxforgemeta.js?keys=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=false",
     "/apps/{{app}}/publishscripts" : "/apis/publishscripts.js?keys=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=false",
+    "/apps/{{app}}/runscript" : "/apis/runscript.js?keys=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=false",
+
 
 
     "/apps/{{app}}/getmetadata" : "/apis/getmetadata.js?keys=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true"
