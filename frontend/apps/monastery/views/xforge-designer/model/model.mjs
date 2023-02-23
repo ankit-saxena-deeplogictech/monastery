@@ -116,7 +116,8 @@ function getScripts() {
          if(script?.code!="" && script?.result!=""){
         finalScripts.push([script.result,script.code,script.name])
          }
-         else return {result:false,key:`Please fill the details in ${result.name}`}}
+         else return {result:false,key:`Please fill the details in ${script.name}`}
+        }
         
     }
     else return {result:false,key:`No Scripts available to publish`}

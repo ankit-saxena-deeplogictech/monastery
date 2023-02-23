@@ -6,6 +6,7 @@
 import { APP_CONSTANTS } from "../../../js/constants.mjs";
 import { apimanager as apiman } from "/framework/js/apimanager.mjs";
 import { session } from "/framework/js/session.mjs";
+import {model} from "../model/model.mjs";
 
 const API_KEYS = { "*": "jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf" }, KEY_HEADER = "org_monkshu_apikey";
 const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase(), userid = new String(session.get(APP_CONSTANTS.USERID)).toLowerCase();
@@ -120,6 +121,22 @@ async function publishMetaData(metaData, org, userid, server, port) {
     } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
 }
 
+async function runScript() {
+    apiman.registerAPIKeys({ "*": "fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389" }, "X-API-Key");
+    const finalData = model.getModel();
+    const name = finalData.scripts[0].result;
+    console.log(name);
+
+
+    try {   // try to publish now
+        return {
+            result: (await apiman.rest( APP_CONSTANTS.API_RUNSCRIPT, "POST",
+                {name}, false, true)).result, err: "Publishing failed at the server",
+            raw_err: "Publishing failed at the server", key: "PublishServerIssue"
+        };
+    } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
+}
+
 
 
 
@@ -163,4 +180,4 @@ async function loginToServer(server, port, adminid, adminpassword) {
         } catch (err) { return { result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue" } }
     }
 }
-export const serverManager = { publishModel, unpublishModel, getModelList, getMetaData, publishMetaData, loginToServer, publishScripts };
+export const serverManager = { publishModel, unpublishModel, getModelList, getMetaData, publishMetaData, loginToServer, publishScripts,runScript};

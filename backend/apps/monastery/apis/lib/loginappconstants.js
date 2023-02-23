@@ -14,7 +14,9 @@ exports.API_DIR = path.resolve(`${__dirname}/../`);
 exports.DB_DIR = `${APP_ROOT}/db`;
 exports.META_DIR = `${APP_ROOT}/conf/meta`;
 exports.XFORGE_META_DIR = `${APP_ROOT}/conf/xforgemeta`;
-exports.XFORGE_SCRIPTS_DIR = `${APP_ROOT}/conf/scripts`;
+exports.XFORGE_SCRIPTS_DIR = `${APP_ROOT}/3p/xforge/samples`;
+exports.XFORGE_DIR = `${APP_ROOT}/3p/xforge`;
+
 
 
 

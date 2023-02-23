@@ -33,8 +33,8 @@ async function openDialog() {
     DIALOG.showDialog(dialogPropertiesPath, html, null, DIALOG_RET_PROPS, 
         async (typeOfClose, result, dialogElement) => { if (typeOfClose == "submit") {
             saved_props = util.clone(result, ["adminpassword"]); // don't save password, for security
-            const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase(); 
-            const userid = new String(session.get(APP_CONSTANTS.USERID)).toLowerCase();
+            const org = new String(session.get(APP_CONSTANTS.USERORG)); 
+            const userid = new String(session.get(APP_CONSTANTS.USERID));
             const finalData = model.getModel();
             const scriptData = model.getScripts();
             result.adminpassword=password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value;
