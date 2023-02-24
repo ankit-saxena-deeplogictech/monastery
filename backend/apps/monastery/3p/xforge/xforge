@@ -15,12 +15,6 @@ const _printBuildTime = timeStarted => { if (args.time) CONSTANTS.LOGINFO(`Total
 
 module.exports.xforge = async function(inprocessArgs) {
     let args = new (require("commander").Command);
-
-    console.log("xforge");
-    console.log(inprocessArgs);
-    console.log(JSON.stringify(inprocessArgs));
-    console.log(args);
-    console.log(JSON.stringify(args));
     args.storeOptionsAsProperties(); 
     args.description("XForge - (C) TekMonks\nJust like make, except if it was on steriods ;)")
     args.version("XForge v2.4.9");
