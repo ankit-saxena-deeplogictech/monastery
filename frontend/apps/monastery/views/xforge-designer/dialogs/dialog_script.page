@@ -2,13 +2,13 @@ SCHEMA
 ======
 {
     "result": {"html":"input", "type":"text", "placeholder":"{{i18n.Name}}",  "spellcheck":"false", "required":"true","spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","class":"validate"},
-     "code": {"html":"text-editor","showToolbar":"true","mode":"javascript"},
+     "code": {"html":"text-editor","showToolbar":"true","style":"width:100%; height:100%;","mode":"javascript"},
      "recurring": {"html":"text-div","text":"Recurring?"},
      "isrecurringneeded": {"html":"drop-down","style":"width:100%; height:100%;","list":"[{'value':'YES'},{'value':'NO'}]","text":"NO","styleBody":"select#choices{padding:12px}","value":"NO"},
      "at": {"html":"text-div","text":"at"},
-    "time": {"html":"input", "type":"text", "placeholder":"{{i18n.Time}}",  "spellcheck":"false", "required":"true","spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","class":"validate"},
-    "date": {"html":"input", "type":"text", "placeholder":"{{i18n.Date}}",  "spellcheck":"false", "required":"true","spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","class":"validate"},
-   "period": {"html":"drop-down","style":"width:100%; height:100%;","list":"[{'value':'Dialy'},{'value':'Weekly'},{'value':'Monthly'},{'value':'Yearly'},{'value':'Custom..'}]","text":"NO","styleBody":"select#choices{padding:12px}"}
+    "time": {"html":"input", "type":"text", "placeholder":"{{i18n.Time}}",  "spellcheck":"false", "required":"true","spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')"},
+    "date": {"html":"input", "type":"text", "placeholder":"{{i18n.Date}}",  "spellcheck":"false", "required":"true","spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')"},
+   "period": {"html":"drop-down","style":"width:100%; height:100%;","list":"[{'value':'Dialy'},{'value':'Weekly'},{'value':'Monthly'},{'value':'Yearly'},{'value':'Custom..'}]","text":"Custom..","styleBody":"select#choices{padding:12px}"}
 }
 ======
 
@@ -24,7 +24,7 @@ LAYOUT
 
 =================
 Row Heights = 4em,calc(100vh - 152px - 4em  - 4em), 4em
-Col Widths = 15%, 10%, 5%, 10%, 20%, 40%
+Col Widths = 8% ,15% ,4% ,15%, 23% ,35%
 =================
 
 
@@ -62,22 +62,14 @@ body {
     padding: 3px 25px 0px 11px;
 }
 
-input[type=text]#result {
-    width: 100%;
-    outline: none;
-    padding: 6px;
-    resize: none;
-    border: none;
-    border-radius: 4px;
-    font-family: inherit;
-}
+
 
 .grid-item-extension > input, .grid-item-extension > input:focus {
     width: 100%;
-    border-radius: 10px;
+    border-radius: 5px;
     border: 0.5px solid #98CCFD;
     outline: none;
-    padding: 12px;
+    padding: 0.9em;
     resize: none;
     font-family: inherit;
     box-sizing: border-box;
@@ -85,6 +77,14 @@ input[type=text]#result {
 
 .item0,.item2,.item3,.item4,.item5,.item6,.item7{
 align-self:baseline
+}
+
+.item6{
+margin-left: 1.3em;
+}
+
+ .item7{
+margin-left: 1em;
 }
 
 ::placeholder {opacity: 0.8;}
