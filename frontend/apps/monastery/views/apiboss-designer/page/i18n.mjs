@@ -19,7 +19,8 @@ export const i18n = {
         "ExposedPath":"Exposed Path (/exposedPath)",
         "BackendURL":"Backend URL (http(s)://domain-name/path)",
         "ValidPath": "Path should start from / character",
-        "FillRequiredApi":"Please fill required fields in api"
+        "FillRequiredApi":"Please fill required fields in api",
+        "URLRegex": "^(https?|ftp):\/\/(?:localhost|(?:\d{1,3}\.){3}\d{1,3}|(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6})(?::\d{1,5})?(?:\/.*)?$"
     },
 
     hi: {
