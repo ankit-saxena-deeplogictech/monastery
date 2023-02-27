@@ -16,7 +16,7 @@
     "var--window-border": "1px solid #4788C7", closeIcon: `${COMPONENT_PATH}/close.svg`
 }, CONSOLE_HTML_FILE = `${COMPONENT_PATH}/code-snippet-window.html`, CONSOLE_HTML_JAVA_FILE = `${COMPONENT_PATH}/code-snippet-window-java.html`,
   CONSOLE_HTML_CURL_FILE = `${COMPONENT_PATH}/code-snippet-window-curl.html`;
-let exposedpath, token, key, exposedmethod,floatingWindowID,floatingWindowHTMLJavaID,floatingWindowHTMLCurlID,attrData,currentFloatingWindow;
+let exposedpath, token, key, exposedmethod,floatingWindowID,floatingWindowHTMLJavaID,floatingWindowHTMLCurlID,attrData,currentFloatingWindow, nodejsData, javaData, curlData;
 
 
 function setExposedPathAndMethod(path, method){
@@ -98,7 +98,8 @@ function updateData(){
           });
        }); `
 
-       data =data.replace(/^\s*\n/gm, "");
+      data =data.replace(/^\s*\n/gm, "");
+      nodejsData = data;
       await code_editor.setValue(data,floating_window.getShadowRootByHostId(floatingWindowID).querySelector("code-editor#nodejs"),"javascript");
   }
   }
@@ -120,7 +121,8 @@ function updateData(){
       
       Response response = client.newCall(request).execute(); `
   
-         data =data.replace(/^\s*\n/gm, "");
+        data =data.replace(/^\s*\n/gm, "");
+        javaData = data;
         await code_editor.setValue(data,floating_window.getShadowRootByHostId(floatingWindowHTMLJavaID).querySelector("code-editor#java"),"java");
     }
     }
@@ -134,7 +136,8 @@ function updateData(){
         ${key?`--header 'apikey:${key?key:""}'  \\`:""} 
         ${attrData?`--data '${attrData?JSON.stringify(attrData,null,4):""} e()'`:""} `
     
-           data =data.replace(/^\s*\n/gm, "");
+          data =data.replace(/^\s*\n/gm, "");
+          curlData = data;
           await code_editor.setValue(data,floating_window.getShadowRootByHostId(floatingWindowHTMLCurlID).querySelector("code-editor#curl"),"curl");
       }
       }
@@ -146,8 +149,14 @@ function updateData(){
     setShellValue();
   }
 
+  function getValue(mode){
+    if(mode == "nodejs") return nodejsData;
+    else if(mode == "java") return javaData; 
+    else if(mode == "curl") return curlData; 
+  }
+
 export const code_snippet_window = {
-    trueWebComponentMode: true , codeSnippetWindow, setExposedPathAndMethod, ifAuthSetAuth, ifKeySetKey, setNodeJSValue,setAttributeData,setJavaValue,setShellValue
+    trueWebComponentMode: true , codeSnippetWindow, setExposedPathAndMethod, ifAuthSetAuth, ifKeySetKey, setNodeJSValue,setAttributeData,setJavaValue,setShellValue, getValue
   }
   
   monkshu_component.register(
