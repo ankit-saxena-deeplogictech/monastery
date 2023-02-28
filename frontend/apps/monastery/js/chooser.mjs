@@ -30,7 +30,7 @@ async function loadView(name) {
 	 const view = (await import(`${APP_CONSTANTS.APP_PATH}/views/${name}/view.mjs`)).view; await view.init(); 
 
     
-    const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase(); 
+    // const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase(); 
     // if (securityguard.isAllowed(view, org))
      router.loadPage(`${APP_CONSTANTS.MAIN_HTML}?view=${name}`);
     //  await loader.afterLoading();
