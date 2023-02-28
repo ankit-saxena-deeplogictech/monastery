@@ -8,7 +8,7 @@ import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 import { session } from "/framework/js/session.mjs";
 
 const API_KEYS = {"*":"jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf"}, KEY_HEADER = "org_monkshu_apikey";
-const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase(),userid = new String(session.get(APP_CONSTANTS.USERID)).toLowerCase();
+const org = new String(session.get(APP_CONSTANTS.USERORG)),userid = new String(session.get(APP_CONSTANTS.USERID));
 /**
  * Returns the list of models present on the server
  * @param {string} server Server IP or Hostname

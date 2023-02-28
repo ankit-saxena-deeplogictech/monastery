@@ -15,8 +15,8 @@ async function getItemList() {
     try {
        const serverDetails = JSON.parse(session.get("__org_server_details"));
         let metadata;
-        const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase();
-        const userid = new String(session.get(APP_CONSTANTS.USERID)).toLowerCase();
+        const org = new String(session.get(APP_CONSTANTS.USERORG));
+        const userid = new String(session.get(APP_CONSTANTS.USERID));
         const role = securityguard.getCurrentRole();
         await loader.beforeLoading();
         

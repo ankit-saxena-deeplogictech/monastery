@@ -36,8 +36,8 @@ async function openDialog() {
             const parsedData = apibossmodel.getparsedData(); 
             if(!parsedData.result){ DIALOG.showError(dialogElement,parsedData.key);return false}
             const metadata = apibossmodel.getModel();
-            const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase(); 
-            const userid = new String(session.get(APP_CONSTANTS.USERID)).toLowerCase(); 
+            const org = new String(session.get(APP_CONSTANTS.USERORG)); 
+            const userid = new String(session.get(APP_CONSTANTS.USERID)); 
             const pubResult = await serverManager.publishModel(parsedData.data, result.server, result.port, result.adminid, result.adminpassword);
             console.log(pubResult);
             if (!pubResult.result) {DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); return ;}

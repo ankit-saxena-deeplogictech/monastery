@@ -80,8 +80,10 @@ async function addUser(element) {
 }
 
 async function editUser(name, id, role, approved, element) {
+const loggedInUser = session.get(APP_CONSTANTS.USERID);
+
 	const roles = []; for (const thisrole of conf.roles) roles.push({label:await i18n.get(thisrole), value: thisrole, selected: thisrole==role?true:undefined});
-	monkshu_env.components['display-box'].showDialog(`${MODULE_PATH}/dialogs/addeditprofile.html`, true, true, 
+	monkshu_env.components['display-box'].showDialog(loggedInUser!=id?`${MODULE_PATH}/dialogs/addeditprofile.html`:`${MODULE_PATH}/dialogs/loggedineditprofile.html`, true, true, 
 			{name, id, role, approved:approved==1?true:undefined, roles, CONF:conf}, "dialog", 
 			["name", "id", "role", "approved", "old_id"], async ret => {
 		
