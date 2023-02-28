@@ -80,17 +80,15 @@ async function addUser(element) {
 }
 
 async function editUser(name, id, role, approved, element) {
-const loggedInUser = session.get(APP_CONSTANTS.USERID);
-
+const loggedInUser = session.get(APP_CONSTANTS.USERID).toString();
 	const roles = []; for (const thisrole of conf.roles) roles.push({label:await i18n.get(thisrole), value: thisrole, selected: thisrole==role?true:undefined});
 	monkshu_env.components['display-box'].showDialog(loggedInUser!=id?`${MODULE_PATH}/dialogs/addeditprofile.html`:`${MODULE_PATH}/dialogs/loggedineditprofile.html`, true, true, 
-			{name, id, role, approved:approved==1?true:undefined, roles, CONF:conf}, "dialog", 
-			["name", "id", "role", "approved", "old_id"], async ret => {
-		
-		if (ret.approved.toLowerCase() == "true") ret.approved = true; else ret.approved = false;
+			{name, id, role, approved:loggedInUser!=id?approved==1?true:undefined:true, roles, CONF:conf}, "dialog", 
+			loggedInUser!=id?["name", "id", "role", "approved", "old_id"]:["name", "id", "role","old_id"], async ret => {
+		if(loggedInUser != ret.old_id) if (ret.approved.toLowerCase() == "true" ) ret.approved = true; else ret.approved = false;
+		else ret["approved"] = true;
 		const backendURL = user_manager.getHostElement(element).getAttribute("backendurl");
 		const editResult = await apiman.rest(`${backendURL}/${API_EDITUSER}`, "POST", ret, true);
-		console.log(editResult);
 		if (!editResult?.result) {
 			const err = router.getMustache().render(await i18n.get("EditError"), {name, id}); 
 			LOG.error(err); monkshu_env.components['display-box'].error("dialog", err);
