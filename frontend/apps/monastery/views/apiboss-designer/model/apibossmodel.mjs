@@ -141,7 +141,7 @@ function getparsedData() {
     finalData.push({inputoutput: inputoutput});
     let i = 0;
     for(const api of retModel.apis) {
-
+        let apikeys = [], jwtSub = [], addTokenSub = [];
         console.log(api);
         parsedData = {};
         if(JSON.parse(api.passthrough).length){
@@ -174,14 +174,17 @@ function getparsedData() {
          for(const policy of retModel.policies) {
             console.log(policy.id in api.dependencies);
             if(api.dependencies.includes(policy.id)){
-            parsedData["apikey"] =policy.apikey;
+                apikeys.push(policy.apikey);
+                policy.jwtsubject.replace(/\s/g,"").split(",").forEach((item)=>{jwtSub.push(item)});
+                policy.tokensubject.replace(/\s/g,"").split(",").forEach((item)=>{addTokenSub.push(item)});
             parsedData["needsBasicAuth"] = policy.isauthenticationneeded;
             parsedData["needsToken"] = policy.isjwttokenneeded;
-            parsedData["jwtsubject"] = policy.jwtsubject;
-            parsedData["addsToken"] = policy.istokenneeded;
-            parsedData["tokensubject"] = policy.tokensubject;   
+            parsedData["addsToken"] = policy.istokenneeded;  
          }
         }
+        parsedData["apikey"] = [...new Set(apikeys)].join();
+        parsedData["jwtsubject"] = [...new Set(jwtSub)].join();
+        parsedData["tokensubject"] = [...new Set(addTokenSub)].join();
         apiregistrydata[api.exposedpath] = parsedData;
     }
     console.log(apiregistrydata);
