@@ -11,6 +11,7 @@ import {apibossmodel} from "../model/apibossmodel.mjs";
 import {page_generator} from "/framework/components/page-generator/page-generator.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 import { session } from "/framework/js/session.mjs";
+import { password_box } from "../../../components/password-box/password-box.mjs";
 
 const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/..`, MSG_GET_MODEL_NAME = "GET_MODEL_NAME", 
     MSG_RENAME_MODEL = "RENAME_MODEL", DIALOG_RET_PROPS = ["name", "server", "port", "adminid", "adminpassword"], 
@@ -33,7 +34,8 @@ async function openDialog() {
     DIALOG.showDialog(dialogPropertiesPath, html, null, DIALOG_RET_PROPS, 
         async (typeOfClose, result, dialogElement) => { if (typeOfClose == "submit") {
             saved_props = util.clone(result, ["adminpassword"]); // don't save password, for security
-            const parsedData = apibossmodel.getparsedData(); 
+            const parsedData = apibossmodel.getparsedData();
+            result.adminpassword = password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value; 
             if(!parsedData.result){ DIALOG.showError(dialogElement,parsedData.key);return false}
             const metadata = apibossmodel.getModel();
             const org = new String(session.get(APP_CONSTANTS.USERORG)); 

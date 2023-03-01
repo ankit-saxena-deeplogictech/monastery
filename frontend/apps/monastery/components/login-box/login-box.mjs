@@ -7,6 +7,7 @@ import {router} from "/framework/js/router.mjs";
 import {loginmanager} from "../../js/loginmanager.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
 import { loader } from "../../js/loader.mjs";
+import { password_box } from "../password-box/password-box.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta);
 
@@ -28,7 +29,7 @@ async function signin(signInButton) {
 	await loader.beforeLoading();_disableButton(signInButton);
 
 	const userid = shadowRoot.querySelector("#userid").value.toLowerCase();
-	const pass = shadowRoot.querySelector("#pass").value;
+	const pass = password_box.getShadowRootByHostId("pass").querySelector("#pwinput").value;
 	const otp = shadowRoot.querySelector("#otp").value;
 	const routeOnSuccess = login_box.getHostElement(signInButton).getAttribute("routeOnSuccess");
 	const routeOnNotApproved = login_box.getHostElement(signInButton).getAttribute("routeOnNotApproved");
