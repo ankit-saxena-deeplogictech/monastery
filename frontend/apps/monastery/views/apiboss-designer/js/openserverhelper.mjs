@@ -7,6 +7,7 @@ import {i18n} from "/framework/js/i18n.mjs";
 import {util} from "/framework/js/util.mjs";
 import {serverManager} from "./serverManager.js";
 import {blackboard} from "/framework/js/blackboard.mjs";
+import { password_box } from "../../../components/password-box/password-box.mjs";
 
 const MODULE_PATH = util.getModulePath(import.meta), DIALOG = window.monkshu_env.components["dialog-box"],
     MSG_FILE_UPLOADED = "FILE_UPLOADED",DEFAULT_HOST_ID = "__org_monkshu_dialog_box";
@@ -17,7 +18,8 @@ function init() {
 
 async function connectServerClicked(element) {
     const name = DIALOG.getElementValue("name"), server = DIALOG.getElementValue("server"), port = DIALOG.getElementValue("port"),
-    adminid = DIALOG.getElementValue("adminid"), adminpassword = DIALOG.getElementValue("adminpassword");
+    adminid = DIALOG.getElementValue("adminid"); let adminpassword = DIALOG.getElementValue("adminpassword");
+    adminpassword = password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value;
     if (!_validate(element)) return false;
     const metaDataResult = await serverManager.getMetaData(name,server, port, adminid,adminpassword);
     if (!metaDataResult.result) {DIALOG.showError(null, await i18n.get(metaDataResult.key)); LOG.error("MetaData fetch failed"); return;}

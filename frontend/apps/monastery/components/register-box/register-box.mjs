@@ -12,6 +12,7 @@ import {loginmanager} from "../../js/loginmanager.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
 import { loader } from "../../js/loader.mjs";
+import { password_box } from "../password-box/password-box.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta), DIALOGS_PATH = `${COMPONENT_PATH}/dialogs`;
 let API_GETMATCHINGORGS;
@@ -71,7 +72,7 @@ async function registerOrUpdate(element) {
 	const nameSelector = shadowRoot.querySelector("input#name"); const name = nameSelector.value;
 	const idSelector = shadowRoot.querySelector("input#id"); const id = idSelector.value.toLowerCase();
 	const id_old = register_box.getHostElement(element).getAttribute("email") ? shadowRoot.querySelector("input#oldid").value.toLowerCase() : undefined;
-	const passSelector = shadowRoot.querySelector("password-box#pass1"); const pass = passSelector.value;
+	const passSelector = password_box.getShadowRootByHostId("pass1").querySelector("#pwinput"); const pass = passSelector.value;
 	const orgSelector = shadowRoot.querySelector("input#org"); const org = orgSelector.value;
 	const totpCodeSelector = shadowRoot.querySelector("input#otp"); const totpCode = totpCodeSelector.value && totpCodeSelector.value != ""?totpCodeSelector.value:null;
 	const routeOnSuccess = register_box.getHostElement(element).getAttribute("routeOnSuccess");
@@ -118,7 +119,7 @@ function _validateForm(shadowRoot) {
 }
 
 function _doPasswordsMatch(shadowRoot) {
-	const pass1 = shadowRoot.querySelector("password-box#pass1"), pass2 = shadowRoot.querySelector("password-box#pass2")
+	const pass1 = password_box.getShadowRootByHostId("pass1").querySelector("#pwinput"), pass2 = password_box.getShadowRootByHostId("pass2").querySelector("#pwinput");
 	return pass1.value == pass2.value;
 }
 
