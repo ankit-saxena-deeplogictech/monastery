@@ -40,7 +40,7 @@
  
  function _setValue(value, element) {
    const shadowRoot = drop_down.getShadowRootByHostId(element.getAttribute("id"));
-   shadowRoot.querySelector(`#${value}`).setAttribute("selected", "selected");
+   shadowRoot.querySelector(`#${value}`).selected = true;
    disableOrEnableInputField(element);
  };
 

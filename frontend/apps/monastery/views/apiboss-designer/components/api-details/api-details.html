@@ -300,13 +300,13 @@ div.error-hit{
             <div id="userid" class="input-fields">
                 <label for="MyInput" style="text-align: center; color: #444444;
                margin-left: 1.2em; ">User ID</label>
-                <input type="text" id="MyInput" class="input-text" />
+                <input type="text" id="MyInput" class="input-text validate" oninvalid="this.setCustomValidity('{{i18n.FillField}}')"  oninput="setCustomValidity('')" required="true" class="validate"/>
             </div>
 
             <div id="password" class="input-fields">
                 <label for="Mypwd" style="text-align: center; color: #444444;
                 margin-left: 1.2em;">Password</label>
-                <input type="text" id="Mypwd" class="input-text" />
+                <input type="text" id="Mypwd" class="input-text validate" oninvalid="this.setCustomValidity('{{i18n.FillField}}')"  oninput="setCustomValidity('')" required="true" class="validate"/>
             </div>
             {{/isuserauthsneed}}
 

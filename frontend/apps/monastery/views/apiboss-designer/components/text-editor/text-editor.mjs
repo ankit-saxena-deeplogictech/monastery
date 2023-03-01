@@ -35,7 +35,7 @@
 		 text_editor.getMemoryByHost(element).editor = cm; cm.setSize("100%", "100%"); 
 		//  let data = JSON.stringify(jsonData,null,4);
 		//   _setValue(data, element);
-	 }, 10);
+	 }, 1000);
  }
 
  function updateResponseData() {

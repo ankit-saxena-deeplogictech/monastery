@@ -88,6 +88,12 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+input:disabled {
+    cursor: default;
+    background-color: rgba(239, 239, 239, 0.3);
+    color: rgb(84, 84, 84);
+}
+
 .class-isauthenticationneeded, .class-isjwttokenneeded, .class-israteenforcementneeded, .class-istokenneeded {
     padding: 3px 25px 0px 11px;
 }
