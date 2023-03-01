@@ -114,7 +114,7 @@ function fetchBaseParameters(element, target) {
     <sub class="dataType">${target[key].type}</sub>
      ${target[key].type == "array" && target[key].type !== "object" ? ` <image-button img="./img/add.svg" text=${target[key].items.type} style=" width:6em; height: 100%; margin :0px 10px;"
      class=${target[key].items.type} id=${key} type="row"
-     styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 3px 10px;} div#button>img.row {width: 1.5em;height: 100%;} div#button>span {color: #000000; font-weight: 700; margin-left:5px}"
+     styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 3px 10px;} div#button>img.row {width: 1.5em;height: 100%;} div#button>span {color: #000000; font-weight: 700; margin-left:5px} div#button>span.row {width: 100%;}"
      color="#444444" border="0.5px solid #98CCFD" background-color="#DFF0FE" active-background-color="white" margin = "0px 10px"
      display="inline-block;" onclick='monkshu_env.components["api-details"].addMoreParameters(this, event);monkshu_env.components["api-details"].setAttrData();'></image-button>` : target[key].type !== "object" ? `<input type="text" oninput="monkshu_env.components['api-details'].setAttrData();" style="margin: 0px 5px" id="My${key}" class="input-text" />`:""}</div>`
     content.appendChild(child);
@@ -135,7 +135,7 @@ function addObjParam(element, data) {
     <sub class="dataType">${data[key].type}</sub>
      ${data[key].type == "array" && data[key].type !== "object" ? `<image-button img="./img/add.svg" text=${data[key].items.type} style=" width:6em; height: 100%; margin :0px 10px;"
      class=${data[key].items.type} id=${key} type="row"
-     styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 3px 10px;} div#button>img.row {width: 1.5em;height: 100%;} div#button>span {color: #000000; font-weight: 700; margin-left:5px}"
+     styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 3px 10px;} div#button>img.row {width: 1.5em;height: 100%;} div#button>span {color: #000000; font-weight: 700; margin-left:5px} div#button>span.row {width: 100%;}"
      color="#444444" border="0.5px solid #98CCFD" background-color="#DFF0FE" active-background-color="white" margin = "0px 10px"
      display="inline-block;" onclick='monkshu_env.components["api-details"].addMoreParameters(this, event);monkshu_env.components["api-details"].setAttrData()'></image-button>` : data[key].type !== "object" ? `<input type="text" oninput="monkshu_env.components['api-details'].setAttrData();" style="margin: 0px 5px" id="My${key}" class="input-text" />`:""}</div>`
     element.appendChild(child);
@@ -160,13 +160,13 @@ function _serachParamInSchema(id) {
 }
 
 function addMoreParameters(element, event) {
-  if (event.composedPath()[5].classList == 'string') {
+  if (event.composedPath()[5].classList == 'string' || event.composedPath()[5].classList == 'number') {
     let stringWrapper = document.createElement("div");
     stringWrapper.classList.add("wrapper-div");
     stringWrapper.style.paddingBottom = "0px";
     let inputContainer = document.createElement("div");
     inputContainer.classList.add("input-wrapper");
-    inputContainer.innerHTML = `<input class="input-text" oninput="monkshu_env.components['api-details'].setAttrData();" style="padding:3px;" type="text" placeholder="string"/> <img class="deleteBtn" onclick='monkshu_env.components["api-details"].deleteParameters(this, event);monkshu_env.components["api-details"].setAttrData();' src=${COMPONENT_PATH}/img/delete.svg/>`
+    inputContainer.innerHTML = `<input class="input-text" oninput="monkshu_env.components['api-details'].setAttrData();" style="padding:3px;" type=${event.composedPath()[5].classList == "number" ? "number" : "text"} placeholder=${event.composedPath()[5].classList} /> <img class="deleteBtn" onclick='monkshu_env.components["api-details"].deleteParameters(this, event);monkshu_env.components["api-details"].setAttrData();' src=${COMPONENT_PATH}/img/delete.svg/>`
     stringWrapper.appendChild(inputContainer);
     event.composedPath()[7].appendChild(stringWrapper);
   }
