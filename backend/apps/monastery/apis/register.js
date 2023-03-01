@@ -16,9 +16,7 @@ exports.doService = async jsonReq => {
 	}
 	await exports.updateOrgAndDomain(jsonReq);	// set domain and override org if needed
 	const domainResults = await exports.checkDomain(jsonReq);
-	LOG.info(JSON.stringify(domainResults))
-	if (!domainResults) return { result: false }
-	LOG.info(JSON.stringify(jsonReq))
+	if (!domainResults) {LOG.error(`Unable to register: ${jsonReq.name}, ID: ${jsonReq.id}, wrong with userid`);return CONSTANTS.FALSE_RESULT;}
 
 	const existingUsersForDomain = await userid.getUsersForDomain(_getRootDomain(jsonReq)),
 		existingUsersForOrg = await userid.getUsersForOrg(jsonReq.org),
@@ -62,21 +60,13 @@ exports.checkDomain = async jsonReq => {
 	const rootDomain = _getRootDomain(jsonReq);
 	const existingUsersForDomain = await userid.getUsersForDomain(rootDomain);
 	const existingUsersForOrg = await userid.getUsersForOrg(jsonReq.org);
-	if (!(existingUsersForDomain && existingUsersForDomain.result && existingUsersForDomain.users.length) && (existingUsersForOrg && existingUsersForOrg.result && existingUsersForOrg.users.length)) {
+	if (!(existingUsersForDomain && existingUsersForDomain?.result && existingUsersForDomain?.users.length) && (existingUsersForOrg && existingUsersForOrg?.result && existingUsersForOrg?.users.length)) {
 		const domainNameUsedInOrg = existingUsersForOrg.users[0]["domain"];
 		const result = _checkDomainAndSubdomain(domainNameUsedInOrg.toLowerCase(), rootDomain.toLowerCase());
 		if (result) { jsonReq.domain = result; return true }
 		else return false;
 	}
-	else if ((existingUsersForDomain && existingUsersForDomain.result && existingUsersForDomain.users.length) && (existingUsersForOrg && existingUsersForOrg.result && existingUsersForOrg.users.length)) {
-		const domainNameUsedInOrg = existingUsersForOrg.users[0]["domain"];
-		if (rootDomain.toLowerCase() == domainNameUsedInOrg.toLowerCase()) return true;
-		else return false;
-	}
-	else if ((existingUsersForDomain && existingUsersForDomain.result && existingUsersForDomain.users.length) && !(existingUsersForOrg && existingUsersForOrg.result && existingUsersForOrg.users.length)) return true;
-	else if (!(existingUsersForDomain && existingUsersForDomain.result && existingUsersForDomain.users.length) && !(existingUsersForOrg && existingUsersForOrg.result && existingUsersForOrg.users.length)) return true
-
-
+	return true;
 }
 
 
