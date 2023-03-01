@@ -102,7 +102,9 @@ select {
 {{{CONF.MOBILE_MEDIA_QUERY_LANDSCAPE_END}}}
 {{{CONF.MOBILE_MEDIA_QUERY_PORTRAIT_START}}}
     div#dialog {width: 96%;}
-{{{CONF.MOBILE_MEDIA_QUERY_PORTRAIT_END}}}
+{{{CONF.MOBILE_MEDIA_QUERY_PORTRAIT_END}}} 
+{{^isnotloggedinuser}}<style> select#role{margin-bottom: 0em;}  </style>{{/isnotloggedinuser}}
+
 
 <input type="text" id="name" placeholder="{{i18n.Name}}" value="{{name}}" required 
     oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput="setCustomValidity('')">
@@ -114,11 +116,13 @@ select {
     <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
     {{/roles}}
 </select>
+{{#isnotloggedinuser}}
 <span id="toggler">
     <span>{{i18n.Approve}}?</span>
     <input class="tgl tgl-ios" id="approved" type="checkbox" onclick='this.value=this.checked' {{#approved}}checked{{/approved}} value='{{#approved}}true{{/approved}}{{^approved}}false{{/approved}}'>
     <label class="tgl-btn" for="approved">
 </span>
+{{/isnotloggedinuser}}
 
 <script>
 function onOK(element) {monkshu_env.components["dialog-box"].submit(element);}
