@@ -5,8 +5,8 @@ SCHEMA
     "topribbon": {"html":"pluggable-ribbon-developer", "styleBody":"url(./views/{{url.view}}/page/topribbon.styleBody.css)", "ribbonTitle":"{{i18n.APIBossDeveloper}}", "ribbonLogo":"./views/{{url.view}}/page/logo.png"},
     "packages": {"html":"api-list", "label":"{{i18n.DoubleClickToOpen}}", 
         "onclickHandler":"window.monkshu_env.components['api-list'].openClicked(this,this.id)","styleBody":"span#label{ font-weight: 500;  color: #444444; font-family: 'Red Hat Text';font-size: smaller; text-align: center; background-color: #DFF0FE; padding: 5px;border-top: 1px solid #98CCFD; border-bottom: 1px solid #98CCFD; margin: 0px;} div#container{ border: none ; align-content: flex-start;}"},                                                                                                                                                                                        
-    "contextmenumain": {"html":"context-menu", "styleBody":"body{font-family: inherit; font-size: smaller;} span.menuicon{display:none;} span.menutext{font-size: small !important;} span.menuitem{padding-bottom: 5px;}"},
     "apicontent": {"html":"api-contents"},
+    "treeview":{"html":"apiinput-apioutput"},
     "snippet": {"html":"text-div","text":"Code Snippets", "stylebody":"span#text{margin-left:4em;}"},
     "nodejs": {"html":"image-button", "img":"./views/{{url.view}}/dialogs/nodejs.svg", "text":"{{i18n.Nodejs}}", 
                "style":"width:100%; height: 100%;", "onclickHandler":"window.monkshu_env.components['code-snippet-window'].codeSnippetWindow(`{{i18n.Nodejs}}`)", "type":"row", 
@@ -20,9 +20,10 @@ SCHEMA
                "styleBody":"url(./views/{{url.view}}/page/image-button-row.styleBody.css)",
                "style":"width:100%; height: 100%;", "onclickHandler":"window.monkshu_env.components['code-snippet-window'].codeSnippetWindow(`{{i18n.Curl}}`)", "type":"row", 
                "color":"#000000", "border":"0.5px solid #98CCFD", "background-color":"#F8FCFF", "active-background-color":"white"},
-    "response": {"html":"text-editor", "downloadfilename":"{{{uriEncodedDescription}}}.js"},
     "apidetails":{"html":"api-details"},
-    "treeview":{"html":"apiinput-apioutput"}
+    "response": {"html":"text-editor", "downloadfilename":"{{{uriEncodedDescription}}}.js"},
+    "contextmenumain": {"html":"context-menu", "styleBody":"body{font-family: inherit; font-size: smaller;} span.menuicon{display:none;} span.menutext{font-size: small !important;} span.menuitem{padding-bottom: 5px;}"}
+
    
 }
 ======
@@ -41,11 +42,10 @@ LAYOUT
 ------------------------------------------------------
 |    packages |      apidetails      |     response  |
 ------------------------------------------------------
-|    packages |     apidetails       |    response   |
-------------------------------------------------------
+
 
 =================
-Row Heights = 70px, 42em ,18em,3em,18em,18em
+Row Heights = 70px, auto ,18em,3em,32em
 Col Widths = 20%, 20%, 20%, 20%, 20%
 =================
 
