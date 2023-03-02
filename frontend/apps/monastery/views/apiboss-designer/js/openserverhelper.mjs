@@ -20,10 +20,14 @@ async function connectServerClicked(element) {
     const name = DIALOG.getElementValue("name"), server = DIALOG.getElementValue("server"), port = DIALOG.getElementValue("port"),
     adminid = DIALOG.getElementValue("adminid"); let adminpassword = DIALOG.getElementValue("adminpassword");
     adminpassword = password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value;
-    if (!_validate(element)) return false;
+    if (!_validate()) return false;
+    _disableButton(element);
     const metaDataResult = await serverManager.getMetaData(name,server, port, adminid,adminpassword);
-    if (!metaDataResult.result) {DIALOG.showError(null, await i18n.get(metaDataResult.key)); LOG.error("MetaData fetch failed"); return;}
+    if (!metaDataResult.result) {
+         _enableButton(element);
+        DIALOG.showError(null, await i18n.get(metaDataResult.key)); LOG.error("MetaData fetch failed"); return;}
     else{
+         _enableButton(element);
          DIALOG.hideError();
         blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: name, data: JSON.stringify(metaDataResult.model)});
         DIALOG.hideDialog();
@@ -40,5 +44,7 @@ function _validate() {
     return true;
 }
 
+function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 export const openserverhelper = {init, connectServerClicked};
