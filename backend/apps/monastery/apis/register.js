@@ -29,17 +29,19 @@ exports.doService = async jsonReq => {
 	const result = await userid.register(jsonReq.id, jsonReq.name, jsonReq.org, jsonReq.pwph, jsonReq.totpSecret, role,
 		approved, jsonReq.domain);
 
-	if (result.result) LOG.info(`User registered and logged in: ${jsonReq.name}, ID: ${jsonReq.id}`); else LOG.error(`Unable to register: ${jsonReq.name}, ID: ${jsonReq.id} DB error`);
+	if (result.result){ 
+	LOG.info(`User registered and logged in: ${jsonReq.name}, ID: ${jsonReq.id}`);
 	const currentExistingUsersForOrg = await userid.getUsersForOrg(jsonReq.org);
 	let org_id;
-
 	const orgResult = await userid.getOrgsMatchingOnName(jsonReq.org);
 	if (orgResult.result && orgResult.org_id) org_id = orgResult.org_id;
 	if (currentExistingUsersForOrg.result && currentExistingUsersForOrg.users.length > 0) {
 		const updateDomainResult = await userid.updateusersDomain(org_id, jsonReq.domain);
 		if(!updateDomainResult.result) LOG.error(`Unable to update domain: ${jsonReq.domain}`);
-
 	}
+
+} else LOG.error(`Unable to register: ${jsonReq.name}, ID: ${jsonReq.id} DB error`);
+
 
 
 	const result1 = await userid.getProducts();
