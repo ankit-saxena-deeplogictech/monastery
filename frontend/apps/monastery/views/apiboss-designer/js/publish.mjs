@@ -9,9 +9,9 @@ import {serverManager} from "./serverManager.js";
 import {blackboard} from "/framework/js/blackboard.mjs";
 import {apibossmodel} from "../model/apibossmodel.mjs";
 import {page_generator} from "/framework/components/page-generator/page-generator.mjs";
-import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 import { session } from "/framework/js/session.mjs";
 import { password_box } from "../../../components/password-box/password-box.mjs";
+import {loader} from "../../../js/loader.mjs";
 
 const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/..`, MSG_GET_MODEL_NAME = "GET_MODEL_NAME", 
     MSG_RENAME_MODEL = "RENAME_MODEL", DIALOG_RET_PROPS = ["name", "server", "port", "adminid", "adminpassword"], 
@@ -40,17 +40,23 @@ async function openDialog() {
             const metadata = apibossmodel.getModel();
             const org = new String(session.get(APP_CONSTANTS.USERORG)); 
             const userid = new String(session.get(APP_CONSTANTS.USERID)); 
+            await loader.beforeLoading();_disableButton(dialogElement);
             const pubResult = await serverManager.publishModel(parsedData.data, result.server, result.port, result.adminid, result.adminpassword);
-            console.log(pubResult);
-            if (!pubResult.result) {DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); return ;}
+            if (!pubResult.result) {
+                await loader.afterLoading(); _enableButton(dialogElement);
+                DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); return ;}
             else{
                 const pubMetaResult = await serverManager.publishMetaData(metadata,org,userid, result.name, result.server, result.port);
                 blackboard.broadcastMessage(MSG_RENAME_MODEL, {name: result.name});
+                await loader.afterLoading(); _enableButton(dialogElement);
                 if ( !pubMetaResult.result) DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); 
                 else {DIALOG.showMessage(await i18n.get("PublishSuccess"), null, null, messageTheme, "MSG_DIALOG");  return true;}
             }
 
         } });
 }
+
+function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 export const publish = {openDialog};

@@ -302,7 +302,7 @@ async function tryIt(element, event) {
 
   if (jwtToken) { const storage = _getAPIManagerStorage(); storage.tokenManager[`${host}_${sub}`] = jwtToken; _setAPIManagerStorage(storage); }
   let resp = await apiman.rest(`http://${serverDetails.host}:${serverDetails.port}${path}`, `${method.toUpperCase()}`, reqBody, (jwtToken) ? true : false);
-  console.log(resp)
+  if (typeof resp == "string") resp = JSON.parse(resp);
   text_editor.getJsonData(resp);
   await loader.afterLoading();
   apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
