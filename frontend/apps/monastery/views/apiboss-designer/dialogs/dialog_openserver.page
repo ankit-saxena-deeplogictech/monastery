@@ -5,9 +5,9 @@ SCHEMA
     "server": {"html":"input", "type":"text", "placeholder":"{{i18n.Server}}", "required":"true", "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
     "port": {"html":"input", "type":"number", "placeholder":"{{i18n.Port}}", "required":"true","spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
     "adminid": {"html":"input", "type":"text", "placeholder":"{{i18n.AdminID}}", "required":"true", "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
-    "adminpassword": {"html":"password-box", "style":"width:100%; ", "placeholder":"{{i18n.AdminPassword}}", "required":"true","customValidity":"{{i18n.FillField}}", "styleBody":"span#container{width: 100%;} img.pwimg {width: 2em;} input#pwinput{padding:1em 2em 1em 3.5em;border-radius:10px;border:0.5px solid #98CCFD;color:rgb(0,0,0);}","class":"validate"},
+    "adminpassword": {"html":"password-box", "style":"width:100%; ", "placeholder":"{{i18n.AdminPassword}}", "required":"true","customValidity":"{{i18n.FillField}}", "styleBody":"span#container{width: 100%;} img.pwimg {width: 2em;} input#pwinput{padding:1em 2em 0.8em 3.5em;border-radius:10px;border:0.5px solid #98CCFD;color:rgb(0,0,0);}","class":"validate"},
     "connect": {"html":"image-button", "img":"./views/{{url.view}}/dialogs/connect.svg", "text":"{{i18n.Connect}}", 
-        "style":"width:100%; height: 100%;", "onclickHandler":"window.monkshu_env['OPEN_SERVER_HELPER'].connectServerClicked()", "type":"column", 
+        "style":"width:100%; height: 100%;", "onclickHandler":"window.monkshu_env['OPEN_SERVER_HELPER'].connectServerClicked(this)", "type":"column", 
         "color":"#444444", "border":"0.5px solid #98CCFD", "background-color":"#B6DCFE", "active-background-color":"white"}
 
 }
