@@ -94,7 +94,6 @@ function toggleNode(node) {
  */
 function createNodeElement(node) {
   let el = element('div');
-console.log(node);
   const getSizeString = (node) => {
     const len = node.children.length;
     if (node.type === 'array') return `[${len}]`;
