@@ -1,7 +1,6 @@
 SCHEMA
 ======
 {
-    "space": {"html":"span", "style":"height:100%; display:block; background:#DFF0FE;"},
     "topribbon": {"html":"pluggable-ribbon-developer", "styleBody":"url(./views/{{url.view}}/page/topribbon.styleBody.css)", "ribbonTitle":"{{i18n.APIBossDeveloper}}", "ribbonLogo":"./views/{{url.view}}/page/logo.png"},
     "packages": {"html":"api-list", "label":"{{i18n.DoubleClickToOpen}}", 
         "onclickHandler":"window.monkshu_env.components['api-list'].openClicked(this,this.id)","styleBody":"span#label{ font-weight: 500;  color: #444444; font-family: 'Red Hat Text';font-size: smaller; text-align: center; background-color: #DFF0FE; padding: 5px;border-top: 1px solid #98CCFD; border-bottom: 1px solid #98CCFD; margin: 0px;} div#container{ border: none ; align-content: flex-start;}"},                                                                                                                                                                                        
@@ -22,7 +21,9 @@ SCHEMA
                "color":"#000000", "border":"0.5px solid #98CCFD", "background-color":"#F8FCFF", "active-background-color":"white"},
     "apidetails":{"html":"api-details"},
     "response": {"html":"text-editor", "downloadfilename":"{{{uriEncodedDescription}}}.js"},
-    "contextmenumain": {"html":"context-menu", "styleBody":"body{font-family: inherit; font-size: smaller;} span.menuicon{display:none;} span.menutext{font-size: small !important;} span.menuitem{padding-bottom: 5px;}"}
+    "contextmenumain": {"html":"context-menu", "styleBody":"body{font-family: inherit; font-size: smaller;} span.menuicon{display:none;} span.menutext{font-size: small !important;} span.menuitem{padding-bottom: 5px;}"},
+    "space": {"html":"span", "style":"height:100%; display:block; background:rgba(255, 255, 255, 1);"}
+
 
    
 }
@@ -44,8 +45,10 @@ LAYOUT
 ------------------------------------------------------
 
 
+
+
 =================
-Row Heights = 70px, auto ,18em,3em,32em
+Row Heights = 70px, min-content ,18em,3em,32em
 Col Widths = 20%, 20%, 20%, 20%, 20%
 =================
 
@@ -82,9 +85,16 @@ CSS
     margin:0.7em 1em 1em 0em;
 }
 
+
 .class-treeview{
     margin-left:1.4em;
     margin-right:1.4em;
+    margin-top:0.5em;
+
+}
+
+.item2{
+    height:fit-content
 }
 html, body {
     margin: 0%;
