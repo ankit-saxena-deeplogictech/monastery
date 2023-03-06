@@ -57,8 +57,6 @@ function loadModel(jsonModel) {
 }
 
 function modelNodesModified(type, nodeName, id, properties) {
-console.log(type);
-console.log(nodeName);
     if (type == apibossmodel.ADDED) return _nodeAdded(nodeName, id, properties);
     if (type == apibossmodel.REMOVED) return _nodeRemoved(nodeName, id);
     if (type == apibossmodel.MODIFIED) return _nodeModified(nodeName, id, properties);
@@ -77,7 +75,6 @@ function modelConnectorsModified(type, sourceName, targetName, sourceID, targetI
             const dependencies = targetNode.dependencies;
             if ((!dependencies) || (!dependencies.length) || dependencies.indexOf(sourceNode.id) == -1) return;
             else{const newD = _arrayDelete(dependencies, sourceNode.id);console.log(newD);}
-            console.log(dependencies);
             if (dependencies.length == 0) delete targetNode.dependencies;    // no longer required
         }
     }
@@ -113,7 +110,6 @@ function getModel() {
 function getparsedData() {
     let parsedData = {},finalData = [], rateLimit = {}, inputoutput = {}, apiregistrydata = {};
     const retModel = util.clone(apibossmodelObj);
-    console.log(retModel);
     if(!(retModel.apis.length>0 && retModel.policies.length>0)) return {result:false,key:"Require data is not available to publish"};
     for (const policy of retModel.policies){
         if(!("apikey" in policy)) return {result:false,key:`Please fill apikey in ${policy.description}`};
@@ -128,7 +124,6 @@ function getparsedData() {
     finalData.push({rateLimit: rateLimit});
     parsedData = {};
     for (const api of retModel.apis) {
-        console.log("dependencies" in api);
         if(!("dependencies" in api) ) return {result:false,key:`Please attach policy to the ${api.description}`};
         if(api.dependencies.length<1) return {result:false,key:`Please attach policy to the ${api.description}`};
         const keys = ["exposedpath", "backendurl","backendurlmethod","isrestapi","apiname","exposedmethod"];
@@ -142,7 +137,6 @@ function getparsedData() {
     let i = 0;
     for(const api of retModel.apis) {
         let apikeys = [], jwtSub = [], addTokenSub = [];
-        console.log(api);
         parsedData = {};
         if(JSON.parse(api.passthrough).length){
             let passthroughHeader = JSON.parse(api.passthrough);
@@ -172,7 +166,6 @@ function getparsedData() {
         parsedData["isrestapi"] = api.isrestapi;
         parsedData["customContentType"] = api.contentinput;
          for(const policy of retModel.policies) {
-            console.log(policy.id in api.dependencies);
             if(api.dependencies.includes(policy.id)){
                 apikeys.push(policy.apikey);
                 policy.jwtsubject.replace(/\s/g,"").split(",").forEach((item)=>{jwtSub.push(item)});
@@ -187,9 +180,7 @@ function getparsedData() {
         parsedData["tokensubject"] = [...new Set(addTokenSub)].join();
         apiregistrydata[api.exposedpath] = parsedData;
     }
-    console.log(apiregistrydata);
     finalData.push({ apiregistrydata: apiregistrydata });
-    console.log(finalData);
     return {result:true,data:finalData};
 }
 
@@ -224,7 +215,6 @@ function _nodeRemoved(nodeName, id) {
     if (nodeName == "api") _arrayDelete(apibossmodelObj.apis, node);
     else if (nodeName == "policy") _arrayDelete(apibossmodelObj.policies, node);
     delete idCache[id]; // uncache
-    console.log(apibossmodelObj);
     return true;
 }
 
@@ -241,8 +231,6 @@ const _arrayDelete = (array, element) => {
     if(element.nodeName == "policy"){
         for (const api of apibossmodelObj.apis)
         if (api.dependencies)  if (api.dependencies.includes(element.id)) api.dependencies.splice(api.dependencies.indexOf(element.id), 1);
-        console.log(apibossmodelObj.apis);
-        console.log(idCache);
     }
  
     if (array.includes(element)) array.splice(array.indexOf(element), 1); return element;

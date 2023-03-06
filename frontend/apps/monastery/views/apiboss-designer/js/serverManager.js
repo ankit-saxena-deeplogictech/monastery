@@ -92,8 +92,6 @@ async function getModelList(server, port, adminid, adminpassword) {
  */
 async function publishModel(parsedData, server, port, adminid, adminpassword) {
     const loginResult = await loginToServer(server, port, adminid, adminpassword);
-    console.log(loginResult);
-
     if (!loginResult.result) return loginResult;    // failed to connect or login
     try {   // try to publish now
         return {result: (await apiman.rest(`http://${server}:${port}/apps/apiboss/admin/updateconf`, "POST", 

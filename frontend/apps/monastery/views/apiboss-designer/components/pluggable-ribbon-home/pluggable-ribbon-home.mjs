@@ -5,7 +5,11 @@
 import {util} from "/framework/js/util.mjs";
 import {session} from "/framework/js/session.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
-import {securityguard} from "/framework/js/securityguard.mjs";
+import {blackboard} from "/framework/js/blackboard.mjs";
+import { serverManager } from "../../js/serverManager.js"
+
+
+const MSG_FILE_UPLOADED = "FILE_UPLOADED";
 import { loader } from "../../../../js/loader.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta);
@@ -27,7 +31,7 @@ async function elementRendered(element) {
 	const shadowRoot = pluggable_ribbon_home.getShadowRootByHostId(element.id);
 	for (const pluginName in pluggable_ribbon_home.extensions[element.id||"null"]) // attach shadowRoots to the plugins
 		pluggable_ribbon_home.extensions[element.id||"null"][pluginName].shadowRoot = shadowRoot;
-}
+	}
 
 async function _instantiatePlugins(element) {
 	let plugins; try{plugins = await $$.requireJSON(`${COMPONENT_PATH}/${element.id}/pluginreg.json`);} catch (err) {LOG.error(`Can't read plugin registry, error is ${err}`); return {};};
@@ -54,6 +58,12 @@ async function _instantiatePlugins(element) {
 function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
 function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
+async function loadDefaultMeta(){
+    const serverDetails = JSON.parse(session.get("__org_server_details"));
+   const metaDataResult = await serverManager.getMetaData(serverDetails.name,serverDetails.host,serverDetails.port, serverDetails.adminid,serverDetails.adminpassword);
+   if (metaDataResult.result) blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: serverDetails.name, data: JSON.stringify(metaDataResult.model)});
+}
+
 // convert this all into a WebComponent so we can use it
-export const pluggable_ribbon_home = {trueWebComponentMode: true, elementConnected, elementRendered}
+export const pluggable_ribbon_home = {trueWebComponentMode: true, elementConnected, elementRendered, loadDefaultMeta}
 monkshu_component.register("pluggable-ribbon-home", `${COMPONENT_PATH}/pluggable-ribbon-home.html`, pluggable_ribbon_home);
