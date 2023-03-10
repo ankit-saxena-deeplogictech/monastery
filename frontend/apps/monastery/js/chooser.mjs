@@ -27,6 +27,7 @@ async function interceptPageLoadData() {
 
 async function loadView(name) {
     await loader.beforeLoading();
+    if(name!="apiboss-designer"){ const view = (await import(`${APP_CONSTANTS.APP_PATH}/views/${name}/view.mjs`)).view; await view.init(); }
      router.loadPage(`${APP_CONSTANTS.MAIN_HTML}?view=${name}`);
      	//  const view = (await import(`${APP_CONSTANTS.APP_PATH}/views/${name}/view.mjs`)).view; await view.init(); 
     // const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase(); 
