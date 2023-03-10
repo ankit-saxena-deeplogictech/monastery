@@ -23,7 +23,6 @@ async function elementConnected(element) {
 	conf = await $$.requireJSON(`${MODULE_PATH}/conf/usermanager.json`);;
 	const usersResult = await apiman.rest(`${element.getAttribute("backendurl")}/${API_GETORGUSERS}`, "GET", 
 		{org:element.getAttribute("org")}, true);
-		console.log(usersResult);
 	if (!usersResult.result) {LOG.error("Can't fetch the list of users for the org, API returned false.");}
 
 	const users = usersResult?.users||[], data = _createData(element, users);

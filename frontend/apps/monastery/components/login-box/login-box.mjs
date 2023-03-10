@@ -23,7 +23,6 @@ async function elementConnected(element) {
 }
 
 async function signin(signInButton) {	
-	console.log(signInButton);
 	const shadowRoot = login_box.getShadowRootByContainedElement(signInButton); _hideErrors(shadowRoot);
 	if (!_validateForm(shadowRoot)) return;	// HTML5 validation failed
 	await loader.beforeLoading();_disableButton(signInButton);
@@ -69,7 +68,7 @@ function _handleLoginResult(result, shadowRoot, routeOnSuccess, routeOnNotApprov
 		default: shadowRoot.getElementById("notifier").style.display = "inline"; break;
 	}
 }
-function _disableButton(element){console.log(element); element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
 function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 const trueWebComponentMode = true;	// making this false renders the component without using Shadow DOM

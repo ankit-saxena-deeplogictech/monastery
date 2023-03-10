@@ -2,5 +2,7 @@
     {"module": "js/application.mjs", "function":"interceptPageLoadData"},
     {"module": "js/loginmanager.mjs", "function":"interceptPageLoad"},
     {"module": "js/main.mjs", "function":"interceptPageData"},
-    {"module": "js/chooser.mjs", "function":"interceptPageLoadData"}
+    {"module": "js/chooser.mjs", "function":"interceptPageLoadData"},
+    {"module": "views/apiboss-designer/view.mjs", "function":"init"}
+
 ]
