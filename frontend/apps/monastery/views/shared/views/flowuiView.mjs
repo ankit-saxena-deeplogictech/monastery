@@ -22,7 +22,7 @@ const PAGE_GENERATOR_GRID_ITEM_CLASS = "grid-item-extension", HTML_INPUT_ELEMENT
     "textarea","spread-sheet","text-editor", "drag-drop","input-table","drop-down", "input-output-fields", "list-box",  "radio-button"];
 let ID_CACHE = {}, CONF, VIEW_PATH;
 
-const _generateShapeName = name => name.toLowerCase(), _generateShapeX = _ => 30, _generateShapeY = _ => 30;
+const _generateShapeName = name => name.toLowerCase(), _generateShapeX = _ => 30, _generateShapeY = _ => 30, _generateShapeXForIfTrue = _ => 120, _generateShapeYForIfTrue = _ => 30, _generateShapeXForIfFalse = _ => 30, _generateShapeYForIfFalse = _ => 120;
 
 async function init(viewPath) {
     

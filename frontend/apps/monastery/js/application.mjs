@@ -11,10 +11,7 @@ import { apimanager as apiman } from "/framework/js/apimanager.mjs";
 const APP_EXIT_FLAG = "__org_monkshu_app_exit";
 
 async function init() {
-
 	window.APP_CONSTANTS = (await import("./constants.mjs")).APP_CONSTANTS;
-	// const view = (await import(`${APP_CONSTANTS.APP_PATH}/views/apiboss-designer/view.mjs`)).view; await view.init(); 
-
 	window.LOG = (await import("/framework/js/log.mjs")).LOG;
 	apiman.registerAPIKeys(APP_CONSTANTS.API_KEYS, APP_CONSTANTS.KEY_HEADER);
 	if (!session.get($$.MONKSHU_CONSTANTS.LANG_ID)) session.set($$.MONKSHU_CONSTANTS.LANG_ID, "en");
@@ -37,19 +34,6 @@ async function main(page, desiredData) {
 		if (router.getLastSessionURL() && (decodedURL.toString() == router.getLastSessionURL().toString())) router.reload();
 		else router.loadPage(decodedURL.href, desiredData);
 	} else router.loadPage(APP_CONSTANTS.LOGIN_HTML);
-
-	// if (session.get(APP_EXIT_FLAG)) {	// exit check, once exited, can't reload
-	// 	router.loadPage(APP_CONSTANTS.EXIT_HTML);	
-	// 	return;
-	// }
-
-
-	// else route to what ever is requested.
-	/*if (justURL == APP_CONSTANTS.INDEX_HTML) router.loadPage(APP_CONSTANTS.REGISTER_HTML);
-	else if (securityguard.isAllowed(justURL)) {
-		if (router.getLastSessionURL() && (decodedURL.toString() == router.getLastSessionURL().toString())) router.reload();
-		else router.loadPage(decodedURL.href, desiredData);
-	} else router.loadPage(APP_CONSTANTS.REGISTER_HTML);*/
 }
 const interceptPageLoadData = _ => router.addOnLoadPageData("*", async (data, _url) => {
 	data.APP_CONSTANTS = APP_CONSTANTS;
