@@ -6,7 +6,7 @@ import {util} from "/framework/js/util.mjs";
 import {session} from "/framework/js/session.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
 import {blackboard} from "/framework/js/blackboard.mjs";
-import { serverManager } from "../../js/serverManager.js"
+const ORG_METADATA = "__org_metadata";
 
 
 const MSG_FILE_UPLOADED = "FILE_UPLOADED";
@@ -60,8 +60,10 @@ function _enableButton(element){ element.style["pointer-events"]=""; element.sty
 
 async function loadDefaultMeta(){
     const serverDetails = JSON.parse(session.get("__org_server_details"));
-   const metaDataResult = await serverManager.getMetaData(serverDetails.name,serverDetails.host,serverDetails.port, serverDetails.adminid,serverDetails.adminpassword);
-   if (metaDataResult.result) blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: serverDetails.name, data: JSON.stringify(metaDataResult.model)});
+//    const metaDataResult = await serverManager.getMetaData(serverDetails.name,serverDetails.host,serverDetails.port, serverDetails.adminid,serverDetails.adminpassword);
+
+const metadata = session.get(ORG_METADATA)
+   if (metadata) blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: serverDetails.name, data: JSON.stringify(metadata)});
 }
 
 // convert this all into a WebComponent so we can use it
