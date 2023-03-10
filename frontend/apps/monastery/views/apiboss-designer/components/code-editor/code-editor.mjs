@@ -47,7 +47,6 @@ async function elementConnected(element) {
  * @param element Host element
  */
 async function elementRendered(element) {
-  console.log("elementRendered");
   const MODE = element.getAttribute("mode");
   if (MODE == "javascript") {
     for (const p3lib of P3_LIBS) await $$.require(p3lib); // load all the comman libs we need

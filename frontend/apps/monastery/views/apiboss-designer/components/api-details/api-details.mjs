@@ -109,8 +109,6 @@ function fetchBaseParameters(element, target) {
   content.innerHTML = '';
 
   for (let key in target) {
-    console.log(target);
-    console.log(key);
     let child = document.createElement('div');
     child.innerHTML = `<div class="input-fields" style="padding-right: 10px" id=${target[key].type}>
      <label for="My${target[key].type}" id="my${key}" style="text-align: center; color: #444444;
@@ -127,8 +125,6 @@ function fetchBaseParameters(element, target) {
 }
 
 function addObjParam(element, data) {
-  console.log(element);
-  console.log(data);
   for(let key in data) {
     let child = document.createElement('div');
     child.classList.add('wrapper-div');
@@ -225,7 +221,6 @@ function getParaVal(element, obj) {
     let newChild = Array.from(child);
     let resObj = {};
     newChild.shift();
-    console.log(newChild);
     newChild.forEach((each)=>{
       // each.querySelectorAll(":scope>div").forEach((para)=>{
       //   console.log(para);

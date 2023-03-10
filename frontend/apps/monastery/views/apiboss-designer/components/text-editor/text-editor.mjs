@@ -104,7 +104,7 @@
  
  function _setValue(value, host) {
 	 const cm = text_editor.getMemoryByHost(host).editor;
-	 cm.getDoc().setValue(value);
+	if(cm) cm.getDoc().setValue(value);
  }
  
  // convert this all into a WebComponent so we can use it

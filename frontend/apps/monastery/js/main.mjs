@@ -16,8 +16,6 @@ const dialog = display_box;
 
 async function init(viewURL) {
     window.monkshu_env.frameworklibs.blackboard = blackboard;
-
-console.log(viewURL);
     // doing this here instead of adding pageGenerator directly to the HTML ensures any i18n or 
     // other changes that the view page needs, are incorporated into the application before 
     // the pageGenerator runs as we await view.init() in the previous line.
@@ -43,7 +41,6 @@ function toggleMenu() {
 }
 
 async function changePassword(_element) {
-    console.log(dialog);
     display_box().showDialog(`${APP_CONSTANTS.DIALOGS_PATH}/changepass.html`, true, true, {}, "dialog", ["p1","p2"], async result=>{
         const done = await loginmanager.changepassword(session.get(APP_CONSTANTS.USERID), result.p1);
         if (!done) display_box().error("dialog", await i18n.get("PWCHANGEFAILED"));

@@ -16,8 +16,6 @@ async function signin(id, pass, otp) {
     logoutListeners = [];   // reset listeners on sign in
         
     const resp = await apiman.rest(APP_CONSTANTS.API_LOGIN, "POST", {pwph, otp, id}, false, true);
-    console.log(resp);
-
     if (resp && resp.result && resp.tokenflag) {
         session.set(APP_CONSTANTS.USERID, resp.id); 
         session.set(APP_CONSTANTS.USERNAME, resp.name);

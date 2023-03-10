@@ -63,7 +63,6 @@ async function initialRender(host) {
 }
 
 async function registerOrUpdate(element) {	
-	console.log(element);
 	const shadowRoot = register_box.getShadowRootByContainedElement(element); if (!_validateForm(shadowRoot)) return;
 	await loader.beforeLoading();_disableButton(element);
 

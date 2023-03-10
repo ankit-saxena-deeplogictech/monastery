@@ -15,8 +15,9 @@ import {monkshu_component} from "/framework/js/monkshu_component.mjs";
 import {router} from "/framework/js/router.mjs";
 import { items } from "../../js/items.mjs";
 import { loader } from "../../../../js/loader.mjs";
+import { session } from "/framework/js/session.mjs";
 
-const COMPONENT_PATH = util.getModulePath(import.meta);
+const COMPONENT_PATH = util.getModulePath(import.meta),CURRENT_API = "_selected_api";
 
 async function elementConnected(element) {
 	Object.defineProperty(element, "value", {get: _=>JSON.stringify(item_list.getData(element.id).items), 
@@ -42,6 +43,7 @@ async function openClicked(element, elementid) {
 	window.monkshu_env.components["api-details"].updateExposedpathandMethod(elementid);
 	window.monkshu_env.components["api-list"].highlightApi(elementid);
 	await loader.afterLoading();
+	session.set(CURRENT_API,elementid)
 
 }
 function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
