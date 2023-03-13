@@ -45,8 +45,8 @@
  };
 
  function _attachFormValidationControls(element) {
-
   const selectElement = drop_down.getShadowRootByHostId(element.getAttribute("id")).querySelector("select#choices");
+  
   element.getValue = _ => selectElement.value;
   element.setValue = v => selectElement.value = v;
   element.getValidity = _ => selectElement.validity;
