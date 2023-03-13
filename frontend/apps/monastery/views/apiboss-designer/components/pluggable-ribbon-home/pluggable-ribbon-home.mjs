@@ -60,7 +60,6 @@ function _enableButton(element){ element.style["pointer-events"]=""; element.sty
 
 async function loadDefaultMeta(){
     const serverDetails = JSON.parse(session.get("__org_server_details"));
-//    const metaDataResult = await serverManager.getMetaData(serverDetails.name,serverDetails.host,serverDetails.port, serverDetails.adminid,serverDetails.adminpassword);
 
 const metadata = session.get(ORG_METADATA)
    if (metadata) blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: serverDetails.name, data: JSON.stringify(metadata)});
