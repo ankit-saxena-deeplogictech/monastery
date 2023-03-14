@@ -11,17 +11,24 @@ import {securityguard} from "/framework/js/securityguard.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 import {blackboard} from "/framework/js/blackboard.mjs"; 
 import { display_box } from "../components/display-box/display-box.mjs";
+
+
+
 const dialog = display_box;
 
 
-async function init(viewURL) {
+async function init(viewURL,viewPage) {
     window.monkshu_env.frameworklibs.blackboard = blackboard;
+    const view = (await import(`${viewURL}/view.mjs`)).view; await view.init(); 
+
     // doing this here instead of adding pageGenerator directly to the HTML ensures any i18n or 
     // other changes that the view page needs, are incorporated into the application before 
     // the pageGenerator runs as we await view.init() in the previous line.
     await import ("/framework/components/page-generator/page-generator.mjs");
     const pageGenerator = document.createElement("page-generator"); 
-    pageGenerator.setAttribute("file", `${viewURL}/page/view.page`);
+    if(viewPage=="home")  pageGenerator.setAttribute("file", `${viewURL}/page/${viewPage}.page`);
+    else if(viewPage=="developer") pageGenerator.setAttribute("file", `${viewURL}/page/${viewPage}.page`);
+    else  pageGenerator.setAttribute("file", `${viewURL}/page/view.page`);
     document.body.appendChild(pageGenerator);
 }
 

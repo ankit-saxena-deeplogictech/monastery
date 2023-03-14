@@ -283,14 +283,12 @@ async function tryIt(element, event) {
   targetNode.querySelectorAll(":scope>div").forEach((para) => {
     getParaVal(para, reqBody);
   })
-  console.log(reqBody);
   let path = shadowRoot.querySelector("span#path").innerText, jwtToken;
   if(shadowRoot.querySelector("input#token-input")){
     jwtToken = shadowRoot.querySelector("input#token-input").value;
   }
   if(shadowRoot.querySelector("#apikey")){
     let xapikey = {"*": shadowRoot.querySelector("#apikey").value}
-    console.log(xapikey)
     apiman.registerAPIKeys(xapikey, "x-api-key");
   }
   const host = new URL(`http://${serverDetails.host}:${serverDetails.port}`).host; // have to change the host for our dynamic case
@@ -337,7 +335,6 @@ function getAttributesData(){
   targetNode.querySelectorAll(":scope>div").forEach((para) => {
     getParaVal(para, reqBody);
   })
-  console.log(reqBody);
   return reqBody;
 }
 
