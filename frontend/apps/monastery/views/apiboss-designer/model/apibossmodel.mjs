@@ -74,7 +74,7 @@ function modelConnectorsModified(type, sourceName, targetName, sourceID, targetI
         } else if (type == apibossmodel.REMOVED && targetNode) {
             const dependencies = targetNode.dependencies;
             if ((!dependencies) || (!dependencies.length) || dependencies.indexOf(sourceNode.id) == -1) return;
-            else{const newD = _arrayDelete(dependencies, sourceNode.id);console.log(newD);}
+            else{const newD = _arrayDelete(dependencies, sourceNode.id)}
             if (dependencies.length == 0) delete targetNode.dependencies;    // no longer required
         }
     }

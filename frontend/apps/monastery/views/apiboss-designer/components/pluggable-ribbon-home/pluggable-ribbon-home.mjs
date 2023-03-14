@@ -59,10 +59,11 @@ function _disableButton(element){ element.style["pointer-events"]="none"; elemen
 function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 async function loadDefaultMeta(){
+	setTimeout(_=>{
     const serverDetails = JSON.parse(session.get("__org_server_details"));
-
-const metadata = session.get(ORG_METADATA)
-   if (metadata) blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: serverDetails.name, data: JSON.stringify(metadata)});
+    const metadata = session.get(ORG_METADATA);
+    if (metadata) blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name: serverDetails.name, data: JSON.stringify(metadata)});
+	},100)
 }
 
 // convert this all into a WebComponent so we can use it

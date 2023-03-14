@@ -37,7 +37,7 @@
 
 
 	<script type="module">
-	import { main } from "./js/main.mjs"; main.init(new URL("./views/{{url.view}}", window.location.href).href);</script>
+	import { main } from "./js/main.mjs"; main.init(new URL("./views/{{url.view}}", window.location.href).href,"{{url.page}}");</script>
 	<script type="text/javascript">history.pushState(null, document.title, location.href);
 		window.addEventListener('popstate', function (event) {
 			history.pushState(null, document.title, location.href);
