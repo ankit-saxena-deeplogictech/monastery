@@ -20,6 +20,12 @@ input {
     border-radius: 0;
 }
 
+input:disabled {
+    cursor: default;
+    background-color:rgb(239, 239, 239);
+    color: rgb(84, 84, 84);
+}
+
 input.error {color: red;}
 
 
@@ -109,7 +115,7 @@ select {
 <input type="text" id="name" placeholder="{{i18n.Name}}" value="{{name}}" required 
     oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput="setCustomValidity('')">
 <input type="text" id="id" placeholder="{{i18n.Email}}" value="{{id}}" required 
-    oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput="setCustomValidity('')">
+    oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput="setCustomValidity('')" disabled>
 <input type="hidden" id="old_id" value="{{id}}">
 <select id="role" value="{{role}}" required>
     {{#roles}}
