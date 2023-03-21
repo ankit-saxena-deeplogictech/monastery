@@ -110,8 +110,8 @@ button {
     border-style: none;
     outline: none;
     text-align: center;
-    background-color: rgb(51, 204, 102);
-    color: white;
+    background-color: rgb(182,220,254);
+    color: inherit;
     position: relative;
     margin: 30px 0% 20px 0%;
     font-family: inherit;
@@ -136,7 +136,7 @@ button:hover {
 <head>
 	<meta charset="UTF-8">
 
-	<link href="./img/favicon.ico" rel="icon" type="image/x-icon">
+	<link href="./img/favicon.svg" rel="icon" type="image/svg+xml">
 	
 	<title>{{i18n.Title}}</title>
 	
@@ -148,10 +148,9 @@ button:hover {
 <div id="bodydiv">
 <div id="header">
 <span id="imgheader">
-	<img class="logo" src="./img/logo.svg" onclick="window.open('http://teleworkr.com', '_blank')"></img>
+	<img class="logo" src="./img/favicon.svg"></img>
 </span>
 <span id="signin">
-	<span><a href="{{#_org_monkshu_makeLink}}./loginroom.html{{/_org_monkshu_makeLink}}">{{i18n.RoomLoginMsg}}</a></span>
 	<span><a href="{{#_org_monkshu_makeLink}}./register.html{{/_org_monkshu_makeLink}}">{{i18n.Register}}</a></span>
 	<span><a href="{{#_org_monkshu_makeLink}}./login.html{{/_org_monkshu_makeLink}}">{{i18n.SignIn}}</a></span>
 </span>
