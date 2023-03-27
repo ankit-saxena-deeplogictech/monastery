@@ -298,5 +298,8 @@ export const i18n = {
 "OpenGoogleAuthenticator": "Open Authenticator",
 "EmailVerified": "Email successfully verified.",
 "EmailNotVerified": "Email verification failed.",
-"ClickHereToContinueLogin": "Click here to continue to login."
+"ClickHereToContinueLogin": "Click here to continue to login.",
+"validData": "Please enter vaild data",
+"namePattern": "^[a-zA-Z][a-zA-Z0-9_-\s]+[a-zA-Z0-9]$",
+"orgPattern":"^[a-zA-Z0-9]+$"
 }

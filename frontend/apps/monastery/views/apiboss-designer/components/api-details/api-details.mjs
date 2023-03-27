@@ -291,14 +291,14 @@ async function tryIt(element, event) {
     let xapikey = {"*": shadowRoot.querySelector("#apikey").value}
     apiman.registerAPIKeys(xapikey, "x-api-key");
   }
-  const host = new URL(`http://${serverDetails.host}:${serverDetails.port}`).host; // have to change the host for our dynamic case
+  const host = new URL(`${serverDetails.secure ? `https` : `http`}://${serverDetails.host}:${serverDetails.port}`).host; // have to change the host for our dynamic case
   let sub = 'access'
   if(shadowRoot.querySelector("#userid") && shadowRoot.querySelector("#password")){
     const storage = _getAPIManagerStorage(); storage.tokenManager[`basic_auth`] = `Basic ${btoa(`${shadowRoot.querySelector("#MyInput").value}:${shadowRoot.querySelector("#Mypwd").value}`)}`; _setAPIManagerStorage(storage);
   }
 
   if (jwtToken) { const storage = _getAPIManagerStorage(); storage.tokenManager[`${host}_${sub}`] = jwtToken; _setAPIManagerStorage(storage); }
-  let resp = await apiman.rest(`http://${serverDetails.host}:${serverDetails.port}${path}`, `${method.toUpperCase()}`, reqBody, (jwtToken) ? true : false);
+  let resp = await apiman.rest(`${serverDetails.secure ? `https` : `http`}://${serverDetails.host}:${serverDetails.port}${path}`, `${method.toUpperCase()}`, reqBody, (jwtToken) ? true : false, false, false, false, true);
   if (typeof resp == "string") resp = JSON.parse(resp);
   text_editor.getJsonData(resp);
   await loader.afterLoading();

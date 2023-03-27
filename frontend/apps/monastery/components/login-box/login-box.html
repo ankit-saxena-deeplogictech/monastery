@@ -137,7 +137,7 @@
         <img class="inputimg" src="./img/user.svg">
     </span>
     <password-box style="width:100%; padding-top: 20px;" id="pass" placeholder="{{i18n.Password}}" required="true"
-        minlength="{{minlength}}" customValidity="{{i18n.PWMUST}}" pattern="^(?=.*\d)(?=.*[^\p{L}\d\s])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+        minlength="{{minlength}}" customValidity="{{i18n.PWMUST}}" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$"
         styleBody="span#container{width: 100%;} input#pwinput{padding:1em 1em 1em 3em;}"></password-box>
     <input type="number" id="otp" placeholder="{{i18n.Otp}}" oninvalid="this.setCustomValidity('{{i18n.FillField}}')"
         oninput="setCustomValidity('')" required

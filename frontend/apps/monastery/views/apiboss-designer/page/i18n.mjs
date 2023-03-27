@@ -20,7 +20,11 @@ export const i18n = {
         "BackendURL":"Backend URL (http(s)://domain-name/path)",
         "ValidPath": "Path should start from / character",
         "FillRequiredApi":"Please fill required fields in api",
-        "URLRegex": "^(https?|ftp):\/\/(?:localhost|(?:\d{1,3}\.){3}\d{1,3}|(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6})(?::\d{1,5})?(?:\/.*)?$"
+        "URLRegex": "^(https?|ftp):\/\/(?:localhost|(?:\d{1,3}\.){3}\d{1,3}|(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6})(?::\d{1,5})?(?:\/.*)?$",
+        "namePattern": "^[a-zA-Z][a-zA-Z0-9_-\s]+[a-zA-Z0-9]$",
+        "apiDescPattern": "^[^ ].*[^ ]$",
+        "passwordRegex": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$",
+        "validData": "Please enter vaild data"
     },
 
     hi: {

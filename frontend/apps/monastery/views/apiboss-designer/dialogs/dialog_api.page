@@ -1,8 +1,8 @@
 SCHEMA
 ======
 {
-    "apiname": {"html":"input", "type":"text", "placeholder":"{{i18n.APIName}}",  "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
-    "apidescription": {"html":"input", "type":"text", "placeholder":"{{i18n.APIDescription}}","spellcheck":"false"},
+    "apiname": {"html":"input", "type":"text", "placeholder":"{{i18n.APIName}}",  "spellcheck":"false" , "pattern":"{{i18n.namePattern}}", "oninvalid":"this.setCustomValidity('{{i18n.validData}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "apidescription": {"html":"input", "type":"text", "placeholder":"{{i18n.APIDescription}}","spellcheck":"false", "pattern":"{{i18n.apiDescPattern}}", "oninvalid":"this.setCustomValidity('{{i18n.validData}}')" , "oninput":"setCustomValidity('')","class":"validate"},
     "exposedpath": {"html":"input", "type":"text", "placeholder":"{{i18n.ExposedPath}}",  "spellcheck":"false" , "pattern":"^\/.*$", "oninvalid":"this.setCustomValidity('{{i18n.ValidPath}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
     "backendurl": {"html":"input", "type":"url", "placeholder":"{{i18n.BackendURL}}","spellcheck":"false" , "pattern":"{{i18n.URLRegex}}", "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
     "exposedmethod": {"html":"drop-down","style":"width:100%; height:100%;","list":"[{'value':'POST'},{'value':'GET'}]","text":"Select Method","styleBody":"select#choices{padding:12px}","class":"validate"},
