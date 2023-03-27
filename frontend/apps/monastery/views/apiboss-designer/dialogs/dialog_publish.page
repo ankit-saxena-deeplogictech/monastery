@@ -1,7 +1,7 @@
 SCHEMA
 ======
 {
-    "name": {"html":"input", "type":"text", "placeholder":"{{i18n.PackageName}}", "required":"true", "value":"{{modelName}}",  "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "name": {"html":"input", "type":"text", "placeholder":"{{i18n.PackageName}}", "required":"true", "value":"{{modelName}}", "maxlength":"40", "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
     "server": {"html":"input", "type":"text", "placeholder":"{{i18n.Server}}", "required":"true",  "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
     "port": {"html":"input", "type":"number", "placeholder":"{{i18n.Port}}",  "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
     "adminid": {"html":"input", "type":"text", "placeholder":"{{i18n.AdminID}}", "required":"true", "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},

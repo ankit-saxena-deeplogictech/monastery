@@ -134,21 +134,21 @@ span#otp > button {display: none;}
 
 <div id="container">
 <span id="error">{{i18n.RegisterError}}</span>
-<input type="text" id="name" placeholder="{{i18n.Name}}" value="{{name}}" required spellcheck="false"
-    oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput="setCustomValidity('')">
-<input type="email" id="id" placeholder="{{i18n.Email}}" value="{{id}}" required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+<input type="text" id="name" placeholder="{{i18n.Name}}" value="{{name}}" required pattern="{{i18n.namePattern}}" spellcheck="false"
+    oninvalid="this.setCustomValidity('{{i18n.validData}}')" oninput="setCustomValidity('')">
+<input type="text" id="id" placeholder="{{i18n.Email}}" value="{{id}}" required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
     oninvalid="this.setCustomValidity('{{i18n.EMVALID}}')" oninput="setCustomValidity('')" {{#reset}}readonly{{/reset}} {{#initial}}readonly{{/initial}}>
 <input type="hidden" id="oldid" value="{{id}}">
-<input type="text" id="org" placeholder="{{i18n.Org}}" value="{{org}}" required 
-    oninvalid="this.setCustomValidity('{{i18n.FillField}}')" spellcheck="false"
+<input type="text" id="org" placeholder="{{i18n.Org}}" value="{{org}}" required pattern="{{i18n.orgPattern}}"
+    oninvalid="this.setCustomValidity('{{i18n.validData}}')" spellcheck="false"
     oninput="setCustomValidity(''); monkshu_env.components['register-box'].updateOrgDataList(this.value, this.nextElementSibling)" 
     list="orgsearchlist" autocomplete="off" {{#reset}}readonly{{/reset}} {{#initial}}readonly{{/initial}}>
 <datalist id="orgsearchlist"></datalist>
 <span id="password">
     <password-box style="width:45%; padding: 10px 0px 10px 0px; height: 2em;" id="pass1" placeholder="{{Password}}" 
-        required="true" minlength="{{minlength}}" pattern="^(?=.*\d)(?=.*[^\p{L}\d\s])(?=.*[a-z])(?=.*[A-Z]).{8,}$" customValidity="{{i18n.PWMUST}}" styleBody = "img.pwimg{display:none}"></password-box>
+        required="true" minlength="{{minlength}}" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$" customValidity="{{i18n.PWMUST}}" styleBody = "img.pwimg{display:none}"></password-box>
     <password-box style="width:45%; padding: 10px 0px 10px 0px; height: 2em;" id="pass2" placeholder="{{PasswordAgain}}" 
-        required="true" minlength="{{minlength}}" pattern="^(?=.*\d)(?=.*[^\p{L}\d\s])(?=.*[a-z])(?=.*[A-Z]).{8,}$" customValidity="{{i18n.PWMUST}}" styleBody = "img.pwimg{display:none}"></password-box>
+        required="true" minlength="{{minlength}}" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$" customValidity="{{i18n.PWMUST}}" styleBody = "img.pwimg{display:none}"></password-box>
 </span>
 <span id="otp">
     <img src="{{totpQRCodeData}}">
