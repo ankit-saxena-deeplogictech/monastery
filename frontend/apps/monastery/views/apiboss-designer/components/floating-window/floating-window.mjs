@@ -32,6 +32,7 @@ async function showWindow(header, themeOrThemePath, templateOrTemplateURL, templ
 	shadowRoot.querySelector("div#windowcontent").appendChild(templateRoot);    // add window content
 
 	document.querySelector(`#${hostID}`).style.display = "block";   // show the window
+	_disableBackground(document.querySelector("page-generator"));
 	return hostID;
 }
 
@@ -45,6 +46,8 @@ function hideWindow(elementOrHostID) {
 	const windowHostElement = floating_window.getShadowRootByHostId(hostID).querySelector("div#windowcontent");
 	while (windowHostElement && windowHostElement.firstChild) windowHostElement.removeChild(windowHostElement.firstChild);  // deletes everything
 	document.body.removeChild(hostElement);
+	_enableBackground(document.querySelector("page-generator"));
+
 }
 
 function elementRendered(_) {
@@ -98,6 +101,10 @@ async function _processTheme(theme, header) {
 	clone.componentPath = util.getModulePath(import.meta);
 	return clone;
 }
+
+
+function _disableBackground(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _enableBackground(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 const _generateNewHostID = _ => DEFAULT_HOST_ID+hostIDNum++;
 
