@@ -140,7 +140,7 @@
         minlength="{{minlength}}" customValidity="{{i18n.PWMUST}}" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$"
         styleBody="span#container{width: 100%;} input#pwinput{padding:1em 1em 1em 3em;}"></password-box>
     <input type="number" id="otp" placeholder="{{i18n.Otp}}" oninvalid="this.setCustomValidity('{{i18n.FillField}}')"
-        oninput="setCustomValidity('')" required
+        oninput="setCustomValidity('')" required onkeypress="monkshu_env.components['login-box'].checkTotpFormat(event);"
         onkeyup="if (event.keyCode == 13) monkshu_env.components['login-box'].getShadowRootByContainedElement(this).querySelector('#submit').click();">
     <button type="submit" id="submit"
         onclick="monkshu_env.components['login-box'].signin(this);">{{i18n.SignIn}}</button>

@@ -36,6 +36,13 @@ async function signin(signInButton) {
 	_handleLoginResult(await loginmanager.signin(userid, pass, otp), shadowRoot, routeOnSuccess, routeOnNotApproved,signInButton);
 }
 
+async function checkTotpFormat(event) {
+	var charCode = (typeof event.which == "undefined") ? event.keyCode : event.which;
+  	var charStr = String.fromCharCode(charCode);
+
+  	if (!charStr.match(/^[0-9]+$/)) event.preventDefault();
+}
+
 async function resetAccount(element) {
 	const shadowRoot = login_box.getShadowRootByContainedElement(element);
 	shadowRoot.getElementById("notifier").style.display = "none";
@@ -72,5 +79,5 @@ function _disableButton(element){ element.style["pointer-events"]="none"; elemen
 function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 const trueWebComponentMode = true;	// making this false renders the component without using Shadow DOM
-export const login_box = {signin, resetAccount, trueWebComponentMode, elementConnected}
+export const login_box = {signin, resetAccount, trueWebComponentMode, elementConnected, checkTotpFormat}
 monkshu_component.register("login-box", `${APP_CONSTANTS.APP_PATH}/components/login-box/login-box.html`, login_box);
