@@ -130,6 +130,7 @@ span#otp > button {display: none;}
 
 <script type="module">
     import {password_box} from "./components/password-box/password-box.mjs"; 
+    import {login_box} from "./components/login-box/login-box.mjs";
 </script>
 
 <div id="container">
@@ -158,7 +159,7 @@ span#otp > button {display: none;}
         <p id="desktopotpmsg">{{AuthenticatorMsg}}</p>
         <p id="mobileotpmsg">Enter Code</p>
         <input type="number" id="otp" placeholder="{{i18n.Otp}}" required minlength="6" {{^reset}}required="true"{{/reset}} 
-            oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput="setCustomValidity('')" 
+            oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput="setCustomValidity('')" onkeypress="window.monkshu_env.components['login-box'].checkTotpFormat(event);"
             onkeyup="if (event.keyCode == 13) monkshu_env.components['register-box'].getShadowRootByContainedElement(this).querySelector('#submit').click();">
     </div>
 </span>
