@@ -300,6 +300,6 @@ export const i18n = {
 "EmailNotVerified": "Email verification failed.",
 "ClickHereToContinueLogin": "Click here to continue to login.",
 "validData": "Please enter vaild data",
-"namePattern": "^[a-zA-Z][a-zA-Z0-9_-\s]+[a-zA-Z0-9]$",
+"namePattern": "^[a-zA-Z]+([ _-]?[a-zA-Z0-9]+)*[a-zA-Z0-9]?$",
 "orgPattern":"^[a-zA-Z0-9]+$"
 }
