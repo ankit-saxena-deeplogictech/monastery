@@ -112,7 +112,7 @@ select {
 {{^isnotloggedinuser}}<style> select#role{margin-bottom: 0em;}  </style>{{/isnotloggedinuser}}
 
 
-<input type="text" id="name" placeholder="{{i18n.Name}}" value="{{name}}" required pattern="{{i18n.namePattern}}"
+<input type="text" id="name" class="validate" placeholder="{{i18n.Name}}" value="{{name}}" required pattern="{{i18n.namePattern}}"
     oninvalid="this.setCustomValidity('{{i18n.validData}}')" oninput="setCustomValidity('')">
 <input type="text" id="id" placeholder="{{i18n.Email}}" value="{{id}}" required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
     oninvalid="this.setCustomValidity('{{i18n.EMVALID}}')" oninput="setCustomValidity('')" disabled>
