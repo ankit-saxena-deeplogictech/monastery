@@ -267,13 +267,11 @@ async function tryIt(element, event) {
   const shadowRoot = api_details.getShadowRootByHost(thisElement);
 
   if (!_validate(shadowRoot)) {
-    shadowRoot.querySelector(".error-hit").innerText = "Please fill all field to try the API";
-    shadowRoot.querySelector(".error-hit").style.display = "block";
-    shadowRoot.querySelector("#headcontainer").style.borderRadius = "0px";
-    setTimeout(()=>{shadowRoot.querySelector(".error-hit").style.display = "none";
-    shadowRoot.querySelector("#headcontainer").style.borderRadius = "10px 10px 0px 0px";
-    }, 3000);
-    return false
+    const toValidateList = shadowRoot.querySelectorAll('.validate');
+
+    for (const validate of toValidateList) {
+        if (!validate.checkValidity()) { validate.reportValidity(); return false; }
+    }
   };
   await loader.beforeLoading();
 
