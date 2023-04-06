@@ -76,8 +76,8 @@
   <body><div style="font-size:30px; font-weight:bold; text-decoration: underline; margin-bottom: 10px;">${docData.apiname}</div>`
   var footer = "</body></html>";
 
-  const innerData = shadowRoot.querySelector("#container").innerHTML.replace(/<img\s+src=([" '])(.*)+/gm, "");
-  var sourceHTML = header + innerData.replace(/background-color:#98CCFD;/gm, "text-decoration: underline; font-weight: bold;") + footer;
+  const innerData = shadowRoot.querySelector("#container").innerHTML.replace(/<img[^>]*src="([^"]+)"[^>]*>/gm, "");
+  var sourceHTML = header + innerData.replace(/background-color:#98CCFD;/gmi, "text-decoration: underline; font-weight: bold;") + footer;
   var source = 'data:application/msword;charset=utf-8,' + encodeURIComponent(sourceHTML);
   var fileDownload = document.createElement("a");
   document.body.appendChild(fileDownload);
