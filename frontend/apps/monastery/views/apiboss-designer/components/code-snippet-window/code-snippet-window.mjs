@@ -7,7 +7,9 @@
  import { floating_window } from "../floating-window/floating-window.mjs";
  import { code_editor } from "../code-editor/code-editor.mjs";
  import { api_details } from "../api-details/api-details.mjs";
+ import { session } from "/framework/js/session.mjs";
  const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH;
+ let serverDetails;
 
 
  const CONSOLE_THEME = {
@@ -16,7 +18,7 @@
     "var--window-border": "1px solid #4788C7", closeIcon: `${COMPONENT_PATH}/close.svg`
 }, CONSOLE_HTML_FILE = `${COMPONENT_PATH}/code-snippet-window.html`, CONSOLE_HTML_JAVA_FILE = `${COMPONENT_PATH}/code-snippet-window-java.html`,
   CONSOLE_HTML_CURL_FILE = `${COMPONENT_PATH}/code-snippet-window-curl.html`;
-let exposedpath, token, key, exposedmethod,floatingWindowID,floatingWindowHTMLJavaID,floatingWindowHTMLCurlID,attrData,currentFloatingWindow, nodejsData, javaData, curlData;
+let exposedpath, token, key, exposedmethod,floatingWindowID,floatingWindowHTMLJavaID,floatingWindowHTMLCurlID,attrData,currentFloatingWindow, nodejsData, javaData, curlData,basicToken;
 
 
 function setExposedPathAndMethod(path, method){
@@ -30,6 +32,11 @@ function ifAuthSetAuth(authToken){
   return;
 }
 
+function ifBasicAuthSetAuth(basicAuthToken){
+  basicToken = basicAuthToken;
+  return;
+}
+
 function ifKeySetKey(apiKey){
   key = apiKey;
   return;
@@ -38,7 +45,9 @@ function ifKeySetKey(apiKey){
 async function codeSnippetWindow(element) {
   if(floatingWindowID)  floating_window.hideWindow(floatingWindowID);
   if(floatingWindowHTMLJavaID) floating_window.hideWindow(floatingWindowHTMLJavaID);
-  if(floatingWindowHTMLCurlID) floating_window.hideWindow(floatingWindowHTMLCurlID)
+  if(floatingWindowHTMLCurlID) floating_window.hideWindow(floatingWindowHTMLCurlID);
+ serverDetails = JSON.parse(session.get("__org_server_details"));
+
 
 
     if(element == "NodeJS Client"){
@@ -80,23 +89,38 @@ function updateData(){
 
  async function setNodeJSValue(){
   if(document.querySelector(`floating-window`) && floatingWindowID && currentFloatingWindow=="nodejs"){
-    let data = ` const https = require("https");
+    let data = ` const httpType = require("${serverDetails.secure?'https':'http'}");
     const options = {
-      method: ${exposedmethod},
+      method: '${exposedmethod}',
       headers: {
-          accept: 'application/json',
-          ${token?`authorization: 'Bearer`:""} ${token?`${token}'`+',':""}
-          ${key?"apikey:":""} ${key?`'${key}'`:""}
-      }${attrData?",":""}
-      ${attrData?"attributes:":""} ${attrData?JSON.stringify(attrData,null,4):""}
+         'Content-Type': 'application/json',
+         'accept': 'application/json',
+         ${token?`'authorization': 'Bearer`:""} ${token?`${token}'`+',':""}
+         ${basicToken?`'authorization': 'Basic`:""} ${basicToken?`${basicToken}'`+',':""}
+         ${key?"'x-api-key':":""} ${key?`'${key}'`:""}
+      }
     }
-    https.request('${exposedpath}', options, (resp)=>{
-              
-    // The whole response has been received. Print out the result
-      resp.on("end", ()=>{
-         console.log(JSON.parse(data).explanation);
-          });
-       }); `
+    const req = httpType.request('${exposedpath}', options, (resp) => {
+    let data = '';
+
+    resp.on('data', (chunk) => {
+      data += chunk;
+     });
+
+    resp.on('end', () => {
+      console.log(data);
+    });
+  });
+
+    req.on('error', (error) => {
+      console.error(error);
+    });
+
+   req.write(${attrData?`JSON.stringify(${JSON.stringify(attrData)})`:""});
+
+   req.end();`
+
+   
 
       data =data.replace(/^\s*\n/gm, "");
       nodejsData = data;
@@ -114,7 +138,7 @@ function updateData(){
         .url('${exposedpath}')
         .post(${exposedmethod})
         .addHeader("accept", "application/json")
-        ${token?`.addHeader("authorization", "Bearer ${token?token:''}")`:""}
+        ${token?`.addHeader("'authorization'", "Bearer ${token?token:''}")`:""}
         ${key?`.addHeader("apikey", "${key?key:''}")`:""}
 
         .build();
@@ -129,12 +153,7 @@ function updateData(){
 
     async function setShellValue(){
       if(document.querySelector(`floating-window`) && floatingWindowHTMLCurlID && currentFloatingWindow=="curl"){
-        let data = `curl --request ${exposedmethod} \\
-        --url ${exposedpath} \\
-        --header 'accept: application/json' \\
-        ${token?`--header 'authorization: Bearer ${token?token:""}' \\ `:""} 
-        ${key?`--header 'apikey:${key?key:""}'  \\`:""} 
-        ${attrData?`--data '${attrData?JSON.stringify(attrData,null,4):""} e()'`:""} `
+        let data = `curl --request ${exposedmethod}  --url ${exposedpath}  --header 'Content-Type: application/json'   ${token?`--header 'authorization: Bearer ${token?token :""}'`:""}   ${key?`--header 'x-api-key:${key?key:""}'`:""} ${basicToken?`--header 'authorization: Basic ${basicToken?basicToken :""}'`:""}  ${attrData?`--data '${attrData?JSON.stringify(attrData):""}'`:""} `
     
           data =data.replace(/^\s*\n/gm, "");
           curlData = data;
@@ -156,7 +175,7 @@ function updateData(){
   }
 
 export const code_snippet_window = {
-    trueWebComponentMode: true , codeSnippetWindow, setExposedPathAndMethod, ifAuthSetAuth, ifKeySetKey, setNodeJSValue,setAttributeData,setJavaValue,setShellValue, getValue
+    trueWebComponentMode: true , codeSnippetWindow, setExposedPathAndMethod, ifAuthSetAuth, ifKeySetKey,ifBasicAuthSetAuth, setNodeJSValue,setAttributeData,setJavaValue,setShellValue, getValue
   }
   
   monkshu_component.register(
