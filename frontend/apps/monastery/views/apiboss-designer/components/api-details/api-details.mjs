@@ -323,6 +323,18 @@ function setAttrData(){
   code_snippet_window.setAttributeData(getAttributesData())
 }
 
+function setBasicAuthentication(){
+  let thisElement = api_details.getHostElementByID("apidetails");
+  const shadowRoot = api_details.getShadowRootByHost(thisElement);
+  if(shadowRoot.querySelector("#userid") && shadowRoot.querySelector("#password")){
+    code_snippet_window.ifBasicAuthSetAuth(`${btoa(`${shadowRoot.querySelector("#MyInput").value}:${shadowRoot.querySelector("#Mypwd").value}`)}`);
+    code_snippet_window.setNodeJSValue();
+    code_snippet_window.setJavaValue();
+    code_snippet_window.setShellValue();
+  }
+
+}
+
 
 function getAttributesData(){
   let thisElement = api_details.getHostElementByID("apidetails");
@@ -356,7 +368,7 @@ function _setAPIManagerStorage(storage) {
 }
 
 export const api_details = {
-  trueWebComponentMode: true, elementConnected, elementRendered, addMoreParameters, toggle, deleteParameters, _serachParamInSchema, tryIt, getParaVal, updateExposedpathandMethod, _getAPIManagerStorage, _setAPIManagerStorage, setAuthorization, setApiKey, getAttributesData,setAttrData
+  trueWebComponentMode: true, elementConnected, elementRendered, addMoreParameters, toggle, deleteParameters, _serachParamInSchema, tryIt, getParaVal, updateExposedpathandMethod, _getAPIManagerStorage, _setAPIManagerStorage, setAuthorization, setApiKey, getAttributesData,setAttrData,setBasicAuthentication
 }
 
 monkshu_component.register(
