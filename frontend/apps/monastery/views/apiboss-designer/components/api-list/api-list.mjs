@@ -41,7 +41,7 @@ async function elementRendered(element) {
 const items = Array.from(api_list.getShadowRootByHostId(element.id).querySelector("div#container").children);
 if(apiname==undefined && items.length>0 && session.get(CURRENT_API) ) {
     apiname = session.get(CURRENT_API).toString();
-     await openClicked(api_list.getShadowRootByHostId(element.id).querySelector(`div#${apiname}`),apiname)
+     await openClicked(api_list.getShadowRootByHostId(element.id).querySelector(`div#${apiname.replace(/\s/g, "\\ ")}`),apiname)
 
 }
 
