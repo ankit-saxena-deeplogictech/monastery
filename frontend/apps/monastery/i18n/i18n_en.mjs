@@ -51,7 +51,7 @@ export const i18n = {
 "DownloadAuthenticatorMsg": "Please download the Google Authenticator app on your phone. Scan this bar code and enter the code shown.",
 "ResetAuthenticatorMsg": "To reset OTP scan this bar code and enter the code shown in the Google Authenticator app. Else leave this blank to retain the old OTP.",
 "Otp": "Code shown in the app",
-"RegisterError": "Either passwords don't match or code is wrong or the email is already registered",
+"RegisterError": "Either passwords don't match or code is wrong or the email is already registered or incorrect email",
 "Hi":"Hi,",
 "NoName": "Please enter your name",
 "Logout" : "Logout",
@@ -77,6 +77,8 @@ export const i18n = {
 "FillField": "Please fill out this field.",
 "PWNOTSAME": "Passwords are not the same.",
 "PWMUSTBE": "Passwords must be minimum 10 characters.",
+"PWMUST": "Your password must be at least 8 characters including a lowercase letter, an uppercase letter, a special character, and a number",
+"EMVALID": "Please enter a valid email.",
 "ChangePassword": "Change password",
 "ChangePhone": "Change phone",
 "ChangeProfile": "Change profile",
@@ -223,7 +225,6 @@ export const i18n = {
 "DownloadAuthenticatorMsg": "Please download the Google Authenticator app on your phone. Scan this bar code and enter the code shown.",
 "ResetAuthenticatorMsg": "To reset OTP scan this bar code and enter the code shown in the Google Authenticator app. Else leave this blank to retain the old OTP.",
 "Otp": "Code shown in the app",
-"RegisterError": "Either passwords don't match or code is wrong or the email is already registered",
 "Hi":"Hi,",
 "NoName": "Please enter your name",
 "Logout" : "Logout",
@@ -241,6 +242,7 @@ export const i18n = {
 "DesiredUserID" : "Desired User ID",
 "Password" : "Password",
 "PasswordAgain" : "Password again",
+"ConfirmPassword" : "Confirm Password",
 "SignIn" : "Login",
 "BadLogin" : "Incorrect Login.",
 "LoginReset" : "Click here to reset login",
@@ -296,5 +298,8 @@ export const i18n = {
 "OpenGoogleAuthenticator": "Open Authenticator",
 "EmailVerified": "Email successfully verified.",
 "EmailNotVerified": "Email verification failed.",
-"ClickHereToContinueLogin": "Click here to continue to login."
+"ClickHereToContinueLogin": "Click here to continue to login.",
+"validData": "Please enter vaild data",
+"namePattern": "^[a-zA-Z]+([ _-]?[a-zA-Z0-9]+)*[a-zA-Z0-9]?$",
+"orgPattern":"^[a-zA-Z0-9]+$"
 }

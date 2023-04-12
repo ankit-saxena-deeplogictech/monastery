@@ -1,25 +1,25 @@
 SCHEMA
 ======
 {
-    "apikey": {"html":"input", "type":"text", "placeholder":"{{i18n.APIKey}}",  "spellcheck":"false"},
+    "apikey": {"html":"input", "type":"text", "placeholder":"{{i18n.APIKey}}",  "spellcheck":"false", "pattern":"{{i18n.apiDescPattern}}", "required":"true", "value":"{{modelName}}",  "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.validData}}')" , "oninput":"setCustomValidity('')","class":"validate"},
     "basicauthentication": {"html":"text-div","text":"Basic Authentication?"},
     "isauthenticationneeded": {"html":"drop-down","style":"width:100%; height:100%;","list":"[{'value':'YES'},{'value':'NO'}]","text":"NO","styleBody":"select#choices{padding:12px}" ,"value":"NO"},
-    "userid": {"html":"input", "type":"text", "placeholder":"{{i18n.USERID}}",  "spellcheck":"false"},
-    "password": {"html":"input", "type":"text","placeholder":"{{i18n.Password}}",  "spellcheck":"false"},
+    "userid": {"html":"input", "type":"text", "placeholder":"{{i18n.USERID}}",  "spellcheck":"false", "pattern":"{{i18n.namePattern}}", "oninvalid":"this.setCustomValidity('{{i18n.validData}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "password": {"html":"input", "type":"text","placeholder":"{{i18n.Password}}",  "spellcheck":"false", "pattern":"{{i18n.apiDescPattern}}", "oninvalid":"this.setCustomValidity('{{i18n.validData}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
     "needsjwt": {"html":"text-div","text":"Needs JWT Token?"},
     "isjwttokenneeded": {"html":"drop-down","style":"width:100%; height:100%;","list":"[{'value':'YES'},{'value':'NO'}]","text":"NO","styleBody":"select#choices{padding:12px}","value":"NO"},
-    "jwtsubject": {"html":"input", "type":"text", "placeholder":"{{i18n.JWTSubject}}",  "spellcheck":"false"},
+    "jwtsubject": {"html":"input", "type":"text", "placeholder":"{{i18n.JWTSubject}}",  "spellcheck":"false", "pattern":"{{i18n.apiDescPattern}}", "oninvalid":"this.setCustomValidity('{{i18n.validData}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
     "needstoken": {"html":"text-div","text":"Add Token?"},
     "istokenneeded": {"html":"drop-down","style":"width:100%; height:100%;","list":"[{'value':'YES'},{'value':'NO'}]","text":"NO","styleBody":"select#choices{padding:12px}","value":"NO"},
-    "tokensubject": {"html":"input", "type":"text", "placeholder":"{{i18n.TokenSubject}}",  "spellcheck":"false"},
+    "tokensubject": {"html":"input", "type":"text", "placeholder":"{{i18n.TokenSubject}}",  "spellcheck":"false", "pattern":"{{i18n.apiDescPattern}}", "oninvalid":"this.setCustomValidity('{{i18n.validData}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
     "rateenforcement": {"html":"text-div","text":"Rate Enforcement?"},
     "israteenforcementneeded": {"html":"drop-down","style":"width:100%; height:100%;","list":"[{'value':'YES'},{'value':'NO'}]","text":"NO","styleBody":"select#choices{padding:12px}" ,"value":"NO"},
-    "persec": {"html":"input", "type":"text", "placeholder":"{{i18n.PerSec}}",  "spellcheck":"false"},
-    "permin": {"html":"input", "type":"text", "placeholder":"{{i18n.PerMin}}",  "spellcheck":"false"},
-    "perhour": {"html":"input", "type":"text", "placeholder":"{{i18n.PerHour}}",  "spellcheck":"false"},
-    "perday": {"html":"input", "type":"text", "placeholder":"{{i18n.PerDay}}",  "spellcheck":"false"},
-    "permonth": {"html":"input", "type":"text", "placeholder":"{{i18n.PerMonth}}",  "spellcheck":"false"},
-    "peryear": {"html":"input", "type":"text", "placeholder":"{{i18n.PerYear}}",  "spellcheck":"false"}
+    "persec": {"html":"input", "type":"number", "placeholder":"{{i18n.PerSec}}",  "spellcheck":"false", "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "permin": {"html":"input", "type":"number", "placeholder":"{{i18n.PerMin}}",  "spellcheck":"false", "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "perhour": {"html":"input", "type":"number", "placeholder":"{{i18n.PerHour}}",  "spellcheck":"false", "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "perday": {"html":"input", "type":"number", "placeholder":"{{i18n.PerDay}}",  "spellcheck":"false", "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "permonth": {"html":"input", "type":"number", "placeholder":"{{i18n.PerMonth}}",  "spellcheck":"false", "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "peryear": {"html":"input", "type":"number", "placeholder":"{{i18n.PerYear}}",  "spellcheck":"false", "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"}
 
 }
 ======
@@ -77,6 +77,21 @@ CSS
     resize: none;
     font-family: inherit;
     box-sizing: border-box;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+input:disabled {
+    cursor: default;
+    background-color: rgba(239, 239, 239, 0.3);
+    color: rgb(84, 84, 84);
 }
 
 .class-isauthenticationneeded, .class-isjwttokenneeded, .class-israteenforcementneeded, .class-istokenneeded {

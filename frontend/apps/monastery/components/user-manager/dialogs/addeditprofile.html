@@ -20,6 +20,12 @@ input {
     border-radius: 0;
 }
 
+input:disabled {
+    cursor: default;
+    background-color:rgb(239, 239, 239);
+    color: rgb(84, 84, 84);
+}
+
 input.error {color: red;}
 
 
@@ -102,23 +108,27 @@ select {
 {{{CONF.MOBILE_MEDIA_QUERY_LANDSCAPE_END}}}
 {{{CONF.MOBILE_MEDIA_QUERY_PORTRAIT_START}}}
     div#dialog {width: 96%;}
-{{{CONF.MOBILE_MEDIA_QUERY_PORTRAIT_END}}}
+{{{CONF.MOBILE_MEDIA_QUERY_PORTRAIT_END}}} 
+{{^isnotloggedinuser}}<style> select#role{margin-bottom: 0em;}  </style>{{/isnotloggedinuser}}
 
-<input type="text" id="name" placeholder="{{i18n.Name}}" value="{{name}}" required 
-    oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput="setCustomValidity('')">
-<input type="text" id="id" placeholder="{{i18n.Email}}" value="{{id}}" required 
-    oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput="setCustomValidity('')">
+
+<input type="text" id="name" class="validate" placeholder="{{i18n.Name}}" value="{{name}}" required pattern="{{i18n.namePattern}}"
+    oninvalid="this.setCustomValidity('{{i18n.validData}}')" oninput="setCustomValidity('')">
+<input type="text" id="id" placeholder="{{i18n.Email}}" value="{{id}}" required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+    oninvalid="this.setCustomValidity('{{i18n.EMVALID}}')" oninput="setCustomValidity('')" disabled>
 <input type="hidden" id="old_id" value="{{id}}">
 <select id="role" value="{{role}}" required>
     {{#roles}}
     <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
     {{/roles}}
 </select>
+{{#isnotloggedinuser}}
 <span id="toggler">
     <span>{{i18n.Approve}}?</span>
     <input class="tgl tgl-ios" id="approved" type="checkbox" onclick='this.value=this.checked' {{#approved}}checked{{/approved}} value='{{#approved}}true{{/approved}}{{^approved}}false{{/approved}}'>
     <label class="tgl-btn" for="approved">
 </span>
+{{/isnotloggedinuser}}
 
 <script>
 function onOK(element) {monkshu_env.components["dialog-box"].submit(element);}

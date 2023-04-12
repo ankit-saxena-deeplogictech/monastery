@@ -5,15 +5,13 @@ body {
 }
 
 div#ribbon {
+    height: calc(100% - 1.2em); 
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    padding: 10px 0px 10px 0px;
+    margin: 10px 0px;
 }
 
-div#ribbon{
-    height: calc(100% - 1.2em); 
-    justify-content: space-between;}
 div#ribbon > div {
     display: flex;
     flex-wrap: nowrap;

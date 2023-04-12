@@ -3,7 +3,7 @@
  */
 import {util} from "/framework/js/util.mjs";
 import {application} from "../../../../../../js/application.mjs";
-
+import { home } from "../../../../home.mjs";
 const PLUGIN_PATH = util.getModulePath(import.meta);
 let IMAGE, I18N;
 

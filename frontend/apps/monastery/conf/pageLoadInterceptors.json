@@ -3,4 +3,5 @@
     {"module": "js/loginmanager.mjs", "function":"interceptPageLoad"},
     {"module": "js/main.mjs", "function":"interceptPageData"},
     {"module": "js/chooser.mjs", "function":"interceptPageLoadData"}
+
 ]

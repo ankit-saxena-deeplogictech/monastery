@@ -16,8 +16,6 @@ async function signin(id, pass, otp) {
     logoutListeners = [];   // reset listeners on sign in
         
     const resp = await apiman.rest(APP_CONSTANTS.API_LOGIN, "POST", {pwph, otp, id}, false, true);
-    console.log(resp);
-
     if (resp && resp.result && resp.tokenflag) {
         session.set(APP_CONSTANTS.USERID, resp.id); 
         session.set(APP_CONSTANTS.USERNAME, resp.name);
@@ -85,7 +83,6 @@ async function logout(dueToTimeout) {
     session.remove(APP_CONSTANTS.USERID); session.remove(APP_CONSTANTS.USERNAME);
     session.remove(APP_CONSTANTS.USERORG); session.remove("__org_telemeet_cuser_pass");
     session.set($$.MONKSHU_CONSTANTS.LANG_ID, savedLang);     securityguard.setCurrentRole(APP_CONSTANTS.GUEST_ROLE);
-    
     if (dueToTimeout) application.main(APP_CONSTANTS.ERROR_HTML, {error: await i18n.get("Timeout_Error"), 
         button: await i18n.get("Relogin"), link: router.encodeURL(APP_CONSTANTS.LOGIN_HTML)}); 
     else application.main(APP_CONSTANTS.LOGIN_HTML);
@@ -104,7 +101,7 @@ async function getProfileData(id, time) {
     if (resp && resp.result) return resp; else return null;
 }
 
-function startAutoLogoutTimer() { return;
+function startAutoLogoutTimer() { 
     if (!session.get(APP_CONSTANTS.USERID)) return; // no one is logged in
     
     const events = ["load", "mousemove", "mousedown", "click", "scroll", "keypress"];

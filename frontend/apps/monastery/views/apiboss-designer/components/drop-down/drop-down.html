@@ -10,99 +10,7 @@
     width: 100%;
   }
 
-  select#choices {
-    /* for Firefox */
-    -moz-appearance: none;
-    /* for Safari, Chrome, Opera */
-    -webkit-appearance: none;
-  }
-
-  /* for IE10 */
-  select#choices ::-ms-expand {
-    display: none;
-  }
-
-  .cselect::after {
-    content: "\25b6";
-  }
-
-  /* (A3) POSITION CUSTOM ARROW */
-  .cselect {
-    position: relative;
-  }
-
-  .cselect::after {
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-
-  /* (B) DIMENSTIONS */
-  /* (B1) MAKE <SELECT> FILL THE WRAPPER */
-  .cselect select {
-    width: 100%;
-  }
-
-  .cselect {
-    max-width: 400px;
-  }
-
-  /* OPTIONAL */
-
-  /* (B2) ALL SAME HEIGHT */
-  .cselect,
-  .cselect::after,
-  .cselect select {
-    box-sizing: border-box;
-    height: 42px;
-  }
-
-  /* (B3) A SQUARE CUSTOM ARROW BOX */
-  /* ADD BORDER-RADIUS: 50% TO TURN IT CIRCLE */
-  .cselect::after {
-    width: 42px;
-  }
-
-  /* (C) COSMETICS */
-  /* (C1) OVERRIDE DEFAULT SELECT BOX STYLES */
-  .cselect select {
-    border: 1px solid #ccc;
-    background: rgba(152, 204, 253, 1);
-    padding: 5px 10px;
-  }
-
-  /* (C2) DROPDOWN ARROW BOX */
-  .cselect::after {
-    /* COLORS */
-    color: rgba(152, 204, 253, 1);
-    background: rgba(255, 255, 255, 1);
-    /* CENTER ARROW IN BOX */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: rotate(90deg);
-  }
-
-  /* (C3) FUNKY ANIMATIONS */
-
-
-  /* (C4) REMOVE DEFAULT HIGHLIGHTS */
-  .cselect select:active,
-  .cselect select:focus,
-  .cselect select:hover {
-    outline: none;
-  }
-
-  .left.cselect select {
-    padding-left: 50px;
-  }
-
-  .left.cselect::after {
-    right: auto;
-    left: 0;
-    border-radius: 50%;
-  }
-
+  
   select#choices {
     width: 100%;
     font-family: inherit;
@@ -113,13 +21,29 @@
     outline: none;
     cursor: pointer;
     resize: none;
+    color: #444444;
+    appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg width="16" height="16" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 20L0.875645 0.5L25.1244 0.5L13 20Z" fill="%2398CCFD"/></svg>') !important;
+  background-repeat: no-repeat !important;
+  background-position: right 1em center !important;
+  padding-right: 16px;
+
   }
+
+  select#choices ::-ms-expand {
+    display: none;
+  }
+
+
+
 </style>
 
 
 {{{styleBody}}}
 <div class="cselect">
-  <select name="choices" id="choices" required="true" class="validate" oninvalid="this.setCustomValidity('{{i18n.SelectDropDown}}')" onchange='monkshu_env.components["drop-down"].disableOrEnableInputField(this)'  oninput="setCustomValidity('')">
+  <select name="choices" id="choices" required="true" class="validate" oninvalid="this.setCustomValidity('{{i18n.SelectDropDown}}')" onchange='monkshu_env.components["drop-down"].disableOrEnableInputField(this)'  oninput="setCustomValidity('')" open>
     <option value="" disabled selected hidden class="disabled">{{text}}</option>
     {{#values}}
     <option value="{{value}}" class="values" id="{{value}}">{{value}}</option>

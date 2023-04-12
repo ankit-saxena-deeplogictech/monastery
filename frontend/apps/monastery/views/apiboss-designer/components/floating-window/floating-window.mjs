@@ -6,6 +6,7 @@
 import {util} from "/framework/js/util.mjs";
 import {router} from "/framework/js/router.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
+import { code_snippet_window } from "../code-snippet-window/code-snippet-window.mjs";
 
 const DEFAULT_HOST_ID = "__org_monkshu_floating_window", COMPONENT_PATH = util.getModulePath(import.meta),
 	DEFAULT_THEME = {};
@@ -31,6 +32,7 @@ async function showWindow(header, themeOrThemePath, templateOrTemplateURL, templ
 	shadowRoot.querySelector("div#windowcontent").appendChild(templateRoot);    // add window content
 
 	document.querySelector(`#${hostID}`).style.display = "block";   // show the window
+	_disableBackground(document.querySelector("page-generator"));
 	return hostID;
 }
 
@@ -44,6 +46,8 @@ function hideWindow(elementOrHostID) {
 	const windowHostElement = floating_window.getShadowRootByHostId(hostID).querySelector("div#windowcontent");
 	while (windowHostElement && windowHostElement.firstChild) windowHostElement.removeChild(windowHostElement.firstChild);  // deletes everything
 	document.body.removeChild(hostElement);
+	_enableBackground(document.querySelector("page-generator"));
+
 }
 
 function elementRendered(_) {
@@ -75,12 +79,12 @@ function _initWindowFramework(hostID) {
 } 
 
 
-function copyToClipboard(element) {
+async function copyToClipboard(element) {
 	const host = floating_window.getHostElement(element);	
 	const shadowRoot = floating_window.getShadowRootByHost(host);
 	const windowContentElement = shadowRoot.querySelector('#windowcontent');
-	const texinClitpboard= windowContentElement.querySelector("#consoleText").value ? windowContentElement.querySelector("#consoleText").value : windowContentElement.querySelector("#consoleText").innerText;
-	navigator.clipboard.writeText(texinClitpboard)
+	let value = await code_snippet_window.getValue(windowContentElement.querySelector("code-editor").getAttribute("id"));
+	navigator.clipboard.writeText(value);
 	shadowRoot.querySelector("span.tooltiptext").innerText = "Copied!";
 	setTimeout(()=>{
 		shadowRoot.querySelector("span.tooltiptext").innerText = "Copy";
@@ -97,6 +101,10 @@ async function _processTheme(theme, header) {
 	clone.componentPath = util.getModulePath(import.meta);
 	return clone;
 }
+
+
+function _disableBackground(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _enableBackground(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 const _generateNewHostID = _ => DEFAULT_HOST_ID+hostIDNum++;
 

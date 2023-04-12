@@ -1,7 +1,7 @@
 <style>
     body {
-        height: 80vh;
         margin: 1.3em;
+        color: #444444;
     }
 
     div#container {
@@ -55,7 +55,12 @@
     tr{
         width:100%;
         display: grid;
-        grid-template-columns: 3em 15em 13em 22em;
+        grid-template-columns: 3em 17em 13em 22em;
+    }
+
+    td{
+        word-break: break-word;
+        padding-right: 7px;
     }
 
     div#securityinfo{
@@ -73,6 +78,7 @@
 
     *::-webkit-scrollbar {
     width: 0.5em !important;
+    height: 0.5em !important;
     scroll-behavior: smooth !important;
 }
 
@@ -99,7 +105,7 @@
         </div>
     </div>
     <div style="height: 20%;">
-        <div class="apidata-header" style="background-color:#98CCFD; padding: 5px 32px;">
+        <div class="apidata-header" style="background-color:#98CCFD; padding: 5px 32px;color:#000000;">
             Calling this API
         </div>
         <div style="padding: 0px 32px;">
@@ -109,8 +115,8 @@
         </div>
     </div>
     <div>
-        <div class="input-headers" style="background-color:#98CCFD; padding: 8px 32px;">The input parameters are</div>
-        <div style="max-height: 4.75em; padding: 10px 32px; overflow: auto;">
+        <div class="input-headers" style="background-color:#98CCFD; padding: 8px 32px;color:#000000;">The input parameters are</div>
+        <div style="max-height: 6.5em; padding: 10px 32px; overflow: auto;">
             <table style="border-collapse: separate; border-spacing: 0px 14px;">
                 <tbody>
                     {{#inputparams}}
@@ -126,8 +132,8 @@
         </div>
     </div>
     <div>
-        <div class="output-headers" style="background-color:#98CCFD; padding: 8px 32px;">The output parameters are</div>
-        <div style="max-height: 9em; padding: 10px 32px; overflow: auto;">
+        <div class="output-headers" style="background-color:#98CCFD; padding: 8px 32px;color:#000000;">The output parameters are</div>
+        <div style="max-height: 6.5em; padding: 10px 32px; overflow: auto;">
             <table style="border-collapse: separate; border-spacing: 0px 14px;">
                 <tbody>
                     {{#outputparams}}
@@ -143,7 +149,7 @@
         </div>
     </div>
     <div style>
-        <div class="security-headers" style="background-color:#98CCFD; padding: 5px 32px;">Security</div>
+        <div class="security-headers" style="background-color:#98CCFD; padding: 5px 32px;color:#000000;">Security</div>
         {{#securitydata}}
         <div style="padding: 8px 32px;" id ="securityinfo">
             <span>{{index}}</span>

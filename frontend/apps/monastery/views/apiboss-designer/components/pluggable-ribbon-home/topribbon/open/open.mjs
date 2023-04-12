@@ -48,9 +48,36 @@ async function droppedFile(event) {
 
 async function _uploadFile() {
     try {
-        const {name, data} = await util.uploadAFile("application/json");
+        const {name, data} = await uploadAFile("*/*");
         blackboard.broadcastMessage(MSG_FILE_UPLOADED, {name, data});
     } catch (err) {LOG.error(`Error opening file: ${err}`);}
+}
+
+function uploadAFile(accept="*/*", type="text") {
+    const uploadFiles = _ => new Promise(resolve => {
+        const uploader = document.createElement("input"); uploader.setAttribute("type","file"); 
+        uploader.style.display = "none"; uploader.setAttribute("accept", accept);
+
+        document.body.appendChild(uploader); uploader.onchange = _ => {resolve(uploader.files); document.body.removeChild(uploader); }; 
+        uploader.click();
+    });
+
+    return new Promise(async (resolve, reject) => {
+        const file = (await uploadFiles())[0]; if (!file) {reject("User cancelled upload"); return;}
+        try {resolve(await getFileData(file, type));} catch (err) {reject(err);} 
+    });
+}
+
+function getFileData(file, type="text") {
+    const apibossRegex = /^.*\.(apiboss)$/;
+    if(apibossRegex.test(file.name)){
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = event => resolve({name: file.name, data: event.target.result});
+        reader.onerror = _event => reject(reader.error);
+        if (type.toLowerCase() == "text") reader.readAsText(file); else reader.readAsArrayBuffer(file);
+    });
+    } else {alert('Only apiboss files are allowed');}
 }
     
 async function _getFromServer() {

@@ -45,13 +45,13 @@
     div#headcontainer {
         background: #98CCFD;
         border: 1px solid #98CCFD;
-        border-radius: 10px;
         padding: 5px 20px;
         display: grid;
         align-items: center;
         grid-template-columns: 72% 28%;
         border-bottom-left-radius: 0%;
         border-bottom-right-radius: 0%;
+        border-radius: 10px 10px 0px 0px;
     }
 
     div.input-form {
@@ -169,7 +169,7 @@
     }
 
     .parameter-header .label {
-        padding: 5px;
+        padding: 10px;
         cursor: pointer;
         display: flex;
         justify-content: space-between;
@@ -233,7 +233,12 @@
 
     *::-webkit-scrollbar {
     width: 0.5em !important;
+    height: 0.5em !important;
     scroll-behavior: smooth !important;
+}
+
+label {
+    word-break: break-word;
 }
 
 *::-webkit-scrollbar-track {
@@ -247,10 +252,20 @@
     border-radius: 10px !important;
     background-clip: padding-box;
 }
+
+div.error-hit{
+        display: none;
+        text-align: center;
+        color: red;
+        background: rgb(152, 204, 253);
+        border: 1px solid rgb(152, 204, 253);
+        border-radius: 10px 10px 0px 0px;
+    }
+
 </style>
 
 <div id="container">
-
+    <div class="error-hit"></div>
     <div id="headcontainer">
         <span id = "methodpath">
             <span id="{{exposedmethod}}">{{exposedmethod}}</span>
@@ -267,20 +282,20 @@
     </div>
 
     <div class="wrapper-container">
-    <div class="container-header header-header" onclick='monkshu_env.components["api-details"].toggle(this, event)'>
+    <div class="container-header header-header active" onclick='monkshu_env.components["api-details"].toggle(this, event)'>
         <div class="label">Headers</div>
         <div class="content">
             {{#isapineed}}
             <div id="api-key" class="input-form">
                 <span id="api-key" class="input-label"> API Key</span>
-                <input type="text" id="apikey" class="input-text validate" oninvalid="this.setCustomValidity('{{i18n.FillField}}')"  oninput="setCustomValidity('');monkshu_env.components['api-details'].setApiKey(event);"  required="true" class="validate" >
+                <input type="text" id="apikey" class="input-text validate" pattern="^\S+$" oninvalid="this.setCustomValidity('{{i18n.validData}}')" oninput="setCustomValidity('');monkshu_env.components['api-details'].setApiKey(event);"  required="true" class="validate" >
             </div>
             {{/isapineed}}
             {{#isjwtneed}}
             <div id="text"> JWT Token</div>
             <div id="jwt-token" class="input-form">
                 <span id="tokeninput" class="input-label">Bearer</span>
-                <input type="text" id="token-input" class="input-text validate"  oninvalid="this.setCustomValidity('{{i18n.FillField}}')" oninput="setCustomValidity('');monkshu_env.components['api-details'].setAuthorization(event);"  required="true" class="validate">
+                <input type="text" id="token-input" class="input-text validate" pattern="^\S+$" oninvalid="this.setCustomValidity('{{i18n.validData}}')" oninput="setCustomValidity('');monkshu_env.components['api-details'].setAuthorization(event);"  required="true" class="validate">
             </div>
             {{/isjwtneed}}
             {{#isuserauthsneed}}
@@ -289,37 +304,22 @@
             <div id="userid" class="input-fields">
                 <label for="MyInput" style="text-align: center; color: #444444;
                margin-left: 1.2em; ">User ID</label>
-                <input type="text" id="MyInput" class="input-text" />
+                <input type="text" id="MyInput" class="input-text validate" pattern="^\S+$" oninvalid="this.setCustomValidity('{{i18n.validData}}')"  oninput="setCustomValidity('');monkshu_env.components['api-details'].setBasicAuthentication();" required="true" class="validate"/>
             </div>
 
             <div id="password" class="input-fields">
                 <label for="Mypwd" style="text-align: center; color: #444444;
                 margin-left: 1.2em;">Password</label>
-                <input type="text" id="Mypwd" class="input-text" />
+                <input type="text" id="Mypwd" class="input-text validate" pattern="^\S+$" oninvalid="this.setCustomValidity('{{i18n.validData}}')"  oninput="setCustomValidity('');monkshu_env.components['api-details'].setBasicAuthentication(event);" required="true" class="validate"/>
             </div>
             {{/isuserauthsneed}}
 
         </div>
     </div>
 
-    <div class="container-header parameter-header" onclick='monkshu_env.components["api-details"].toggle(this, event)'>
-        <div class="label"><span id="parameters">Parameters</span>
-            <!-- <image-button img="{{{componentPath}}}/img/json.svg" text="{{i18n.json}}" style="width:6em; height: 100%;"
-                id="json" onclickHandler="window.monkshu_env['OPEN_SERVER_HELPER'].connectServerClicked()" type="row"
-                styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 5px 5px 5px 5px;} div#button>img.row {width: 2em;height: 100%;} div#button>span {color: #000000                ; font-weight: 700; margin-left:5px}"
-                color="#444444" border="0.5px solid #98CCFD" background-color="#F8FCFF" active-background-color="white"
-                display="inline-block;">
-
-            </image-button> -->
-        </div>
+    <div class="container-header parameter-header active" onclick='monkshu_env.components["api-details"].toggle(this, event)'>
+        <div class="label">Parameters</div>
         <div class="content" id="content" style="background-color: #DFF0FE; padding-bottom: 0.5em;">
-            <!-- <div id="name" class="input-fields">
-                <label for="Myname" style="text-align: center; color: #444444;
-               margin-left: 1.2em; ">name</label>
-               <sub class="dataType">string</sub>
-                <input type="text" id="Myname" class="input-text" />
-            </div> -->
-
         </div>
     </div>
     </div>

@@ -23,13 +23,10 @@ async function elementConnected(element) {
 	conf = await $$.requireJSON(`${MODULE_PATH}/conf/usermanager.json`);;
 	const usersResult = await apiman.rest(`${element.getAttribute("backendurl")}/${API_GETORGUSERS}`, "GET", 
 		{org:element.getAttribute("org")}, true);
-		console.log(usersResult);
 	if (!usersResult.result) {LOG.error("Can't fetch the list of users for the org, API returned false.");}
 
 	const users = usersResult?.users||[], data = _createData(element, users);
 	user_manager.setDataByHost(element, data);
-console.log(users);
-console.log(data);
 	user_manager.getMemory(element.id).users = users;
 }
 
@@ -80,26 +77,24 @@ async function addUser(element) {
 }
 
 async function editUser(name, id, role, approved, element) {
-	const roles = []; for (const thisrole of conf.roles) roles.push({label:await i18n.get(thisrole), value: thisrole, selected: thisrole==role?true:undefined});
-	monkshu_env.components['display-box'].showDialog(`${MODULE_PATH}/dialogs/addeditprofile.html`, true, true, 
-			{name, id, role, approved:approved==1?true:undefined, roles, CONF:conf}, "dialog", 
-			["name", "id", "role", "approved", "old_id"], async ret => {
-		
-		if (ret.approved.toLowerCase() == "true") ret.approved = true; else ret.approved = false;
-		const backendURL = user_manager.getHostElement(element).getAttribute("backendurl");
-		const editResult = await apiman.rest(`${backendURL}/${API_EDITUSER}`, "POST", ret, true);
-		console.log(editResult);
-		if (!editResult?.result) {
-			const err = router.getMustache().render(await i18n.get("EditError"), {name, id}); 
-			LOG.error(err); monkshu_env.components['display-box'].error("dialog", err);
-		} else {
-			monkshu_env.components['display-box'].hideDialog("dialog");
-			user_manager.reload(user_manager.getHostElementID(element));
-			console.log(user_manager);
-		}
-
-	});
-}
+	const loggedInUser = session.get(APP_CONSTANTS.USERID).toString();
+		const roles = []; for (const thisrole of conf.roles) roles.push({label:await i18n.get(thisrole), value: thisrole, selected: thisrole==role?true:undefined});
+		monkshu_env.components['display-box'].showDialog(`${MODULE_PATH}/dialogs/addeditprofile.html`, true, true, 
+				{name, id, role, approved:loggedInUser!=id?approved==1?true:undefined:true, roles, CONF:conf,isnotloggedinuser:loggedInUser!=id}, "dialog", 
+				["name", "id", "role", "approved", "old_id"], async ret => {
+					if(loggedInUser != ret.old_id) if (ret.approved.toLowerCase() == "true" ) ret.approved = true; else ret.approved = false;else ret["approved"] = true;
+					const backendURL = user_manager.getHostElement(element).getAttribute("backendurl");
+			const editResult = await apiman.rest(`${backendURL}/${API_EDITUSER}`, "POST", ret, true);
+			if (!editResult?.result) {
+				const err = router.getMustache().render(await i18n.get("EditError"), {name, id}); 
+				LOG.error(err); monkshu_env.components['display-box'].error("dialog", err);
+			} else {
+				monkshu_env.components['display-box'].hideDialog("dialog");
+				user_manager.reload(user_manager.getHostElementID(element));
+			}
+	
+		});
+	}
 
 async function _deleteUser(name, id, element) {
 	_execOnConfirm(router.getMustache().render(await i18n.get("ConfirmUserDelete"), {name, id}), async _ =>{

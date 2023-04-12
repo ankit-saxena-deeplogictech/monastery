@@ -94,13 +94,14 @@ function toggleNode(node) {
  */
 function createNodeElement(node) {
   let el = element('div');
-
   const getSizeString = (node) => {
     const len = node.children.length;
     if (node.type === 'array') return `[${len}]`;
     if (node.type === 'object') return `{${len}}`;
     return null;
   }
+
+
 
   if (node.children.length > 0) {
     el.innerHTML = expandedTemplate({
@@ -109,7 +110,18 @@ function createNodeElement(node) {
     })
     const caretEl = el.querySelector('.' + classes.CARET_ICON);
     node.dispose = listen(caretEl, 'click', () => toggleNode(node));
-  } else {
+  } 
+  else if (node.type === 'object' && node.key === 'object' && node.children.length  == 0 && !node.parent) {
+    el.innerHTML = expandedTemplate({
+      key: node.key,
+      size: `{0}`,
+    })
+    const caretEl = el.querySelector('.' + classes.CARET_ICON);
+    node.dispose = listen(caretEl, 'click', () => toggleNode(node));
+   }
+  
+  
+  else {
     el.innerHTML = notExpandedTemplate({
       key: node.key,
       value: node.value,

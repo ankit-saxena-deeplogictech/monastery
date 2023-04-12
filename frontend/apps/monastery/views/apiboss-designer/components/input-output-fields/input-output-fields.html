@@ -20,7 +20,7 @@
         flex-direction: row;
         justify-content: space-between;
         max-width: calc(100vw - 192px);
-        margin-left: 2em;
+        margin-left: 1em;
         margin-top: 0.5em;
     }
 
@@ -56,7 +56,7 @@
 
     table {
         font-size: smaller;
-        font-family: sans-serif;
+        font-family: "Red Hat Text";
         border-radius: 5px 5px 5px 0px;
         border: 0.5px solid #4788C7;
         overflow-y: scroll;
@@ -103,11 +103,9 @@
 
     tr:first-child>td {
         background-color: #98CCFD;
-        ;
         font-family: 'Red Hat Text';
         font-style: normal;
-        font-weight: bolder;
-        font-size: 18px;
+        font-size: 17px;
         color: #444444;
         overflow: hidden;
     }
@@ -519,6 +517,7 @@ li:hover {
 }
 *::-webkit-scrollbar {
     width: 0.5em !important;
+    height: 0.5em !important;
     scroll-behavior: smooth !important;
 }
 
@@ -546,7 +545,6 @@ li:hover {
             <span class="toolbar">
                 <span class="leftitems">
                     Input Fields&nbsp;&nbsp;</span>
-                    <image-button img="{{{componentPath}}}/img/json.svg" onclick='monkshu_env.components["input-output-fields"].inputJson(this,event)' text="JSON" alt="JSON" styleBody="div#button{display: flex; align-items: center; gap: 0.5em; background-color: #D6EFFF; cursor: pointer;}"></image-button>
                     <!-- <span><button onclick='monkshu_env.components["json-structure"].clicked(this,event)'>JSON</button></span> -->
             </span>
          </td>
@@ -554,7 +552,6 @@ li:hover {
                 <span class="leftitems">
                     Output Fields&nbsp;&nbsp;</span>
                     <!-- <span><button onclick='monkshu_env.components["json-structure"].clicked(this,event)'>JSON</button></span> -->
-                    <image-button img="{{{componentPath}}}/img/json.svg" onclick='monkshu_env.components["input-output-fields"].outputJson(this,event)' text="JSON" alt="JSON" styleBody="div#button{display: flex; align-items: center; gap: 0.5em; background-color: #D6EFFF; cursor: pointer;}"></image-button>
                 </span>
              </td>
     </tr>

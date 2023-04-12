@@ -17,7 +17,7 @@ div#ribbon > span {
     left: 50%;
     position: absolute;
     transform: translateX(-50%);
-    color: #444444;
+    color: #000000;
     font-family: 'Red Hat Text';
     font-size: smaller;
     align-items: center;

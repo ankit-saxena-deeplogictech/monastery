@@ -7,6 +7,7 @@ import {router} from "/framework/js/router.mjs";
 import {loginmanager} from "../../js/loginmanager.mjs";
 import {monkshu_component} from "/framework/js/monkshu_component.mjs";
 import { loader } from "../../js/loader.mjs";
+import { password_box } from "../password-box/password-box.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta);
 
@@ -22,18 +23,24 @@ async function elementConnected(element) {
 }
 
 async function signin(signInButton) {	
-	console.log(signInButton);
 	const shadowRoot = login_box.getShadowRootByContainedElement(signInButton); _hideErrors(shadowRoot);
 	if (!_validateForm(shadowRoot)) return;	// HTML5 validation failed
 	await loader.beforeLoading();_disableButton(signInButton);
 
 	const userid = shadowRoot.querySelector("#userid").value.toLowerCase();
-	const pass = shadowRoot.querySelector("#pass").value;
+	const pass = password_box.getShadowRootByHostId("pass").querySelector("#pwinput").value;
 	const otp = shadowRoot.querySelector("#otp").value;
 	const routeOnSuccess = login_box.getHostElement(signInButton).getAttribute("routeOnSuccess");
 	const routeOnNotApproved = login_box.getHostElement(signInButton).getAttribute("routeOnNotApproved");
 
 	_handleLoginResult(await loginmanager.signin(userid, pass, otp), shadowRoot, routeOnSuccess, routeOnNotApproved,signInButton);
+}
+
+async function checkTotpFormat(event) {
+	var charCode = (typeof event.which == "undefined") ? event.keyCode : event.which;
+  	var charStr = String.fromCharCode(charCode);
+
+  	if (!charStr.match(/^[0-9]+$/)) event.preventDefault();
 }
 
 async function resetAccount(element) {
@@ -68,9 +75,9 @@ function _handleLoginResult(result, shadowRoot, routeOnSuccess, routeOnNotApprov
 		default: shadowRoot.getElementById("notifier").style.display = "inline"; break;
 	}
 }
-function _disableButton(element){console.log(element); element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
 function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
 const trueWebComponentMode = true;	// making this false renders the component without using Shadow DOM
-export const login_box = {signin, resetAccount, trueWebComponentMode, elementConnected}
+export const login_box = {signin, resetAccount, trueWebComponentMode, elementConnected, checkTotpFormat}
 monkshu_component.register("login-box", `${APP_CONSTANTS.APP_PATH}/components/login-box/login-box.html`, login_box);

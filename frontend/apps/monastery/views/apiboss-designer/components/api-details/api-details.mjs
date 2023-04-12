@@ -10,6 +10,7 @@ import { APP_CONSTANTS } from "../../../../js/constants.mjs";
 import { session } from "../../../../../../framework/js/session.mjs";
 import { code_snippet_window } from "../code-snippet-window/code-snippet-window.mjs";
 import { loader } from "../../../../js/loader.mjs";
+import {page_generator} from "/framework/components/page-generator/page-generator.mjs";
 
 const COMPONENT_PATH = util.getModulePath(import.meta), VIEW_PATH = APP_CONSTANTS.CONF_PATH,ORG_METADATA = "__org_metadata", APIMANAGER_SESSIONKEY = "__org_monkshu_APIManager";
 
@@ -25,6 +26,9 @@ const elementConnected = async (element) => {
 }
 
 async function elementRendered(element, initialRender) {
+  const shadowRoot = page_generator.getShadowRootByHost(document.querySelector('page-generator'));
+  let totalSize =shadowRoot.querySelector('div.item2').offsetHeight+shadowRoot.querySelector('div.item3').offsetHeight+shadowRoot.querySelector('div.item5').offsetHeight+shadowRoot.querySelector('div.item8').offsetHeight + 30 ;
+  shadowRoot.querySelector('div.item1').style.maxHeight=totalSize+'px';
   const data = {};
   if (initialRender) {
     model = session.get(ORG_METADATA);
@@ -105,8 +109,6 @@ function fetchBaseParameters(element, target) {
   content.innerHTML = '';
 
   for (let key in target) {
-    console.log(target);
-    console.log(key);
     let child = document.createElement('div');
     child.innerHTML = `<div class="input-fields" style="padding-right: 10px" id=${target[key].type}>
      <label for="My${target[key].type}" id="my${key}" style="text-align: center; color: #444444;
@@ -114,7 +116,7 @@ function fetchBaseParameters(element, target) {
     <sub class="dataType">${target[key].type}</sub>
      ${target[key].type == "array" && target[key].type !== "object" ? ` <image-button img="./img/add.svg" text=${target[key].items.type} style=" width:6em; height: 100%; margin :0px 10px;"
      class=${target[key].items.type} id=${key} type="row"
-     styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 3px 10px;} div#button>img.row {width: 1.5em;height: 100%;} div#button>span {color: #000000; font-weight: 700; margin-left:5px}"
+     styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 3px 10px;} div#button>img.row {width: 1.5em;height: 100%;} div#button>span {color: #000000; font-weight: 700; margin-left:5px} div#button>span.row {width: 100%;}"
      color="#444444" border="0.5px solid #98CCFD" background-color="#DFF0FE" active-background-color="white" margin = "0px 10px"
      display="inline-block;" onclick='monkshu_env.components["api-details"].addMoreParameters(this, event);monkshu_env.components["api-details"].setAttrData();'></image-button>` : target[key].type !== "object" ? `<input type="text" oninput="monkshu_env.components['api-details'].setAttrData();" style="margin: 0px 5px" id="My${key}" class="input-text" />`:""}</div>`
     content.appendChild(child);
@@ -123,8 +125,6 @@ function fetchBaseParameters(element, target) {
 }
 
 function addObjParam(element, data) {
-  console.log(element);
-  console.log(data);
   for(let key in data) {
     let child = document.createElement('div');
     child.classList.add('wrapper-div');
@@ -135,7 +135,7 @@ function addObjParam(element, data) {
     <sub class="dataType">${data[key].type}</sub>
      ${data[key].type == "array" && data[key].type !== "object" ? `<image-button img="./img/add.svg" text=${data[key].items.type} style=" width:6em; height: 100%; margin :0px 10px;"
      class=${data[key].items.type} id=${key} type="row"
-     styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 3px 10px;} div#button>img.row {width: 1.5em;height: 100%;} div#button>span {color: #000000; font-weight: 700; margin-left:5px}"
+     styleBody="div#button.row {flex-direction: row; justify-content: flex-start;} div#button {padding: 3px 10px;} div#button>img.row {width: 1.5em;height: 100%;} div#button>span {color: #000000; font-weight: 700; margin-left:5px} div#button>span.row {width: 100%;}"
      color="#444444" border="0.5px solid #98CCFD" background-color="#DFF0FE" active-background-color="white" margin = "0px 10px"
      display="inline-block;" onclick='monkshu_env.components["api-details"].addMoreParameters(this, event);monkshu_env.components["api-details"].setAttrData()'></image-button>` : data[key].type !== "object" ? `<input type="text" oninput="monkshu_env.components['api-details'].setAttrData();" style="margin: 0px 5px" id="My${key}" class="input-text" />`:""}</div>`
     element.appendChild(child);
@@ -160,13 +160,13 @@ function _serachParamInSchema(id) {
 }
 
 function addMoreParameters(element, event) {
-  if (event.composedPath()[5].classList == 'string') {
+  if (event.composedPath()[5].classList == 'string' || event.composedPath()[5].classList == 'number') {
     let stringWrapper = document.createElement("div");
     stringWrapper.classList.add("wrapper-div");
     stringWrapper.style.paddingBottom = "0px";
     let inputContainer = document.createElement("div");
     inputContainer.classList.add("input-wrapper");
-    inputContainer.innerHTML = `<input class="input-text" oninput="monkshu_env.components['api-details'].setAttrData();" style="padding:3px;" type="text" placeholder="string"/> <img class="deleteBtn" onclick='monkshu_env.components["api-details"].deleteParameters(this, event);monkshu_env.components["api-details"].setAttrData();' src=${COMPONENT_PATH}/img/delete.svg/>`
+    inputContainer.innerHTML = `<input class="input-text" oninput="monkshu_env.components['api-details'].setAttrData();" style="padding:3px;" type=${event.composedPath()[5].classList == "number" ? "number" : "text"} placeholder=${event.composedPath()[5].classList} /> <img class="deleteBtn" onclick='monkshu_env.components["api-details"].deleteParameters(this, event);monkshu_env.components["api-details"].setAttrData();' src=${COMPONENT_PATH}/img/delete.svg/>`
     stringWrapper.appendChild(inputContainer);
     event.composedPath()[7].appendChild(stringWrapper);
   }
@@ -221,7 +221,6 @@ function getParaVal(element, obj) {
     let newChild = Array.from(child);
     let resObj = {};
     newChild.shift();
-    console.log(newChild);
     newChild.forEach((each)=>{
       // each.querySelectorAll(":scope>div").forEach((para)=>{
       //   console.log(para);
@@ -264,10 +263,17 @@ function getParaVal(element, obj) {
 }
 
 async function tryIt(element, event) {
-  await loader.beforeLoading();
   let thisElement = api_details.getHostElementByID("apidetails");
   const shadowRoot = api_details.getShadowRootByHost(thisElement);
-  if (!_validate(shadowRoot)) return false;
+
+  if (!_validate(shadowRoot)) {
+    const toValidateList = shadowRoot.querySelectorAll('.validate');
+
+    for (const validate of toValidateList) {
+        if (!validate.checkValidity()) { validate.reportValidity(); return false; }
+    }
+  };
+  await loader.beforeLoading();
 
   let node = shadowRoot.querySelector("#content");
   let targetNode = node;
@@ -275,25 +281,23 @@ async function tryIt(element, event) {
   targetNode.querySelectorAll(":scope>div").forEach((para) => {
     getParaVal(para, reqBody);
   })
-  console.log(reqBody);
   let path = shadowRoot.querySelector("span#path").innerText, jwtToken;
   if(shadowRoot.querySelector("input#token-input")){
     jwtToken = shadowRoot.querySelector("input#token-input").value;
   }
   if(shadowRoot.querySelector("#apikey")){
     let xapikey = {"*": shadowRoot.querySelector("#apikey").value}
-    console.log(xapikey)
     apiman.registerAPIKeys(xapikey, "x-api-key");
   }
-  const host = new URL(`http://${serverDetails.host}:${serverDetails.port}`).host; // have to change the host for our dynamic case
+  const host = new URL(`${serverDetails.secure ? `https` : `http`}://${serverDetails.host}:${serverDetails.port}`).host; // have to change the host for our dynamic case
   let sub = 'access'
   if(shadowRoot.querySelector("#userid") && shadowRoot.querySelector("#password")){
     const storage = _getAPIManagerStorage(); storage.tokenManager[`basic_auth`] = `Basic ${btoa(`${shadowRoot.querySelector("#MyInput").value}:${shadowRoot.querySelector("#Mypwd").value}`)}`; _setAPIManagerStorage(storage);
   }
 
   if (jwtToken) { const storage = _getAPIManagerStorage(); storage.tokenManager[`${host}_${sub}`] = jwtToken; _setAPIManagerStorage(storage); }
-  let resp = await apiman.rest(`http://${serverDetails.host}:${serverDetails.port}${path}`, `${method.toUpperCase()}`, reqBody, (jwtToken) ? true : false);
-  console.log(resp)
+  let resp = await apiman.rest(`${serverDetails.secure ? `https` : `http`}://${serverDetails.host}:${serverDetails.port}${path}`, `${method.toUpperCase()}`, reqBody, (jwtToken) ? true : false, false, false, false, true);
+  if (typeof resp == "string") resp = JSON.parse(resp);
   text_editor.getJsonData(resp);
   await loader.afterLoading();
   apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
@@ -319,6 +323,18 @@ function setAttrData(){
   code_snippet_window.setAttributeData(getAttributesData())
 }
 
+function setBasicAuthentication(){
+  let thisElement = api_details.getHostElementByID("apidetails");
+  const shadowRoot = api_details.getShadowRootByHost(thisElement);
+  if(shadowRoot.querySelector("#userid") && shadowRoot.querySelector("#password")){
+    code_snippet_window.ifBasicAuthSetAuth(`${btoa(`${shadowRoot.querySelector("#MyInput").value}:${shadowRoot.querySelector("#Mypwd").value}`)}`);
+    code_snippet_window.setNodeJSValue();
+    code_snippet_window.setJavaValue();
+    code_snippet_window.setShellValue();
+  }
+
+}
+
 
 function getAttributesData(){
   let thisElement = api_details.getHostElementByID("apidetails");
@@ -329,7 +345,6 @@ function getAttributesData(){
   targetNode.querySelectorAll(":scope>div").forEach((para) => {
     getParaVal(para, reqBody);
   })
-  console.log(reqBody);
   return reqBody;
 }
 
@@ -353,7 +368,7 @@ function _setAPIManagerStorage(storage) {
 }
 
 export const api_details = {
-  trueWebComponentMode: true, elementConnected, elementRendered, addMoreParameters, toggle, deleteParameters, _serachParamInSchema, tryIt, getParaVal, updateExposedpathandMethod, _getAPIManagerStorage, _setAPIManagerStorage, setAuthorization, setApiKey, getAttributesData,setAttrData
+  trueWebComponentMode: true, elementConnected, elementRendered, addMoreParameters, toggle, deleteParameters, _serachParamInSchema, tryIt, getParaVal, updateExposedpathandMethod, _getAPIManagerStorage, _setAPIManagerStorage, setAuthorization, setApiKey, getAttributesData,setAttrData,setBasicAuthentication
 }
 
 monkshu_component.register(

@@ -40,13 +40,13 @@
  
  function _setValue(value, element) {
    const shadowRoot = drop_down.getShadowRootByHostId(element.getAttribute("id"));
-   shadowRoot.querySelector(`#${value}`).setAttribute("selected", "selected");
+   shadowRoot.querySelector(`#${value}`).selected = true;
    disableOrEnableInputField(element);
  };
 
  function _attachFormValidationControls(element) {
-
   const selectElement = drop_down.getShadowRootByHostId(element.getAttribute("id")).querySelector("select#choices");
+  
   element.getValue = _ => selectElement.value;
   element.setValue = v => selectElement.value = v;
   element.getValidity = _ => selectElement.validity;
@@ -98,6 +98,7 @@ function disableOrEnableInputField(element) {
 function _setAttribute (shadowRoot, elementidarray){
   for(let id of elementidarray){
     shadowRoot.querySelector(`#${id}`).setAttribute("disabled", "true");
+    shadowRoot.querySelector(`#${id}`).value = "";
   }
 }
 

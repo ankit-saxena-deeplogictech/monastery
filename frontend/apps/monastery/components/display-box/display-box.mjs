@@ -80,7 +80,7 @@ function hideError(element) {
  */
 function submit(element) {
     const memory = display_box.getMemoryByContainedElement(element);
-
+    if(!_validate(element)) return;
     if (memory.retValIDs && memory.callback) {
         const ret = {}; const shadowRoot = display_box.getShadowRootByContainedElement(element);
         for (const retValId of memory.retValIDs) ret[retValId] = shadowRoot.querySelector(`#${retValId}`)?shadowRoot.querySelector(`#${retValId}`).value:null;
@@ -122,6 +122,16 @@ function _resetUI(shadowRoot) {
     shadowRoot.querySelector("body").style.height = "fit-content";
 }
 
+function _validate(element) {
+    const shadowRoot = display_box.getShadowRootByContainedElement(element);
+    const toValidateList = shadowRoot.querySelectorAll('.validate');
+
+    for (const validate of toValidateList) {
+        if (!validate.checkValidity()) { validate.reportValidity(); return false; }
+    }
+    return true;
+}
+
 const trueWebComponentMode = true;	// making this false renders the component without using Shadow DOM
-export const display_box = {showDialog, trueWebComponentMode, hideDialog, cancel, error, showMessage, hideError, submit}
+export const display_box = {showDialog, trueWebComponentMode, hideDialog, cancel, error, showMessage, hideError, submit, _validate}
 monkshu_component.register("display-box", `${COMPONENT_PATH}/display-box.html`, display_box);

@@ -6,9 +6,10 @@
 import { APP_CONSTANTS } from "../../../js/constants.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 import { session } from "/framework/js/session.mjs";
+import {loader} from "../../../js/loader.mjs";
 
 const API_KEYS = {"*":"jfiouf90iejw9ri32fewji910idj2fkvjdskljkeqjf"}, KEY_HEADER = "org_monkshu_apikey";
-const org = new String(session.get(APP_CONSTANTS.USERORG)).toLowerCase(),userid = new String(session.get(APP_CONSTANTS.USERID)).toLowerCase();
+const org = new String(session.get(APP_CONSTANTS.USERORG)),userid = new String(session.get(APP_CONSTANTS.USERID));
 /**
  * Returns the list of models present on the server
  * @param {string} server Server IP or Hostname
@@ -40,19 +41,20 @@ async function getModelList(server, port, adminid, adminpassword) {
  * @param {string} adminpassword Server admin password
  * @returns {result: true|false, model: Model object on success, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
- async function getMetaData( server, port,adminid,adminpassword) {
-   
+ async function getMetaData(name, server, port,adminid,adminpassword) {
+    await loader.beforeLoading();
     const loginResult = await loginToServer(server, port, adminid, adminpassword);
-    console.log(loginResult);
-    if (!loginResult.result) return loginResult;    // failed to connect or login
+    if (!loginResult.result){ // failed to connect or login
+        await loader.afterLoading();
+        return loginResult; }   
     apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
 
     try {   // try to read the model now
-        const result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, id: userid ,server,port}, true, true);
-        console.log(result);
+        const result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org, name, id: userid ,server,port}, true, true);
+       await loader.afterLoading();
         return {result: result.result, model: result.result?result.data:null, err: "Metadata read failed at the server", 
             name: result.result?result.name:null, raw_err: "Metadata read failed at the server", key: "MetaDataReadServerIssue"};
-    } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
+    } catch (err)  {await loader.afterLoading();return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
 }
 
 /**
@@ -90,8 +92,6 @@ async function getModelList(server, port, adminid, adminpassword) {
  */
 async function publishModel(parsedData, server, port, adminid, adminpassword) {
     const loginResult = await loginToServer(server, port, adminid, adminpassword);
-    console.log(loginResult);
-
     if (!loginResult.result) return loginResult;    // failed to connect or login
     try {   // try to publish now
         return {result: (await apiman.rest(`http://${server}:${port}/apps/apiboss/admin/updateconf`, "POST", 
@@ -100,12 +100,12 @@ async function publishModel(parsedData, server, port, adminid, adminpassword) {
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
 }
 
-async function publishMetaData(metaData,org,userid,server, port) {
+async function publishMetaData(metaData,org,userid,name,server, port) {
     apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
 
     try {   // try to publish now
         return {result: (await apiman.rest(APP_CONSTANTS.API_CREATEORUPDATEMETA, "POST", 
-            { metadata: metaData,org:org,id:userid,server,port}, true,true)).result, err: "Publishing failed at the server", 
+            { metadata: metaData,org,id:userid,server,port,name}, true,true)).result, err: "Publishing failed at the server", 
             raw_err: "Publishing failed at the server", key: "PublishServerIssue"};
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
 }
@@ -129,4 +129,8 @@ async function loginToServer(server, port, adminid, adminpassword) {
         } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
     }
 }
+
+function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
+function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
+
 export const serverManager = {publishModel, unpublishModel, getModelList, getMetaData,publishMetaData,loginToServer};

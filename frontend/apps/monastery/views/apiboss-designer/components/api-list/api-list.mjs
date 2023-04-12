@@ -15,8 +15,9 @@ import { i18n as i18nFramework } from "/framework/js/i18n.mjs";
 import { monkshu_component } from "/framework/js/monkshu_component.mjs";
 import { loader } from "../../../../js/loader.mjs";
 import { items } from "../../js/items.mjs";
+import { session } from "/framework/js/session.mjs";
 
-const COMPONENT_PATH = util.getModulePath(import.meta);
+const COMPONENT_PATH = util.getModulePath(import.meta),CURRENT_API = "_selected_api";
 let apiname;
 
 
@@ -38,11 +39,19 @@ async function elementConnected(element) {
 
 async function elementRendered(element) {
 const items = Array.from(api_list.getShadowRootByHostId(element.id).querySelector("div#container").children);
+if(apiname==undefined && items.length>0 && session.get(CURRENT_API) ) {
+    apiname = session.get(CURRENT_API).toString();
+     await openClicked(api_list.getShadowRootByHostId(element.id).querySelector(`div#${apiname.replace(/\s/g, "\\ ")}`),apiname)
+
+}
+
 for(let i=0;i<items.length;i++){
     if(apiname == items[i].id){
         items[i].style.background = "#F8FCFF"
     } else items[i].style.background = "none"
 }
+
+
 }
 
 function _addClickHandlerToItems(items, onclick) {
@@ -70,6 +79,7 @@ async function openClicked(element, elementid) {
   window.monkshu_env.components["apiinput-apioutput"].bindApiInputOutputParameters(elementid, "update");
   window.monkshu_env.components["text-editor"].updateResponseData();
   await loader.afterLoading(); _enableButton(thisElement.parentElement.parentElement);
+  session.set(CURRENT_API,elementid)
 // setTimeout(()=>{loader.afterLoading(); _enableButton(thisElement.parentElement.parentElement);}, 500);
 
 }

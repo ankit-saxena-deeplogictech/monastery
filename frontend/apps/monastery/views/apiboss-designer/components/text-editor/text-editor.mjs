@@ -35,7 +35,7 @@
 		 text_editor.getMemoryByHost(element).editor = cm; cm.setSize("100%", "100%"); 
 		//  let data = JSON.stringify(jsonData,null,4);
 		//   _setValue(data, element);
-	 }, 10);
+	 }, 1000);
  }
 
  function updateResponseData() {
@@ -46,32 +46,32 @@
   }
 
   function getJsonData(json){
-	  const element = text_editor.getHostElementByID("response");
-	  const shadowRoot = text_editor.getShadowRootByHost(element);
-	if(json && !json.status) {
-		let data = JSON.stringify(json, null, 4);
-		if(data){
-			shadowRoot.querySelector("div#statuscontainer").style.display = "block";
-			shadowRoot.querySelector("#status").innerText = `200`; shadowRoot.querySelector("#dot").style.border = "#0E9B71";
-			shadowRoot.querySelector("#dot").style.background = "#12CA93";
-			_setValue(data, element);
-		} else {
-			shadowRoot.querySelector("div#statuscontainer").style.display = "none";
-			let res = {}; _setValue(JSON.stringify(res),element);
-		}
-	}
-	else if (json.status) {_setValue(`${json.status}: ${json.statusText}`,element);
-			shadowRoot.querySelector("div#statuscontainer").style.display = "block";
-			shadowRoot.querySelector("#status").innerText = `${json.status}`; shadowRoot.querySelector("#dot").style.border = "red";
-			shadowRoot.querySelector("#dot").style.background = "red";
-		}
-	else {_setValue(`500: Internal Error`,element);
-	shadowRoot.querySelector("div#statuscontainer").style.display = "block";
-	shadowRoot.querySelector("#status").innerText = `500`; shadowRoot.querySelector("#dot").style.border = "red";
-	shadowRoot.querySelector("#dot").style.background = "red";
-		}
-	return;
- }
+	const element = text_editor.getHostElementByID("response");
+	const shadowRoot = text_editor.getShadowRootByHost(element);
+  if(json && !json.respErr) {
+	  let data = JSON.stringify(json, null, 4);
+	  if(data){
+		  shadowRoot.querySelector("div#statuscontainer").style.display = "block";
+		  shadowRoot.querySelector("#status").innerText = `200`; shadowRoot.querySelector("#dot").style.border = "#0E9B71";
+		  shadowRoot.querySelector("#dot").style.background = "#12CA93";
+		  _setValue(data, element);
+	  } else {
+		  shadowRoot.querySelector("div#statuscontainer").style.display = "none";
+		  let res = {}; _setValue(JSON.stringify(res),element);
+	  }
+  }
+  else if (json.respErr) {_setValue(`${json.respErr.status}: ${json.respErr.statusText}`,element);
+		  shadowRoot.querySelector("div#statuscontainer").style.display = "block";
+		  shadowRoot.querySelector("#status").innerText = `${json.respErr.status}`; shadowRoot.querySelector("#dot").style.border = "red";
+		  shadowRoot.querySelector("#dot").style.background = "red";
+	  }
+  else {_setValue(`500: Internal Error`,element);
+  shadowRoot.querySelector("div#statuscontainer").style.display = "block";
+  shadowRoot.querySelector("#status").innerText = `500`; shadowRoot.querySelector("#dot").style.border = "red";
+  shadowRoot.querySelector("#dot").style.background = "red";
+	  }
+  return;
+}
 
  function copyToClipboard(element){
 	const host = text_editor.getHostElementByID("response");
@@ -104,7 +104,7 @@
  
  function _setValue(value, host) {
 	 const cm = text_editor.getMemoryByHost(host).editor;
-	 cm.getDoc().setValue(value);
+	if(cm) cm.getDoc().setValue(value);
  }
  
  // convert this all into a WebComponent so we can use it
