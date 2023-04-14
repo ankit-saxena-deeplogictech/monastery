@@ -1,7 +1,7 @@
 SCHEMA
 ======
 {
-    "apikey": {"html":"input", "type":"text", "placeholder":"{{i18n.APIKey}}",  "spellcheck":"false", "pattern":"{{i18n.apiDescPattern}}", "required":"true", "value":"{{modelName}}",  "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.validData}}')" , "oninput":"setCustomValidity('')","class":"validate"},
+    "apikey": {"html":"input", "type":"text", "placeholder":"{{i18n.APIKey}}",  "spellcheck":"false",  "required":"true","spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.validData}}')" , "oninput":"setCustomValidity('')","class":"validate"},
     "basicauthentication": {"html":"text-div","text":"Basic Authentication?"},
     "isauthenticationneeded": {"html":"drop-down","style":"width:100%; height:100%;","list":"[{'value':'YES'},{'value':'NO'}]","text":"NO","styleBody":"select#choices{padding:12px}" ,"value":"NO"},
     "userid": {"html":"input", "type":"text", "placeholder":"{{i18n.USERID}}",  "spellcheck":"false", "pattern":"{{i18n.namePattern}}", "oninvalid":"this.setCustomValidity('{{i18n.validData}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
