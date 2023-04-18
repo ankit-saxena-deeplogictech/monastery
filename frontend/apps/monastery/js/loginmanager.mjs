@@ -10,6 +10,7 @@ import { securityguard } from "/framework/js/securityguard.mjs";
 import { apimanager as apiman } from "/framework/js/apimanager.mjs";
 
 let currTimeout, logoutListeners = [];
+const ORG_METADATA = "__org_metadata";
 
 async function signin(id, pass, otp) {
     const pwph = `${id} ${pass}`;
@@ -82,6 +83,8 @@ async function logout(dueToTimeout) {
     const savedLang = session.get($$.MONKSHU_CONSTANTS.LANG_ID);
     session.remove(APP_CONSTANTS.USERID); session.remove(APP_CONSTANTS.USERNAME);
     session.remove(APP_CONSTANTS.USERORG); session.remove("__org_telemeet_cuser_pass");
+    session.remove(ORG_METADATA);session.remove("__org_server_details");
+
     session.set($$.MONKSHU_CONSTANTS.LANG_ID, savedLang);     securityguard.setCurrentRole(APP_CONSTANTS.GUEST_ROLE);
     if (dueToTimeout) application.main(APP_CONSTANTS.ERROR_HTML, {error: await i18n.get("Timeout_Error"), 
         button: await i18n.get("Relogin"), link: router.encodeURL(APP_CONSTANTS.LOGIN_HTML)}); 
