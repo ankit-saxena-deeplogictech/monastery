@@ -57,7 +57,7 @@
 </style>
 
 {{{styleBody}}}
-
+{{#showtoolbar}}
 <span id="toolbar">
     <span id="leftitems">
         <span><img src="{{{componentPath}}}/img/delete.svg"
@@ -66,6 +66,7 @@
                 onclick='monkshu_env.components["input-table"].rowop("add",this)'></span>
     </span>
 </span>
+{{/showtoolbar}}
 
 <table id="inputtable" style="overflow-y: auto;">
     <tr>
@@ -73,7 +74,6 @@
         <td> {{header}} </td>
         {{/headers1}}
     </tr>
-
     {{#rows}}
     <tr class="tr">
         {{#columns}}<td onclick='this.querySelector("textarea").focus()'><textarea rows="1"

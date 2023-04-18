@@ -25,6 +25,7 @@ async function elementConnected(element) {
 	else data = await _createElementData(element, elementObject[ROW_PROP], columns);
 	data.headers1 = JSON.parse(element.getAttribute("headers1").replace(/'/g, '\"'));
 	data.Header = element.getAttribute("Header");
+	data.showtoolbar = element.getAttribute("showToolBar");
 	if (element.id) if (!input_table.datas) {
 		input_table.datas = {};
 	} else { input_table.data = data; }
@@ -139,6 +140,8 @@ async function _createElementData(host, rows = host.getAttribute("rows") || 6, c
 
 	data.headers1 = JSON.parse(host.getAttribute("headers1").replace(/'/g, '\"'));
 	data.Header = host.getAttribute("Header");
+	data.showtoolbar = host.getAttribute("showToolBar");
+
 
 	return data;
 }

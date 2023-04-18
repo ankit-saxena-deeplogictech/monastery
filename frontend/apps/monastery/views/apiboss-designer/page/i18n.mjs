@@ -23,7 +23,9 @@ export const i18n = {
         "URLRegex": "^(https?|ftp):\/\/(?:localhost|(?:\d{1,3}\.){3}\d{1,3}|(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6})(?::\d{1,5})?(?:\/.*)?$",
         "apiDescPattern": "^[^ ].*[^ ]$",
         "passwordRegex": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$",
-        "validData": "Please enter vaild data"
+        "validData": "Please enter vaild data",
+        "APIKeyFor":"API KEY for developer portal",
+        "Set":"Set"
     },
 
     hi: {
