@@ -7,6 +7,7 @@
  import { APP_CONSTANTS } from "../../../../js/constants.mjs";
  import { code_snippet_window } from "../code-snippet-window/code-snippet-window.mjs";
  import { session } from "/framework/js/session.mjs";
+import { apibossmodel } from "../../model/apibossmodel.mjs";
  
  const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH,ORG_METADATA = "__org_metadata";
  let docData,model,serverDetails, exposedpath;
@@ -28,6 +29,8 @@
  
  async function bindApiContents(elementid) {
    const data = {}
+   let userid = session.get(APP_CONSTANTS.USERID);
+   let domain = apibossmodel._getDomain(userid.native);
    model = session.get(ORG_METADATA),serverDetails =JSON.parse(session.get("__org_server_details"));;
    for (const api of model.apis) {
      let inputParams = [], outputParams = [];
@@ -50,7 +53,7 @@
      traverseObject(JSON.parse(JSON.parse(api["input-output"])[1])["responses"]["200"]["content"]["application/json"]["schema"]["properties"], false, function (node, key) { if (node && typeof node == "object") if (node.type) { outputParams.push({ "name": key, "type": node.type, "desc": node.desc ? node.desc : "", "index": outputParams.length + 1 }); } });
      if (api["apiname"] == elementid) {
        data["description"] = api["apidescription"];
-       data["exposedpath"] = `${serverDetails.secure ?"https":"http"}://${serverDetails.host}:${serverDetails.port}${api["exposedpath"]}`;
+       data["exposedpath"] = `${serverDetails.secure ?"https":"http"}://${serverDetails.host}:${serverDetails.port}/${domain}${api["exposedpath"]}`;
        data["exposedmethod"] = api["exposedmethod"];
        if (api["isrestapi"] == "YES") data["standard"] = "REST";
        else data["standard"] = "NOT REST";

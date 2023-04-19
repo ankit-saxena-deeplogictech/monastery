@@ -6,6 +6,8 @@
 import { algos } from "./algos.mjs";
 import { util } from "/framework/js/util.mjs";
 import { blackboard } from "/framework/js/blackboard.mjs";
+import { session } from "../../../../../framework/js/session.mjs";
+import { APP_CONSTANTS } from "../../../js/constants.mjs";
 
 const EMPTY_MODEL = { apis: [], policies: [] }, DEFAULT_BUNDLE = "apis";
 let apibossmodelObj = EMPTY_MODEL, idCache = {}, current_command_bundle = DEFAULT_BUNDLE;
@@ -103,18 +105,21 @@ function nodeDescriptionChanged(_nodeName, id, description) {
 
 function getModel() {
     const retModel = util.clone(apibossmodelObj);
+    retModel?.policies.forEach((policy)=> {if(policy.password.length) policy.password = ""});
     return retModel;
 
 }
 
 function getparsedData() {
+    let userid = session.get(APP_CONSTANTS.USERID);
+    let domain = _getDomain(userid.native);
     let parsedData = {},finalData = [], rateLimit = {}, inputoutput = {}, apiregistrydata = {};
     const retModel = util.clone(apibossmodelObj);
     if(!(retModel.apis.length>0 && retModel.policies.length>0)) return {result:false,key:"Require data is not available to publish"};
     for (const policy of retModel.policies){
         if(!("apikey" in policy)) return {result:false,key:`Please fill apikey in ${policy.description}`};
         if(policy.apikey!=""){
-         if(policy.israteenforcementneeded!="NO") parsedData["ratelimitsdata"]= _ratelimits(policy);
+         if(policy.israteenforcementneeded!="NO" || policy.isauthenticationneeded=="YES") parsedData["ratelimitsdata"]= _ratelimits(policy);
          else parsedData["ratelimitsdata"]="";
         //  finalData.push({[policy.apikey]:parsedData});
             rateLimit[policy.apikey] = parsedData.ratelimitsdata;
@@ -159,7 +164,7 @@ function getparsedData() {
             }
             parsedData["injected"] = injected;
         }
-        parsedData["exposedpath"] = api.exposedpath;
+        parsedData["exposedpath"] = `/${domain}${api.exposedpath}`;
         parsedData["backendurl"] = api.backendurl;
         parsedData["backendurlmethod"] = api.backendurlmethod;
         parsedData["exposedmethod"] = api.exposedmethod;
@@ -178,7 +183,7 @@ function getparsedData() {
         parsedData["apikey"] = [...new Set(apikeys)].join();
         parsedData["jwtsubject"] = [...new Set(jwtSub)].join();
         parsedData["tokensubject"] = [...new Set(addTokenSub)].join();
-        apiregistrydata[api.exposedpath] = parsedData;
+        apiregistrydata[parsedData["exposedpath"]] = parsedData;
     }
     finalData.push({ apiregistrydata: apiregistrydata });
     return {result:true,data:finalData};
@@ -238,7 +243,9 @@ const _arrayDelete = (array, element) => {
 
 const _getNameFromDescription = description => description.split(" ")[0].split("\n")[0];
 
+const _getDomain = (id) => { return id.indexOf("@") != -1 ? id.substring(id.indexOf("@")+1).toLowerCase() : "undefined" }
+
 export const apibossmodel = {
     init, loadModel, modelNodesModified, modelConnectorsModified, isConnectable,
-    nodeDescriptionChanged, getModelAsFile, getModel,getparsedData,  ADDED: "added", REMOVED: "removed", MODIFIED: "modified"
+    nodeDescriptionChanged, getModelAsFile, getModel,getparsedData,_getDomain,  ADDED: "added", REMOVED: "removed", MODIFIED: "modified"
 };
