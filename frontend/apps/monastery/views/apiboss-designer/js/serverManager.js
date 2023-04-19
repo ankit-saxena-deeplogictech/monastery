@@ -42,6 +42,14 @@ async function getModelList(server, port, adminid, adminpassword) {
  * @returns {result: true|false, model: Model object on success, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
  async function getMetaData(name, server, port,adminid,adminpassword) {
+    let isPublicServer = true;
+    if(server.length && port.length) {isPublicServer = false};
+
+    let publicServer = await getPublicApibossServerDetails();
+    port = port.length ? port : publicServer.port;
+    server = server.length ? server : publicServer.serverIP;
+    adminid = adminid.length ? adminid : publicServer.adminid;
+    adminpassword = adminpassword.length ? adminpassword : publicServer.adminpassword;
     await loader.beforeLoading();
     const loginResult = await loginToServer(server, port, adminid, adminpassword);
     if (!loginResult.result){ // failed to connect or login
@@ -50,7 +58,7 @@ async function getModelList(server, port, adminid, adminpassword) {
     apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
 
     try {   // try to read the model now
-        const result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org, name, id: userid ,server,port}, true, true);
+        const result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org, name, id: userid ,server,port, isPublicServer}, true, true);
        await loader.afterLoading();
         return {result: result.result, model: result.result?result.data:null, err: "Metadata read failed at the server", 
             name: result.result?result.name:null, raw_err: "Metadata read failed at the server", key: "MetaDataReadServerIssue"};
@@ -91,21 +99,34 @@ async function getModelList(server, port, adminid, adminpassword) {
  * @returns {result: true|false, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
 async function publishModel(parsedData, server, port, adminid, adminpassword) {
+    let publicServer = await getPublicApibossServerDetails();
+    port = port.length ? port : publicServer.port;
+    server = server.length ? server : publicServer.serverIP;
+    adminid = adminid.length ? adminid : publicServer.adminid;
+    adminpassword = adminpassword.length ? adminpassword : publicServer.adminpassword;
+
     const loginResult = await loginToServer(server, port, adminid, adminpassword);
     if (!loginResult.result) return loginResult;    // failed to connect or login
     try {   // try to publish now
         return {result: (await apiman.rest(`http://${server}:${port}/apps/apiboss/admin/updateconf`, "POST", 
             { data: parsedData}, true,true)).result, err: "Publishing failed at the server", 
             raw_err: "Publishing failed at the server", key: "PublishServerIssue"};
-    } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
+    } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "LoginIssue"} }
 }
 
 async function publishMetaData(metaData,org,userid,name,server, port) {
+    let isPublicServer = true;
+    if(server.length && port.length) {isPublicServer = false};
+
+    let publicServer = await getPublicApibossServerDetails();
+    port = port.length ? port : publicServer.port;
+    server = server.length ? server : publicServer.serverIP;
+
     apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
 
     try {   // try to publish now
         return {result: (await apiman.rest(APP_CONSTANTS.API_CREATEORUPDATEMETA, "POST", 
-            { metadata: metaData,org,id:userid,server,port,name}, true,true)).result, err: "Publishing failed at the server", 
+            { metadata: metaData,org,id:userid,server,port,name,isPublicServer}, true,true)).result, err: "Publishing failed at the server", 
             raw_err: "Publishing failed at the server", key: "PublishServerIssue"};
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
 }
@@ -130,7 +151,22 @@ async function loginToServer(server, port, adminid, adminpassword) {
     }
 }
 
+async function getPublicApibossServerDetails() {
+    let publicServerDetail = await $$.requireJSON(`${APP_CONSTANTS.CONF_PATH}/serverDetails.json`);
+    return publicServerDetail;
+}
+
+async function setDefaultSettings(org,userid,server,port,apikey) {
+    apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
+
+    try {   // try to publish now
+        return {result: (await apiman.rest(APP_CONSTANTS.API_SETDEFAULTSETTINGS, "POST", 
+            { org,id:userid,server,port,apikey}, true,true)).result, err: "Setting default server failed at the server", 
+            raw_err: "Setting default server failed at the server", key: "SetDefaultServerIssue"};
+    } catch (err)  {return {result: false, err: "Setting failed", raw_err: err, key: "SetDefaultServerIssue"} }
+}
+
 function _disableButton(element){ element.style["pointer-events"]="none"; element.style["opacity"]=0.4; }
 function _enableButton(element){ element.style["pointer-events"]=""; element.style["opacity"]=""; }
 
-export const serverManager = {publishModel, unpublishModel, getModelList, getMetaData,publishMetaData,loginToServer};
+export const serverManager = {publishModel, unpublishModel, getModelList, getMetaData,publishMetaData,loginToServer,setDefaultSettings};
