@@ -5,7 +5,7 @@ SCHEMA
     "output": {"html":"html-fragment", 
         "htmlcontent":"encodeURIComponent(url(./views/{{url.view}}/dialogs/dialog_settings.html))",
         "style":"width: 100%"},
-    "apikey": {"html":"input", "type":"text", "placeholder":"{{i18n.APIKeyFor}}",  "spellcheck":"false",  "required":"true","spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.validData}}')" , "oninput":"setCustomValidity('')","class":"validate"}
+    "apikey": {"html":"input", "type":"text", "placeholder":"{{i18n.APIKeyFor}}",  "spellcheck":"false","spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.validData}}')" , "oninput":"setCustomValidity('')"}
 
 }
 ======

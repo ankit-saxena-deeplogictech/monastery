@@ -20,6 +20,12 @@
     "/apps/{{app}}/getorgsmatching" : "/apis/getorgsmatching.js?get=true&keys=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=false",
     "/apps/{{app}}/getappconfig" : "/apis/getappconfig.js?keys=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true",
     "/apps/{{app}}/createorupdatemeta" : "/apis/createorupdatemeta.js?keys=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true",
-    "/apps/{{app}}/getmetadata" : "/apis/getmetadata.js?keys=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true"
+    "/apps/{{app}}/getmetadata" : "/apis/getmetadata.js?keys=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true",
+    "/apps/{{app}}/setdefaultsettings" : "/apis/setdefaultsettings.js?keys=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true",
+    "/apps/{{app}}/createorgetsettings" : "/apis/createorgetsettings.js?keys=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true",
+    "/apps/{{app}}/checkdataexits" : "/apis/checkdataexits.js?keys=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true"
+
+
+
 
 }
