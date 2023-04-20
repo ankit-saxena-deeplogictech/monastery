@@ -12,8 +12,8 @@ exports.doService = async jsonReq => {
       } else {
         if(!fs.existsSync(`${APP_CONSTANTS.META_DIR}/public/${jsonReq.org}/${jsonReq.name}_${jsonReq.server}_${jsonReq.port}.json`)) return { result: false }
       }
-      if (result) return  { result: true, data: _getMetadata(jsonReq),name:jsonReq.org}
-      else return { result: false };
+      if (result) return  { result: true, data: _getMetadata(jsonReq),name:jsonReq.org,isPublic:jsonReq.isPublicServer}
+      else return { result: false};
 
     }
     else return { result: false };

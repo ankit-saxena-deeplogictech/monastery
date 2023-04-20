@@ -25,7 +25,8 @@ export const i18n = {
         "passwordRegex": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$",
         "validData": "Please enter vaild data",
         "APIKeyFor":"API KEY for developer portal",
-        "Set":"Set"
+        "Set":"Set",
+        "SetDefaultServerIssue":"Setting default server failed at the server"
     },
 
     hi: {

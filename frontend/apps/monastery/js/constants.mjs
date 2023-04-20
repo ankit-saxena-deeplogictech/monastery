@@ -49,6 +49,11 @@ export const APP_CONSTANTS = {
     API_GETMETADATA: API_PATH+"/getmetadata",
 
     API_CREATEORUPDATEMETA: API_PATH+"/createorupdatemeta",
+    API_SETDEFAULTSETTINGS:API_PATH+"/setdefaultsettings",
+    API_CREATEORGETSETTINGS:API_PATH+"/createorgetsettings",
+    API_CHECKDATAEXITS:API_PATH+"/checkdataexits",
+
+
 
 
     USERID: "userid",
