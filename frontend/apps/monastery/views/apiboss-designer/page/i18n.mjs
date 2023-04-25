@@ -26,7 +26,14 @@ export const i18n = {
         "validData": "Please enter vaild data",
         "APIKeyFor":"API KEY for developer portal",
         "Set":"Set",
-        "SetDefaultServerIssue":"Setting default server failed at the server"
+        "SetDefaultServerIssue":"Setting default server failed at the server",
+        "FillKey":"Please fill the apikey",
+        "WrongAPIKey":"API Key is incorrect",
+        "APIsNotPublished":"APIs are not being Published yet on this server",
+        "SetSuccess":"Server Details for Developer Portal has been set successfully",
+        "IncorrectAPI":"API Key is incorrect"
+
+
     },
 
     hi: {
