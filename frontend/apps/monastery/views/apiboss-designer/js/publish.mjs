@@ -41,7 +41,7 @@ async function openDialog() {
             const org = new String(session.get(APP_CONSTANTS.USERORG)); 
             const userid = new String(session.get(APP_CONSTANTS.USERID)); 
             await loader.beforeLoading();_disableButton(dialogElement);
-            const pubResult = await serverManager.publishModel(parsedData.data, result.server, result.port, result.adminid, result.adminpassword);
+            const pubResult = await serverManager.publishModel(parsedData.data, result.name, result.server, result.port, result.adminid, result.adminpassword);
             if (!pubResult.result) {
                 await loader.afterLoading(); _enableButton(dialogElement);
                 DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); return ;}
@@ -49,7 +49,7 @@ async function openDialog() {
                 const pubMetaResult = await serverManager.publishMetaData(metadata,org,userid, result.name, result.server, result.port);
                 blackboard.broadcastMessage(MSG_RENAME_MODEL, {name: result.name});
                 await loader.afterLoading(); _enableButton(dialogElement);
-                if ( !pubMetaResult.result) DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); 
+                if ( !pubMetaResult.result) DIALOG.showError(dialogElement, await i18n.get(pubMetaResult.key)); 
                 else {DIALOG.showMessage(await i18n.get("PublishSuccess"), null, null, messageTheme, "MSG_DIALOG");  return true;}
             }
 

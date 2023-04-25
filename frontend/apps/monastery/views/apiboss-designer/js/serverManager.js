@@ -42,15 +42,14 @@ async function getModelList(server, port, adminid, adminpassword) {
  * @returns {result: true|false, model: Model object on success, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
  async function getMetaData(name, server, port,adminid,adminpassword) {
-    let isPublicServer = true;
-    if(server.length && port.length) {isPublicServer = false};
+    let isPublicServer = false;
 
-    let publicServer = await getPublicApibossServerDetails();
-    port = port.length ? port : publicServer.port;
-    server = server.length ? server : publicServer.serverIP;
-    adminid = adminid.length ? adminid : publicServer.adminid;
-    adminpassword = adminpassword.length ? adminpassword : publicServer.adminpassword;
+    if(!server.length && !port.length && !adminid.length && !adminpassword.length && !name.length) {
+        [server, port, adminid, adminpassword, name] = await getPublicApibossServerDetails();
+        isPublicServer = true;
+    }
     await loader.beforeLoading();
+    if(server.length && port.length && adminid.length && adminpassword.length && name.length) {
     const loginResult = await loginToServer(server, port, adminid, adminpassword);
     if (!loginResult.result){ // failed to connect or login
         await loader.afterLoading();
@@ -63,6 +62,7 @@ async function getModelList(server, port, adminid, adminpassword) {
         return {result: result.result, model: result.result?result.data:null, err: "Metadata read failed at the server", 
             name: result.result?result.name:null, raw_err: "Metadata read failed at the server", key: "MetaDataReadServerIssue"};
     } catch (err)  {await loader.afterLoading();return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
+  } else { await loader.afterLoading(); return {result: false, err: "Server connection issue", raw_err: "InvalidDetails", key: "InvalidDetails"} }
 }
 
 /**
@@ -98,13 +98,11 @@ async function getModelList(server, port, adminid, adminpassword) {
  * @param {string} adminpassword Server admin password
  * @returns {result: true|false, err: Error text on failure, raw_err: Raw error, key: Error i18n key}
  */
-async function publishModel(parsedData, server, port, adminid, adminpassword) {
-    let publicServer = await getPublicApibossServerDetails();
-    port = port.length ? port : publicServer.port;
-    server = server.length ? server : publicServer.serverIP;
-    adminid = adminid.length ? adminid : publicServer.adminid;
-    adminpassword = adminpassword.length ? adminpassword : publicServer.adminpassword;
-
+async function publishModel(parsedData, name, server, port, adminid, adminpassword) {
+    if(!server.length && !port.length && !adminid.length && !adminpassword.length && !name.length) {
+        [server, port, adminid, adminpassword, name] = await getPublicApibossServerDetails();
+    }
+    if(server.length && port.length && adminid.length && adminpassword.length && name.length) {
     const loginResult = await loginToServer(server, port, adminid, adminpassword);
     if (!loginResult.result) return loginResult;    // failed to connect or login
     try {   // try to publish now
@@ -112,23 +110,25 @@ async function publishModel(parsedData, server, port, adminid, adminpassword) {
             { data: parsedData}, true,true)).result, err: "Publishing failed at the server", 
             raw_err: "Publishing failed at the server", key: "PublishServerIssue"};
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "LoginIssue"} }
+  } else { return {result: false, err: "Server connection issue", raw_err: "InvalidDetails", key: "InvalidDetails"} }
 }
 
 async function publishMetaData(metaData,org,userid,name,server, port) {
-    let isPublicServer = true;
-    if(server.length && port.length) {isPublicServer = false};
+    let isPublicServer = false;
 
-    let publicServer = await getPublicApibossServerDetails();
-    port = port.length ? port : publicServer.port;
-    server = server.length ? server : publicServer.serverIP;
-
+    if(!server.length && !port.length && !name.length) {
+        const publicServerDetail = await getPublicApibossServerDetails();
+        [server, port, name] = [publicServerDetail[0], publicServerDetail[1], publicServerDetail.pop()];
+        isPublicServer = true;
+    }
     apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
-
+    if(server.length && port.length && name.length) {
     try {   // try to publish now
         return {result: (await apiman.rest(APP_CONSTANTS.API_CREATEORUPDATEMETA, "POST", 
             { metadata: metaData,org,id:userid,server,port,name,isPublicServer}, true,true)).result, err: "Publishing failed at the server", 
             raw_err: "Publishing failed at the server", key: "PublishServerIssue"};
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "ConnectIssue"} }
+  } else { return {result: false, err: "Server connection issue", raw_err: "InvalidDetails", key: "InvalidDetails"} }
 }
 
 async function loginToServer(server, port, adminid, adminpassword) {
@@ -152,16 +152,16 @@ async function loginToServer(server, port, adminid, adminpassword) {
 }
 
 async function getPublicApibossServerDetails() {
-    let publicServerDetail = await $$.requireJSON(`${APP_CONSTANTS.CONF_PATH}/serverDetails.json`);
-    return publicServerDetail;
+    const publicServerDetail = await $$.requireJSON(`${APP_CONSTANTS.CONF_PATH}/serverDetails.json`);
+    return Object.values(publicServerDetail);
 }
 
-async function setDefaultSettings(org,userid,server,port,apikey) {
+async function setDefaultSettings(org,userid,server,port,apikey,isPublic) {
     apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
 
     try {   // try to publish now
         return {result: (await apiman.rest(APP_CONSTANTS.API_SETDEFAULTSETTINGS, "POST", 
-            { org,id:userid,server,port,apikey}, true,true)).result, err: "Setting default server failed at the server", 
+            { org,id:userid,server,port,apikey,isPublic}, true,true)).result, err: "Setting default server failed at the server", 
             raw_err: "Setting default server failed at the server", key: "SetDefaultServerIssue"};
     } catch (err)  {return {result: false, err: "Setting failed", raw_err: err, key: "SetDefaultServerIssue"} }
 }
