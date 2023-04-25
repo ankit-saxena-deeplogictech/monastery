@@ -53,7 +53,7 @@ async function elementRendered(element, initialRender) {
             }
           })
         }
-        if(apikeys.length>0) data["isapineed"] = true; else data["isapineed"] = false;
+        if(apikeys.length>0) data["isapineed"] = false; else data["isapineed"] = false;
         if (jwtText) data["isjwtneed"] = true; else data["isjwtneed"] = false;
         if (userauths) data["isuserauthsneed"] = true; else data["isuserauthsneed"] = false;
 
@@ -70,11 +70,13 @@ function updateExposedpathandMethod(elementid, updateParam) {
   apiname = elementid;
   if (updateParam) {
     const data = {};
+    let userid = session.get(APP_CONSTANTS.USERID);
+    let domain = apibossmodel._getDomain(userid.native);
     for (const api of model.apis) {
       if (api["apiname"] == elementid) {
         target = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
         data["exposedmethod"] = api["exposedmethod"];
-        data["exposedpath"] = api["exposedpath"];
+        data["exposedpath"] = `/${domain}${api["exposedpath"]}`;
         method = api["exposedmethod"];
         let IdsOfPolicies = api.dependencies, apikeys = [], jwtText = false, userauths = false;
 
@@ -87,7 +89,7 @@ function updateExposedpathandMethod(elementid, updateParam) {
             }
           })
         }
-        if(apikeys.length>0) data["isapineed"] = true; else data["isapineed"] = false;
+        if(apikeys.length>0) data["isapineed"] = false; else data["isapineed"] = false;
         if (jwtText) data["isjwtneed"] = true; else data["isjwtneed"] = false;
         if (userauths) data["isuserauthsneed"] = true; else data["isuserauthsneed"] = false;
 
@@ -288,10 +290,13 @@ async function tryIt(element, event) {
   if(shadowRoot.querySelector("input#token-input")){
     jwtToken = shadowRoot.querySelector("input#token-input").value;
   }
-  if(shadowRoot.querySelector("#apikey")){
-    let xapikey = {"*": shadowRoot.querySelector("#apikey").value}
-    apiman.registerAPIKeys(xapikey, "x-api-key");
-  }
+
+  const org = new String(session.get(APP_CONSTANTS.USERORG));
+  const userid = new String(session.get(APP_CONSTANTS.USERID));
+  const apikey = (await apiman.rest(APP_CONSTANTS.API_CREATEORGETSETTINGS, "POST", { org, id: userid }, true, true)).data.apikey;
+  let xapikey = {"*": apikey}
+  apiman.registerAPIKeys(xapikey, "x-api-key");
+
   const host = new URL(`${serverDetails.secure ? `https` : `http`}://${serverDetails.host}:${serverDetails.port}`).host; // have to change the host for our dynamic case
   let sub = 'access'
   if(shadowRoot.querySelector("#userid") && shadowRoot.querySelector("#password")){

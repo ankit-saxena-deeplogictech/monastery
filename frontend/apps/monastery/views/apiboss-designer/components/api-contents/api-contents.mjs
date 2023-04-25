@@ -47,7 +47,7 @@ import { apibossmodel } from "../../model/apibossmodel.mjs";
      }
  
      if(jwtText) securityData.push({"index":securityData.length + 1,"value": jwtText})
-     if(apikeys && apikeys.length>0) securityData.push({"index":securityData.length + 1,"value": `The following api keys is required - ${apikeys.join(",")}`});
+     if(apikeys && apikeys.length>0) securityData.push({"index":securityData.length + 1,"value": `This api needs an API Key.`});
  
      traverseObject(JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"], false, function (node, key) { if (node && typeof node == "object") if (node.type) { inputParams.push({ "name": key, "type": node.type, "desc": node.desc ? node.desc : "", "index": inputParams.length + 1 }); } });
      traverseObject(JSON.parse(JSON.parse(api["input-output"])[1])["responses"]["200"]["content"]["application/json"]["schema"]["properties"], false, function (node, key) { if (node && typeof node == "object") if (node.type) { outputParams.push({ "name": key, "type": node.type, "desc": node.desc ? node.desc : "", "index": outputParams.length + 1 }); } });

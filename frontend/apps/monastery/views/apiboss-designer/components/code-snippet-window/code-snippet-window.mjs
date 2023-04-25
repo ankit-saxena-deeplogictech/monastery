@@ -84,7 +84,7 @@ function updateData(){
         basicToken = `${btoa(`${shadowRoot.querySelector("#MyInput").value}:${shadowRoot.querySelector("#Mypwd").value}`)}`
       }
       else basicToken = false;
-      if(apikey) key = apikey.value; else key = false;
+      if(apikey) key = false; else key = false;
       if(jwtToken) token = jwtToken.value;else token = false;
 
 
