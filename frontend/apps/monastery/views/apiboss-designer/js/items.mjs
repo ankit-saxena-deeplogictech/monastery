@@ -25,6 +25,7 @@ async function getItemList() {
         else{ result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: serverDetails.name, id: userid, server: publicServerDetails.serverIP, port: publicServerDetails.port, isPublicServer: true }, true, true);}
         serverDetails.host = defaultSeverDetails.data.server!=""?defaultSeverDetails.data.server:publicServerDetails.serverIP;
         serverDetails.port = defaultSeverDetails.data.port!=""?defaultSeverDetails.data.port:publicServerDetails.port;
+        session.set("__org_server_details", JSON.stringify(serverDetails));
         if (result.result && result.data && Object.keys(result.data).length > 0) {
             metadata = result.data;
             session.set(ORG_METADATA, metadata);

@@ -1,7 +1,7 @@
 SCHEMA
 ======
 {
-    "name": {"html":"input", "type":"text", "placeholder":"{{i18n.PackageName}}", "required":"true", "value":"{{modelName}}",  "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')","required":"true","class":"validate"},
+    "name": {"html":"input", "type":"text", "placeholder":"{{i18n.PackageName}}", "value":"{{modelName}}",  "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')"},
     "server": {"html":"input", "type":"text", "placeholder":"{{i18n.Server}}", "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')"},
     "port": {"html":"input", "type":"number", "placeholder":"{{i18n.Port}}","spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')"},
     "adminid": {"html":"input", "type":"text", "placeholder":"{{i18n.AdminID}}", "spellcheck":"false" , "oninvalid":"this.setCustomValidity('{{i18n.FillField}}')" , "oninput":"setCustomValidity('')"},

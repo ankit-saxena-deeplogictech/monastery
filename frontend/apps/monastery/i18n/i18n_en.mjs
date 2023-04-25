@@ -301,5 +301,6 @@ export const i18n = {
 "ClickHereToContinueLogin": "Click here to continue to login.",
 "validData": "Please enter vaild data",
 "namePattern": "^[a-zA-Z]+([ _-]?[a-zA-Z0-9]+)*[a-zA-Z0-9]?$",
-"orgPattern":"^[a-zA-Z0-9]+$"
+"orgPattern":"^[a-zA-Z0-9]+$",
+"InvalidDetails": "Invalid Details"
 }
