@@ -280,7 +280,7 @@ async function tryIt(element, event) {
   };
   await loader.beforeLoading();
 
-  let node = shadowRoot.querySelector("#content");
+  let node = shadowRoot.querySelector("#content"),apikey;
   let targetNode = node;
   let reqBody = {}
   targetNode.querySelectorAll(":scope>div").forEach((para) => {
@@ -293,7 +293,14 @@ async function tryIt(element, event) {
 
   const org = new String(session.get(APP_CONSTANTS.USERORG));
   const userid = new String(session.get(APP_CONSTANTS.USERID));
-  const apikey = (await apiman.rest(APP_CONSTANTS.API_CREATEORGETSETTINGS, "POST", { org, id: userid }, true, true)).data.apikey;
+  const settingDetails = (await apiman.rest(APP_CONSTANTS.API_CREATEORGETSETTINGS, "POST", { org, id: userid }, true, true)).data;
+if(settingDetails.server.length && settingDetails.port.length && settingDetails.package.length) apikey = settingDetails.apikey;
+else if(!settingDetails.publicapikey.length) {
+  if(session.get(ORG_METADATA).policies.length)
+apikey = session.get(ORG_METADATA).policies[0]["apikey"];
+
+}
+else apikey = settingDetails.publicapikey;
   let xapikey = {"*": apikey}
   apiman.registerAPIKeys(xapikey, "x-api-key");
 

@@ -13,7 +13,7 @@ const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH = `${MODULE_PATH}
 
 async function getItemList() {
     try {
-        let serverDetails = JSON.parse(session.get("__org_server_details"));
+        let serverDetails = {host:"",port:"",name:"",secure:false}
         let metadata, result;
         const org = new String(session.get(APP_CONSTANTS.USERORG));
         const userid = new String(session.get(APP_CONSTANTS.USERID));
@@ -21,10 +21,12 @@ async function getItemList() {
         await loader.beforeLoading();
         const defaultSeverDetails = await apiman.rest(APP_CONSTANTS.API_CREATEORGETSETTINGS, "POST", { org, id: userid }, true, true);
         const publicServerDetails = await getPublicApibossServerDetails();
-        if (defaultSeverDetails.data.server && defaultSeverDetails.data.port) result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: serverDetails.name, id: userid, server: defaultSeverDetails.data.server, port: defaultSeverDetails.data.port }, true, true);
-        else{ result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: serverDetails.name, id: userid, server: publicServerDetails.serverIP, port: publicServerDetails.port, isPublicServer: true }, true, true);}
+        if (defaultSeverDetails.data.server && defaultSeverDetails.data.port) result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: defaultSeverDetails.data.package, id: userid, server: defaultSeverDetails.data.server, port: defaultSeverDetails.data.port }, true, true);
+        else{ result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: publicServerDetails.package, id: userid, server: publicServerDetails.serverIP, port: publicServerDetails.port, isPublicServer: true }, true, true);}
         serverDetails.host = defaultSeverDetails.data.server!=""?defaultSeverDetails.data.server:publicServerDetails.serverIP;
         serverDetails.port = defaultSeverDetails.data.port!=""?defaultSeverDetails.data.port:publicServerDetails.port;
+        serverDetails.name = defaultSeverDetails.data.name!=""?defaultSeverDetails.data.package:publicServerDetails.package;
+
         session.set("__org_server_details", JSON.stringify(serverDetails));
         if (result.result && result.data && Object.keys(result.data).length > 0) {
             metadata = result.data;
