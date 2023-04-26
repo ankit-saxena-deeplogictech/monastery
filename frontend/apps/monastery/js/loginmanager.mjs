@@ -26,9 +26,6 @@ async function signin(id, pass, otp) {
         const PERMISSIONS_MAP = securityguard.getPermissionsMap();
         PERMISSIONS_MAP[resp.org] = ["apiboss-designer", "monkruls-designer","api400-designer","asb-designer","monboss-designer"];
         securityguard.setPermissionsMap(PERMISSIONS_MAP);
-        const serverDetails= await apiman.rest(APP_CONSTANTS.API_GETAPPCONFIG, "GET", {},true);
-        session.set("__org_server_details", serverDetails);
-
         LOG.info(`Login succeeded for ${id}`);
         return 1;
     } else if (resp.result && (!resp.tokenflag)){
