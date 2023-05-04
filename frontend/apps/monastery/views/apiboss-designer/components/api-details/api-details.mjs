@@ -311,8 +311,12 @@ else apikey = settingDetails.publicapikey;
   }
 
   if (jwtToken) { const storage = _getAPIManagerStorage(); storage.tokenManager[`${host}_${sub}`] = jwtToken; _setAPIManagerStorage(storage); }
-  let resp = await apiman.rest(`${serverDetails.secure ? `https` : `http`}://${serverDetails.host}:${serverDetails.port}${path}`, `${method.toUpperCase()}`, reqBody, (jwtToken) ? true : false, false, false, false, true);
-  console.log(resp);
+  let resp;
+  try {
+    resp = await apiman.rest(`${serverDetails.secure ? `https` : `http`}://${serverDetails.host}:${serverDetails.port}${path}`, `${method.toUpperCase()}`, reqBody, (jwtToken) ? true : false, false, false, false, true);
+  } catch (error) {
+    resp = {respErr: {status: "500", statusText: "Internal Server Error"}};
+  }
   if (typeof resp == "string") resp = JSON.parse(resp);
   text_editor.getJsonData(resp);
   await loader.afterLoading();
