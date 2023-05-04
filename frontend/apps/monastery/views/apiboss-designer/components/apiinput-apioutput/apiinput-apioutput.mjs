@@ -9,12 +9,12 @@
  import { session } from "/framework/js/session.mjs";
 
  
- const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH,ORG_METADATA = "__org_metadata";
+ const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH,ORG_DEV_METADATA = "__org_dev_metadata";
  
  let model, apiname;
  
  async function elementRendered(element) {
-   model =  session.get(ORG_METADATA);
+   model =  session.get(ORG_DEV_METADATA);
   for (const api of model.apis) {
     if (api["apiname"] == apiname) {
       const shadowRoot = apiinput_apioutput.getShadowRootByHostId("treeview");

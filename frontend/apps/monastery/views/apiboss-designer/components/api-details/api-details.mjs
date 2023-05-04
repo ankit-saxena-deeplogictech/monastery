@@ -13,7 +13,7 @@ import { loader } from "../../../../js/loader.mjs";
 import {page_generator} from "/framework/components/page-generator/page-generator.mjs";
 import { apibossmodel } from "../../model/apibossmodel.mjs";
 
-const COMPONENT_PATH = util.getModulePath(import.meta), VIEW_PATH = APP_CONSTANTS.CONF_PATH,ORG_METADATA = "__org_metadata", APIMANAGER_SESSIONKEY = "__org_monkshu_APIManager";
+const COMPONENT_PATH = util.getModulePath(import.meta), VIEW_PATH = APP_CONSTANTS.CONF_PATH,ORG_DEV_METADATA = "__org_dev_metadata", APIMANAGER_SESSIONKEY = "__org_monkshu_APIManager";
 
 let model, target, apiname, serverDetails, method;
 
@@ -30,11 +30,11 @@ async function elementRendered(element, initialRender) {
   const shadowRoot = page_generator.getShadowRootByHost(document.querySelector('page-generator'));
   let totalSize =shadowRoot.querySelector('div.item2').offsetHeight+shadowRoot.querySelector('div.item3').offsetHeight+shadowRoot.querySelector('div.item5').offsetHeight+shadowRoot.querySelector('div.item8').offsetHeight + 30 ;
   shadowRoot.querySelector('div.item1').style.maxHeight=totalSize+'px';
-  let userid = session.get(APP_CONSTANTS.USERID);
-  let domain = apibossmodel._getDomain(userid.native);
+  // let userid = session.get(APP_CONSTANTS.USERID);
+  let domain = session.get("__org_domain");
   const data = {};
   if (initialRender) {
-    model = session.get(ORG_METADATA);
+    model = session.get(ORG_DEV_METADATA);
     for (const api of model.apis) {
       if (api["apiname"] == apiname) {
         target = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
@@ -71,7 +71,7 @@ function updateExposedpathandMethod(elementid, updateParam) {
   if (updateParam) {
     const data = {};
     let userid = session.get(APP_CONSTANTS.USERID);
-    let domain = apibossmodel._getDomain(userid.native);
+    let domain = session.get("__org_domain");
     for (const api of model.apis) {
       if (api["apiname"] == elementid) {
         target = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
@@ -296,8 +296,8 @@ async function tryIt(element, event) {
   const settingDetails = (await apiman.rest(APP_CONSTANTS.API_CREATEORGETSETTINGS, "POST", { org, id: userid }, true, true)).data;
 if(settingDetails.server.length && settingDetails.port.length && settingDetails.package.length) apikey = settingDetails.apikey;
 else if(!settingDetails.publicapikey.length) {
-  if(session.get(ORG_METADATA).policies.length)
-apikey = session.get(ORG_METADATA).policies[0]["apikey"];
+  if(session.get(ORG_DEV_METADATA).policies.length)
+apikey = session.get(ORG_DEV_METADATA).policies[0]["apikey"];
 
 }
 else apikey = settingDetails.publicapikey;
@@ -312,6 +312,7 @@ else apikey = settingDetails.publicapikey;
 
   if (jwtToken) { const storage = _getAPIManagerStorage(); storage.tokenManager[`${host}_${sub}`] = jwtToken; _setAPIManagerStorage(storage); }
   let resp = await apiman.rest(`${serverDetails.secure ? `https` : `http`}://${serverDetails.host}:${serverDetails.port}${path}`, `${method.toUpperCase()}`, reqBody, (jwtToken) ? true : false, false, false, false, true);
+  console.log(resp);
   if (typeof resp == "string") resp = JSON.parse(resp);
   text_editor.getJsonData(resp);
   await loader.afterLoading();

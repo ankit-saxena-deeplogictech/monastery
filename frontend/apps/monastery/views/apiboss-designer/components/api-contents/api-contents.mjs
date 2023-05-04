@@ -9,12 +9,12 @@
  import { session } from "/framework/js/session.mjs";
 import { apibossmodel } from "../../model/apibossmodel.mjs";
  
- const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH,ORG_METADATA = "__org_metadata";
+ const COMPONENT_PATH = util.getModulePath(import.meta),VIEW_PATH=APP_CONSTANTS.CONF_PATH,ORG_DEV_METADATA = "__org_dev_metadata";
  let docData,model,serverDetails, exposedpath;
  
  
  const elementConnected = async (element) => {
-  model = session.get(ORG_METADATA),serverDetails = JSON.parse(session.get("__org_server_details"));
+  model = session.get(ORG_DEV_METADATA),serverDetails = JSON.parse(session.get("__org_server_details"));
  }
  
  function traverseObject(target, t, callback) {
@@ -29,9 +29,10 @@ import { apibossmodel } from "../../model/apibossmodel.mjs";
  
  async function bindApiContents(elementid) {
    const data = {}
-   let userid = session.get(APP_CONSTANTS.USERID);
-   let domain = apibossmodel._getDomain(userid.native);
-   model = session.get(ORG_METADATA),serverDetails =JSON.parse(session.get("__org_server_details"));;
+  //  let userid = session.get(APP_CONSTANTS.USERID);
+  let domain = session.get("__org_domain");
+
+   model = session.get(ORG_DEV_METADATA),serverDetails =JSON.parse(session.get("__org_server_details"));;
    for (const api of model.apis) {
      let inputParams = [], outputParams = [];
  
