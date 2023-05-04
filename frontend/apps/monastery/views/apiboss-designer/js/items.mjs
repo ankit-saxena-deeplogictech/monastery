@@ -18,7 +18,6 @@ const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH = `${MODULE_PATH}
 
 async function getItemList() {
     try {
-        console.log("testing");
         const messageTheme = await $$.requireJSON(`${VIEW_PATH}/dialogs/dialogPropertiesPrompt.json`);
         let serverDetails = { host: "", port: "", name: "", secure: false }
         let metadata, result;
@@ -34,13 +33,18 @@ async function getItemList() {
         if (defaultSeverDetails.data.server && defaultSeverDetails.data.port) {
             const loginResult = await serverManager.loginToServer(defaultSeverDetails.data.server, defaultSeverDetails.data.port, defaultSeverDetails.data.adminid, defaultSeverDetails.data.adminpassword);
             if (loginResult.result) {
-                const listApiResult =  await apiman.rest(`http://${defaultSeverDetails.data.server}:${defaultSeverDetails.data.port}/apps/apiboss/admin/list`, "POST", 
-                { apikey:defaultSeverDetails.data.apikey,domain }, true,true);
-                apiman.registerAPIKeys({ "*": "fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389" }, "X-API-Key");
-                result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: defaultSeverDetails.data.package, id: userid, server: defaultSeverDetails.data.server, port: defaultSeverDetails.data.port }, true, true);
-                if(listApiResult.result&&result.result){
+                try {
+                    const listApiResponse =  await apiman.rest(`http://${defaultSeverDetails.data.server}:${defaultSeverDetails.data.port}/apps/apiboss/admin/list`, "POST", 
+                    { apikey:defaultSeverDetails.data.apikey,domain }, true,true);
+                    const listApiResult = [];
+                    listApiResponse.apis.forEach((apipath)=>{
+                        if(_checkDomainAndSubdomain(apipath.split("/",2).join("/").substring(1), String(domain))) {listApiResult.push(apipath)}
+                    })
+                    apiman.registerAPIKeys({ "*": "fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389" }, "X-API-Key");
+                    result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: defaultSeverDetails.data.package, id: userid, server: defaultSeverDetails.data.server, port: defaultSeverDetails.data.port }, true, true);
+                    if(listApiResult.length&&result.result){
                     session.set(ORG_METADATA, result.data);
-                    let listApis = listApiResult.apis;
+                    let listApis = listApiResult;
                     let apilist = [];   
                     listApis.forEach((eachapi)=>{
                         result.data.apis.forEach((api)=>{
@@ -55,7 +59,11 @@ async function getItemList() {
                     result.data.apis = apilist;
                     result.data.policies = policy;
                 }
-
+                } catch (error) {
+                    DIALOG.showMessage(await i18n.get("ConnectIssue"), "error", null, messageTheme, "MSG_DIALOG");
+                    await loader.afterLoading();
+                    return "[]"
+                }
             }
             else {
                 DIALOG.showMessage(await i18n.get("ConnectIssue"), "error", null, messageTheme, "MSG_DIALOG");
@@ -66,14 +74,19 @@ async function getItemList() {
         else {
             const loginResult = await serverManager.loginToServer(publicServerDetails.serverIP, publicServerDetails.port, publicServerDetails.adminid, publicServerDetails.adminpassword);
             if (loginResult.result) {
-                const listApiResult =  await apiman.rest(`http://${publicServerDetails.serverIP}:${publicServerDetails.port}/apps/apiboss/admin/list`, "POST", 
-                { apikey:defaultSeverDetails.data.apikey,domain}, true,true);
-                apiman.registerAPIKeys({ "*": "fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389" }, "X-API-Key");
-                result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: publicServerDetails.package, id: userid, server: publicServerDetails.serverIP, port: publicServerDetails.port, isPublicServer: true }, true, true);
-                if(listApiResult.result&&result.result){
+                try {
+                    const listApiResponse =  await apiman.rest(`http://${publicServerDetails.serverIP}:${publicServerDetails.port}/apps/apiboss/admin/list`, "POST", 
+                    { apikey:defaultSeverDetails.data.apikey,domain}, true,true);
+                    const listApiResult = [];
+                    listApiResponse.apis.forEach((apipath)=>{
+                        if(_checkDomainAndSubdomain(apipath.split("/",2).join("/").substring(1), String(domain))) {listApiResult.push(apipath)}
+                    })
+                    apiman.registerAPIKeys({ "*": "fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389" }, "X-API-Key");
+                    result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: publicServerDetails.package, id: userid, server: publicServerDetails.serverIP, port: publicServerDetails.port, isPublicServer: true }, true, true);
+                    if(listApiResult.length&&result.result){
                     session.set(ORG_METADATA, result.data);
 
-                    let listApis = listApiResult.apis;
+                    let listApis = listApiResult;
                     let apilist = [];   
                     listApis.forEach((eachapi)=>{
                         result.data.apis.forEach((api)=>{
@@ -88,6 +101,11 @@ async function getItemList() {
                     });                    
                     result.data.apis = apilist;
                     result.data.policies = policy;
+                }
+                } catch (error) {
+                    DIALOG.showMessage(await i18n.get("ConnectIssue"), "error", null, messageTheme, "MSG_DIALOG");
+                    await loader.afterLoading();
+                    return "[]"
                 }
             } 
             else {
@@ -136,6 +154,29 @@ function _enableButton(element) { element.style["pointer-events"] = ""; element.
 async function getPublicApibossServerDetails() {
     let publicServerDetail = await $$.requireJSON(`${APP_CONSTANTS.CONF_PATH}/serverDetails.json`);
     return publicServerDetail;
+}
+
+function _checkDomainAndSubdomain(str1, str2) {
+	// check if both strings contain a period, indicating a domain or subdomain
+	if (str1.includes(".") && str2.includes(".")) {
+		// split the strings into an array using the period as a delimiter
+		const arr1 = str1.split(".");
+		const arr2 = str2.split(".");
+		// check the length of the arrays to determine which string is the domain and which is the subdomain
+		if (arr1.length > arr2.length) {
+			if (str1.endsWith(str2)) {
+				return true;
+			}
+		}
+		else if (arr2.length > arr1.length) {
+			if (str2.endsWith(str1)) { return true; }
+		}
+        else if (arr1.length == arr2.length) {
+            if(str1 == str2) { return true; }
+        }
+		else return false
+
+	} else return false;
 }
 
 export const items = { getItemList };
