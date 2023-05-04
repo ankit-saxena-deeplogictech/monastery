@@ -51,42 +51,57 @@ async function openDialog() {
             if (typeOfClose == "submit") {
                 const server = html_fragment.getShadowRootByHostId("output").querySelector("textarea#server").value;
                 const port = html_fragment.getShadowRootByHostId("output").querySelector("textarea#port").value;
-                const packageName = html_fragment.getShadowRootByHostId("output").querySelector("textarea#package").value
+                const packageName = html_fragment.getShadowRootByHostId("output").querySelector("textarea#package").value;
+                const adminid = html_fragment.getShadowRootByHostId("output").querySelector("textarea#adminid").value;
+                const adminpassword = html_fragment.getShadowRootByHostId("output").querySelector("textarea#adminpassword").value
 
                 if (!server.length && !port.length && !packageName.length) {
                     if (!result.apikey) { DIALOG.showError(dialogElement, await i18n.get("FillKey")); return; }
                     const publicServerDetails = await getPublicApibossServerDetails();
-                    const publicMetaresult = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: publicServerDetails.package, id: userid, server: publicServerDetails.serverIP, port: publicServerDetails.port, isPublicServer: true }, true, true);
-                    if (publicMetaresult.result && publicMetaresult?.data?.policies.length) {
-                        if (publicMetaresult.data.policies.some(policy => policy.apikey == result.apikey)) {
-                            blackboard.broadcastMessage(MSG_FILE_UPLOADED, { name: publicServerDetails.package, data: JSON.stringify(publicMetaresult.data) });
-                            await serverManager.setDefaultSettings(org, userid, server, port,packageName, result.apikey, true);
-                            session.set(ORG_METADATA, publicMetaresult.data);
-                            return true;
+                    const loginResult = await serverManager.loginToServer(publicServerDetails.serverIP, publicServerDetails.port, publicServerDetails.adminid, publicServerDetails.adminpassword);
+                    if (loginResult.result) { // failed to connect or login
+                        apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
+                        const publicMetaresult = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: publicServerDetails.package, id: userid, server: publicServerDetails.serverIP, port: publicServerDetails.port, isPublicServer: true }, true, true);
+                        if (publicMetaresult.result && publicMetaresult?.data?.policies.length) {
+                            if (publicMetaresult.data.policies.some(policy => policy.apikey == result.apikey)) {
+                                blackboard.broadcastMessage(MSG_FILE_UPLOADED, { name: publicServerDetails.package, data: JSON.stringify(publicMetaresult.data) });
+                                await serverManager.setDefaultSettings(org, userid, server, port, packageName, result.apikey, true);
+                                session.set(ORG_METADATA, publicMetaresult.data);
+                                return true;
+                            }
+                            else { DIALOG.showError(dialogElement, await i18n.get("IncorrectAPI")); return; }
+                        }
+                        else { DIALOG.showError(dialogElement, await i18n.get("APIsNotPublished")); return; }
+ 
+                    }
+                    else { DIALOG.showError(dialogElement, await i18n.get("ConnectIssue")); return; }
+                }
+                const privateLoginResult = await serverManager.loginToServer(server, port, adminid, adminpassword);
+                if (privateLoginResult.result) { 
+                    apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
+                    const localMetaResult = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: packageName, id: userid, server, port }, true, true);
+                    if (localMetaResult.result && localMetaResult?.data?.policies.length) {
+                        if (localMetaResult.data.policies.some(policy => policy.apikey == result.apikey)) {
+                            const setResult = await serverManager.setDefaultSettings(org, userid, server, port, packageName, result.apikey,false,adminid,adminpassword);
+                            if (!setResult.result) {
+                                DIALOG.showError(dialogElement, await i18n.get("APIsNotPublished")); return;
+                            }
+                            else {
+                                blackboard.broadcastMessage(MSG_FILE_UPLOADED, { name: packageName, data: JSON.stringify(localMetaResult.data) });
+                                session.set(ORG_METADATA, localMetaResult.data);
+                                DIALOG.showMessage(await i18n.get("SetSuccess"), null, null, messageTheme, "MSG_DIALOG"); return true;
+                            }
+
                         }
                         else { DIALOG.showError(dialogElement, await i18n.get("IncorrectAPI")); return; }
                     }
-                }
-                const localMetaResult = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: packageName, id: userid, server, port }, true, true);
-                if (localMetaResult.result && localMetaResult?.data?.policies.length) {
-                    if (localMetaResult.data.policies.some(policy => policy.apikey == result.apikey)) {
-                        const setResult = await serverManager.setDefaultSettings(org, userid, server, port,packageName, result.apikey);
-                        if (!setResult.result) {
-                            DIALOG.showError(dialogElement, await i18n.get("APIsNotPublished")); return;
-                        }
-                        else {
-                            blackboard.broadcastMessage(MSG_FILE_UPLOADED, { name: packageName, data: JSON.stringify(localMetaResult.data) });
-                            session.set(ORG_METADATA, localMetaResult.data);
-                            DIALOG.showMessage(await i18n.get("SetSuccess"), null, null, messageTheme, "MSG_DIALOG"); return true;
-                        }
-
+                    else {
+                        DIALOG.showError(dialogElement, await i18n.get("APIsNotPublished")
+                        ); return;
                     }
-                    else { DIALOG.showError(dialogElement, await i18n.get("IncorrectAPI")); return; }
                 }
-                else {
-                    DIALOG.showError(dialogElement, await i18n.get("APIsNotPublished")
-                    ); return;
-                }
+                else { DIALOG.showError(dialogElement, await i18n.get("ConnectIssue")); return; }
+
 
 
             }

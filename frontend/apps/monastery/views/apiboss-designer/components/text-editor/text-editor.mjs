@@ -12,7 +12,7 @@
 	 `${COMPONENT_PATH}/3p/codemirror/mode/javascript/javascript.js`, `${COMPONENT_PATH}/3p/codemirror/addon/edit/matchbrackets.js`,
 	 `${COMPONENT_PATH}/3p/codemirror/addon/lint/lint.js`, `${COMPONENT_PATH}/3p/codemirror/addon/lint/javascript-lint.js`,
 	 `${COMPONENT_PATH}/3p/jshint/jshint.js`,`${COMPONENT_PATH}/3p/codemirror/addon/lint/json-lint.js`,]
- let model, ORG_METADATA = "__org_metadata";
+ let model, ORG_DEV_METADATA = "__org_dev_metadata";
  async function elementConnected(element) {
 	 Object.defineProperty(element, "value", {get: _=>_getValue(element), set: value=>_setValue(value, element)});
 	 
@@ -20,7 +20,7 @@
 		 `<style>${element.getAttribute("styleBody")}</style>`:undefined, 
 		 showToolbar:element.getAttribute("showToolbar")?.toLowerCase() == "false"?undefined:true };
  
-		 model = session.get(ORG_METADATA);
+		 model = session.get(ORG_DEV_METADATA);
 	 if (element.id) if (!text_editor.datas) {text_editor.datas = {}; text_editor.datas[element.id] = data;} 
 	 else text_editor.data = data;
  }

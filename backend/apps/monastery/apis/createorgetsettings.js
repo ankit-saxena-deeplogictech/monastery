@@ -12,9 +12,9 @@ exports.doService = async jsonReq => {
     const jsonData = fs.readFileSync(`${APP_CONSTANTS.CONF_DIR}/settings.json`, 'utf8');
     const data = JSON.parse(jsonData);
     if (!data.hasOwnProperty(jsonReq.org)) {
-        data[jsonReq.org] = {server:"",port:"",apikey:"",package:"",publicapikey:""};
+        data[jsonReq.org] = {server:"",port:"",apikey:"",package:"",publicapikey:"",adminid:"",adminpassword:""};
         fs.writeFileSync(`${APP_CONSTANTS.CONF_DIR}/settings.json`,JSON.stringify(data, null, 4))
-        return { result:result,data:{server:"",port:"",apikey:"",package:"",publicapikey:""}};
+        return { result:result,data:{server:"",port:"",apikey:"",package:"",publicapikey:"",adminid:"",adminpassword:""}};
     }
     else  return { result:result,data:data[jsonReq.org]};
     }

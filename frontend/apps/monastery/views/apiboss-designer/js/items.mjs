@@ -1,55 +1,128 @@
 import { util } from "/framework/js/util.mjs";
+import { i18n } from "/framework/js/i18n.mjs";
 import { apimanager as apiman } from "/framework/js/apimanager.mjs";
 import { APP_CONSTANTS } from "../../../js/constants.mjs";
 import { loader } from "../../../js/loader.mjs";
 import { session } from "/framework/js/session.mjs";
 import { securityguard } from "/framework/js/securityguard.mjs";
+import { serverManager } from "./serverManager.js";
 
 import { dialog } from "../page/dialog.js";
 
-const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH = `${MODULE_PATH}/..`, ORG_METADATA = "__org_metadata";
+
+const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH = `${MODULE_PATH}/..`, ORG_DEV_METADATA = "__org_dev_metadata",ORG_METADATA = "__org_metadata", DIALOG = window.monkshu_env.components["dialog-box"];
+
+
 
 
 
 async function getItemList() {
     try {
-        let serverDetails = {host:"",port:"",name:"",secure:false}
+        console.log("testing");
+        const messageTheme = await $$.requireJSON(`${VIEW_PATH}/dialogs/dialogPropertiesPrompt.json`);
+        let serverDetails = { host: "", port: "", name: "", secure: false }
         let metadata, result;
         const org = new String(session.get(APP_CONSTANTS.USERORG));
         const userid = new String(session.get(APP_CONSTANTS.USERID));
         const role = securityguard.getCurrentRole();
+        const domain = new String(session.get("__org_domain"));
         await loader.beforeLoading();
+        apiman.registerAPIKeys({ "*": "fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389" }, "X-API-Key");
         const defaultSeverDetails = await apiman.rest(APP_CONSTANTS.API_CREATEORGETSETTINGS, "POST", { org, id: userid }, true, true);
         const publicServerDetails = await getPublicApibossServerDetails();
-        if (defaultSeverDetails.data.server && defaultSeverDetails.data.port) result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: defaultSeverDetails.data.package, id: userid, server: defaultSeverDetails.data.server, port: defaultSeverDetails.data.port }, true, true);
-        else{ result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: publicServerDetails.package, id: userid, server: publicServerDetails.serverIP, port: publicServerDetails.port, isPublicServer: true }, true, true);}
-        serverDetails.host = defaultSeverDetails.data.server!=""?defaultSeverDetails.data.server:publicServerDetails.serverIP;
-        serverDetails.port = defaultSeverDetails.data.port!=""?defaultSeverDetails.data.port:publicServerDetails.port;
-        serverDetails.name = defaultSeverDetails.data.name!=""?defaultSeverDetails.data.package:publicServerDetails.package;
 
-        session.set("__org_server_details", JSON.stringify(serverDetails));
-        if (result.result && result.data && Object.keys(result.data).length > 0) {
-            metadata = result.data;
-            session.set(ORG_METADATA, metadata);
-        }
-        const items = [];
-        if (metadata) {
-            for (const api of metadata.apis) {
-                items.push({
-                    id: api["apiname"], img: util.resolveURL(`${MODULE_PATH}/../dialogs/model.svg`),
-                    label: api["apiname"], exposedmethod: api["exposedmethod"]
-                })
+        if (defaultSeverDetails.data.server && defaultSeverDetails.data.port) {
+            const loginResult = await serverManager.loginToServer(defaultSeverDetails.data.server, defaultSeverDetails.data.port, defaultSeverDetails.data.adminid, defaultSeverDetails.data.adminpassword);
+            if (loginResult.result) {
+                const listApiResult =  await apiman.rest(`http://${defaultSeverDetails.data.server}:${defaultSeverDetails.data.port}/apps/apiboss/admin/list`, "POST", 
+                { apikey:defaultSeverDetails.data.apikey,domain }, true,true);
+                apiman.registerAPIKeys({ "*": "fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389" }, "X-API-Key");
+                result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: defaultSeverDetails.data.package, id: userid, server: defaultSeverDetails.data.server, port: defaultSeverDetails.data.port }, true, true);
+                if(listApiResult.result&&result.result){
+                    session.set(ORG_METADATA, result.data);
+                    let listApis = listApiResult.apis;
+                    let apilist = [];   
+                    listApis.forEach((eachapi)=>{
+                        result.data.apis.forEach((api)=>{
+                        if(eachapi.substring(eachapi.indexOf(".com")+4) == api.exposedpath) {
+                          apilist.push(api);
+                        }
+                      })
+                    });                    
+                    let policy = apilist.map((api)=>{
+                     return result.data.policies.find((policy)=>api.dependencies.includes(policy.id))
+                    });                    
+                    result.data.apis = apilist;
+                    result.data.policies = policy;
+                }
+
             }
-            await loader.afterLoading();
-            return JSON.stringify(items);
+            else {
+                DIALOG.showMessage(await i18n.get("ConnectIssue"), "error", null, messageTheme, "MSG_DIALOG");
+                await loader.afterLoading();
+                return "[]"
+            }
         }
         else {
-            await loader.afterLoading();
-            if (role == APP_CONSTANTS.ADMIN_ROLE) await dialog.adminDialog();
-            else if (role == APP_CONSTANTS.USER_ROLE) await dialog.userDialog();
-            return "[]";
-        }
+            const loginResult = await serverManager.loginToServer(publicServerDetails.serverIP, publicServerDetails.port, publicServerDetails.adminid, publicServerDetails.adminpassword);
+            if (loginResult.result) {
+                const listApiResult =  await apiman.rest(`http://${publicServerDetails.serverIP}:${publicServerDetails.port}/apps/apiboss/admin/list`, "POST", 
+                { apikey:defaultSeverDetails.data.apikey,domain}, true,true);
+                apiman.registerAPIKeys({ "*": "fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389" }, "X-API-Key");
+                result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: publicServerDetails.package, id: userid, server: publicServerDetails.serverIP, port: publicServerDetails.port, isPublicServer: true }, true, true);
+                if(listApiResult.result&&result.result){
+                    session.set(ORG_METADATA, result.data);
 
+                    let listApis = listApiResult.apis;
+                    let apilist = [];   
+                    listApis.forEach((eachapi)=>{
+                        result.data.apis.forEach((api)=>{
+                        if(eachapi.substring(eachapi.indexOf(".com")+4) == api.exposedpath) {
+                          apilist.push(api);
+                        }
+                      })
+                    });
+                                        
+                    let policy = apilist.map((api)=>{
+                     return result.data.policies.find((policy)=>api.dependencies.includes(policy.id))
+                    });                    
+                    result.data.apis = apilist;
+                    result.data.policies = policy;
+                }
+            } 
+            else {
+                DIALOG.showMessage(await i18n.get("ConnectIssue"), "error", null, messageTheme, "MSG_DIALOG");
+                await loader.afterLoading();
+                return "[]"
+            }   
+        }    
+                serverDetails.host = defaultSeverDetails.data.server != "" ? defaultSeverDetails.data.server : publicServerDetails.serverIP;
+                serverDetails.port = defaultSeverDetails.data.port != "" ? defaultSeverDetails.data.port : publicServerDetails.port;
+                serverDetails.name = defaultSeverDetails.data.name != "" ? defaultSeverDetails.data.package : publicServerDetails.package;
+
+                session.set("__org_server_details", JSON.stringify(serverDetails));
+                if (result.result && result.data && Object.keys(result.data).length > 0) {
+                    metadata = result.data;
+                    session.set(ORG_DEV_METADATA, metadata);
+                }
+                const items = [];
+                if (metadata) {
+                    for (const api of metadata.apis) {
+                        items.push({
+                            id: api["apiname"], img: util.resolveURL(`${MODULE_PATH}/../dialogs/model.svg`),
+                            label: api["apiname"], exposedmethod: api["exposedmethod"]
+                        })
+                    }
+                    await loader.afterLoading();
+                    return JSON.stringify(items);
+                }
+                else {
+                    await loader.afterLoading();
+                    if (role == APP_CONSTANTS.ADMIN_ROLE) await dialog.adminDialog();
+                    else if (role == APP_CONSTANTS.USER_ROLE) await dialog.userDialog();
+                    return "[]";
+                }     
+        
     }
     catch (err) {
         LOG.error(`User apis list fetch failed and the error is ${err}`);

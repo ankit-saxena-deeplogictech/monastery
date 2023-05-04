@@ -10,7 +10,7 @@ import { securityguard } from "/framework/js/securityguard.mjs";
 import { apimanager as apiman } from "/framework/js/apimanager.mjs";
 
 let currTimeout, logoutListeners = [];
-const ORG_METADATA = "__org_metadata";
+const ORG_METADATA = "__org_metadata",ORG_DEV_METADATA = "__org_dev_metadata";
 
 async function signin(id, pass, otp) {
     const pwph = `${id} ${pass}`;
@@ -22,6 +22,8 @@ async function signin(id, pass, otp) {
         session.set(APP_CONSTANTS.USERNAME, resp.name);
         session.set(APP_CONSTANTS.USERORG, resp.org);
         session.set("__org_telemeet_cuser_pass", pass);
+        session.set("__org_domain", resp.domain);
+
         securityguard.setCurrentRole(resp.role);
         const PERMISSIONS_MAP = securityguard.getPermissionsMap();
         PERMISSIONS_MAP[resp.org] = ["apiboss-designer", "monkruls-designer","api400-designer","asb-designer","monboss-designer"];
@@ -50,8 +52,8 @@ async function registerOrUpdate(old_id, name, id, pass, org, totpSecret, totpCod
         const PERMISSIONS_MAP = securityguard.getPermissionsMap();
         PERMISSIONS_MAP[org] = resp.products;
         securityguard.setPermissionsMap(PERMISSIONS_MAP);
-        const serverDetails= await apiman.rest(APP_CONSTANTS.API_GETAPPCONFIG, "GET", {},true);
-        session.set("__org_server_details", serverDetails);
+        // const serverDetails= await apiman.rest(APP_CONSTANTS.API_GETAPPCONFIG, "GET", {},true);
+        // session.set("__org_server_details", serverDetails);
 
         
  return loginmanager.ID_OK;
@@ -80,7 +82,7 @@ async function logout(dueToTimeout) {
     const savedLang = session.get($$.MONKSHU_CONSTANTS.LANG_ID);
     session.remove(APP_CONSTANTS.USERID); session.remove(APP_CONSTANTS.USERNAME);
     session.remove(APP_CONSTANTS.USERORG); session.remove("__org_telemeet_cuser_pass");
-    session.remove(ORG_METADATA);session.remove("__org_server_details");
+    session.remove(ORG_METADATA);session.remove("__org_server_details"); session.remove(ORG_DEV_METADATA);
 
     session.set($$.MONKSHU_CONSTANTS.LANG_ID, savedLang);     securityguard.setCurrentRole(APP_CONSTANTS.GUEST_ROLE);
     if (dueToTimeout) application.main(APP_CONSTANTS.ERROR_HTML, {error: await i18n.get("Timeout_Error"), 
