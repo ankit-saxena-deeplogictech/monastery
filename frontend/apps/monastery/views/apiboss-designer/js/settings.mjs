@@ -101,9 +101,6 @@ async function openDialog() {
                     }
                 }
                 else { DIALOG.showError(dialogElement, await i18n.get("ConnectIssue")); return; }
-
-
-
             }
         });
 }
