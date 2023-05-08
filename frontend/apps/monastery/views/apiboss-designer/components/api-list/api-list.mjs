@@ -22,6 +22,7 @@ let apiname;
 
 
 async function elementConnected(element) {
+    const itemList = await items.getItemList(element.parentElement.parentElement)
     Object.defineProperty(element, "value", {
         get: _ => JSON.stringify(api_list.getData(element.id).items),
         set: value => {
@@ -30,7 +31,7 @@ async function elementConnected(element) {
         }
     });
     const data = {
-        items: _addClickHandlerToItems(JSON.parse(element.getAttribute("value") || await items.getItemList(element.parentElement.parentElement) ? await items.getItemList(element.parentElement.parentElement) : "[]"), element.getAttribute("onclickHandler")),
+        items: _addClickHandlerToItems(JSON.parse(element.getAttribute("value") || itemList ? itemList : "[]"), element.getAttribute("onclickHandler")),
         styleBody: element.getAttribute("styleBody") ? `<style>${element.getAttribute("styleBody")}</style>` : undefined,
         label: element.getAttribute("label") || i18n.DefaultLabel[i18nFramework.getSessionLang()]
     }

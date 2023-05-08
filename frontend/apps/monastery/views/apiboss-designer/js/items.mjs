@@ -66,7 +66,7 @@ async function getItemList() {
                 }
             }
             else {
-                DIALOG.showMessage(await i18n.get("ConnectIssue"), "error", null, messageTheme, "MSG_DIALOG");
+                DIALOG.showMessage(await i18n.get("ApibossConnectIssue"), "error", null, messageTheme, "MSG_DIALOG");
                 await loader.afterLoading();
                 return "[]"
             }
@@ -109,7 +109,7 @@ async function getItemList() {
                 }
             } 
             else {
-                DIALOG.showMessage(await i18n.get("ConnectIssue"), "error", null, messageTheme, "MSG_DIALOG");
+                DIALOG.showMessage(await i18n.get("ApibossConnectIssue"), "error", null, messageTheme, "MSG_DIALOG");
                 await loader.afterLoading();
                 return "[]"
             }   
@@ -149,8 +149,6 @@ async function getItemList() {
     }
 }
 
-function _disableButton(element) { element.style["pointer-events"] = "none"; element.style["opacity"] = 0.4; }
-function _enableButton(element) { element.style["pointer-events"] = ""; element.style["opacity"] = ""; }
 async function getPublicApibossServerDetails() {
     let publicServerDetail = await $$.requireJSON(`${APP_CONSTANTS.CONF_PATH}/serverDetails.json`);
     return publicServerDetail;

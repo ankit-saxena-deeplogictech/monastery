@@ -17,14 +17,16 @@ import { items } from "../../js/items.mjs";
 import { loader } from "../../../../js/loader.mjs";
 import { session } from "/framework/js/session.mjs";
 
-const COMPONENT_PATH = util.getModulePath(import.meta),CURRENT_API = "_selected_api";
+const COMPONENT_PATH = util.getModulePath(import.meta),CURRENT_API = "_selected_api",ORG_DEV_METADATA = "__org_dev_metadata",ORG_METADATA = "__org_metadata";
 
 async function elementConnected(element) {
+	session.remove(ORG_METADATA); session.remove(ORG_DEV_METADATA);
+	const itemList = await items.getItemList(element.parentElement.parentElement)
 	Object.defineProperty(element, "value", {get: _=>JSON.stringify(item_list.getData(element.id).items), 
 		set: value=>{
 			const newData = item_list.getData(element.id); newData.items = _addDBLClickHandlerToItems(JSON.parse(value), element.getAttribute("ondblclickHandler"));
 			item_list.bindData(newData, element.id) } });
-	const data = { items: _addDBLClickHandlerToItems(JSON.parse(element.getAttribute("value")||await items.getItemList(element.parentElement.parentElement) ? await items.getItemList(element.parentElement.parentElement) : "[]"), element.getAttribute("ondblclickHandler")), 
+	const data = { items: _addDBLClickHandlerToItems(JSON.parse(element.getAttribute("value")||itemList ?itemList : "[]"), element.getAttribute("ondblclickHandler")), 
 		styleBody: element.getAttribute("styleBody")?`<style>${element.getAttribute("styleBody")}</style>`:undefined,
 		label: element.getAttribute("label")||i18n.DefaultLabel[i18nFramework.getSessionLang()] }
 	item_list.setDataByHost(element, data);
