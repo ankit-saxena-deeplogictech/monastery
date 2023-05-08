@@ -31,7 +31,8 @@ export const i18n = {
         "WrongAPIKey":"API Key is incorrect",
         "APIsNotPublished":"APIs are not being Published yet with these details",
         "SetSuccess":"Server Details for Developer Portal has been set successfully",
-        "IncorrectAPI":"API Key is incorrect"
+        "IncorrectAPI":"API Key is incorrect",
+        "ApibossConnectIssue":"Configured APIBoss Server is not reachable now"
 
 
     },
