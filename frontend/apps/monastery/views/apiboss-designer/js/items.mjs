@@ -12,10 +12,6 @@ import { dialog } from "../page/dialog.js";
 
 const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH = `${MODULE_PATH}/..`, ORG_DEV_METADATA = "__org_dev_metadata",ORG_METADATA = "__org_metadata", DIALOG = window.monkshu_env.components["dialog-box"];
 
-
-
-
-
 async function getItemList() {
     try {
         const messageTheme = await $$.requireJSON(`${VIEW_PATH}/dialogs/dialogPropertiesPrompt.json`);
@@ -48,14 +44,17 @@ async function getItemList() {
                     let apilist = [];   
                     listApis.forEach((eachapi)=>{
                         result.data.apis.forEach((api)=>{
-                        if(eachapi.substring(eachapi.indexOf(".com")+4) == api.exposedpath) {
+                        if(eachapi.substring(eachapi.split("/",2).join("/").length) == api.exposedpath) {
                           apilist.push(api);
                         }
                       })
                     });                    
-                    let policy = apilist.map((api)=>{
-                     return result.data.policies.find((policy)=>api.dependencies.includes(policy.id))
-                    });                    
+                    let policy = [];
+                    apilist.forEach((api)=>{
+                      result.data.policies.forEach((eachpolicy)=>{
+                        if(api.dependencies.includes(eachpolicy.id)) { policy.push(eachpolicy) }
+                      })
+                    });                   
                     result.data.apis = apilist;
                     result.data.policies = policy;
                 }
@@ -90,14 +89,17 @@ async function getItemList() {
                     let apilist = [];   
                     listApis.forEach((eachapi)=>{
                         result.data.apis.forEach((api)=>{
-                        if(eachapi.substring(eachapi.indexOf(".com")+4) == api.exposedpath) {
+                        if(eachapi.substring(eachapi.split("/",2).join("/").length) == api.exposedpath) {
                           apilist.push(api);
                         }
                       })
                     });
                                         
-                    let policy = apilist.map((api)=>{
-                     return result.data.policies.find((policy)=>api.dependencies.includes(policy.id))
+                    let policy = [];
+                    apilist.forEach((api)=>{
+                      result.data.policies.forEach((eachpolicy)=>{
+                        if(api.dependencies.includes(eachpolicy.id)) { policy.push(eachpolicy) }
+                      })
                     });                    
                     result.data.apis = apilist;
                     result.data.policies = policy;

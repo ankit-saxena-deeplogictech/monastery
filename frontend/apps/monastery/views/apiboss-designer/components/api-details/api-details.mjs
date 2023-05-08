@@ -31,7 +31,7 @@ async function elementRendered(element, initialRender) {
   let totalSize =shadowRoot.querySelector('div.item2').offsetHeight+shadowRoot.querySelector('div.item3').offsetHeight+shadowRoot.querySelector('div.item5').offsetHeight+shadowRoot.querySelector('div.item8').offsetHeight + 30 ;
   shadowRoot.querySelector('div.item1').style.maxHeight=totalSize+'px';
   // let userid = session.get(APP_CONSTANTS.USERID);
-  let domain = session.get("__org_domain");
+  let domain = apibossmodel.getRootDomain(session.get("__org_domain").native);
   const data = {};
   if (initialRender) {
     model = session.get(ORG_DEV_METADATA);
@@ -71,7 +71,7 @@ function updateExposedpathandMethod(elementid, updateParam) {
   if (updateParam) {
     const data = {};
     let userid = session.get(APP_CONSTANTS.USERID);
-    let domain = session.get("__org_domain");
+    let domain = apibossmodel.getRootDomain(session.get("__org_domain").native);
     for (const api of model.apis) {
       if (api["apiname"] == elementid) {
         target = JSON.parse(JSON.parse(api["input-output"])[0])["requestBody"]["content"]["application/json"]["schema"]["properties"];
