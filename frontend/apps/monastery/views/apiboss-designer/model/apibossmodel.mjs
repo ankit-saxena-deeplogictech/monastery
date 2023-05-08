@@ -111,7 +111,7 @@ function getModel() {
 }
 
 function getparsedData() {
-    let domain = session.get("__org_domain");
+    let domain = getRootDomain(session.get("__org_domain").native);
     // let domain = _getDomain(userid.native);
     let parsedData = {},finalData = [], rateLimit = {}, inputoutput = {}, apiregistrydata = {};
     const retModel = util.clone(apibossmodelObj);
@@ -245,7 +245,14 @@ const _getNameFromDescription = description => description.split(" ")[0].split("
 
 const _getDomain = (id) => { return id.indexOf("@") != -1 ? id.substring(id.indexOf("@")+1).toLowerCase() : "undefined" }
 
+const getRootDomain = (domain) => {
+    let lastIndexOfDot = domain.lastIndexOf(".");
+    let indexOfDot = domain.indexOf(".");
+    if(lastIndexOfDot == indexOfDot) { return domain; }
+    else { return domain.substring(domain.split(".", 1).join(".").length + 1); }
+}
+
 export const apibossmodel = {
     init, loadModel, modelNodesModified, modelConnectorsModified, isConnectable,
-    nodeDescriptionChanged, getModelAsFile, getModel,getparsedData,_getDomain,  ADDED: "added", REMOVED: "removed", MODIFIED: "modified"
+    nodeDescriptionChanged, getModelAsFile, getModel,getparsedData,_getDomain, getRootDomain,  ADDED: "added", REMOVED: "removed", MODIFIED: "modified"
 };
