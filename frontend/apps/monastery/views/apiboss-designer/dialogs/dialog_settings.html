@@ -64,7 +64,7 @@ td.active > textarea:focus {
     color: #444444;
 }
 td.first{width: 30%;border-right: 1px solid #B6DEFF;}
-tr.firstrow>td{border-bottom: 1px solid #B6DEFF;}
+tr.firstrow>td, tr.secondrow>td,tr.thirdrow>td, tr.fourthrow>td{border-bottom: 1px solid #B6DEFF;}
 
 
 
@@ -92,6 +92,7 @@ table::-webkit-scrollbar-thumb {
     background-color: darkgrey !important;
     border-radius: 10px !important;
     background-clip: padding-box;
+
 }
 </style>
 
@@ -104,12 +105,25 @@ table::-webkit-scrollbar-thumb {
         <td style="position: relative;"> Value <div style="position: absolute;"></div><div style="position: absolute;"></div></td>
        </tr>
        <tr class="tr firstrow">
+        <td class="first" ><textarea rows="1"  spellcheck="false" readonly="true" >Package</textarea> </td>
+        <td class="active"><textarea id = "package" rows="1"  spellcheck="false"></textarea>  </td>
+    </tr>
+       <tr class="tr secondrow">
         <td class="first"><textarea rows="1"  spellcheck="false" readonly="true">Server IP Address</textarea> </td>
         <td class="active" ><textarea  id ="server" rows="1"  spellcheck="false"  ></textarea>  </td>
     </tr>
-    <tr class="tr secondrow">
+    <tr class="tr thirdrow">
         <td class="first" ><textarea rows="1"  spellcheck="false" readonly="true" >Port</textarea> </td>
         <td class="active"><textarea id = "port" rows="1"  spellcheck="false"></textarea>  </td>
+    </tr>
+    
+    <tr class="tr fourthrow">
+        <td class="first" ><textarea rows="1"  spellcheck="false" readonly="true" >Admin ID</textarea> </td>
+        <td class="active"><textarea id = "adminid" rows="1"  spellcheck="false"></textarea>  </td>
+    </tr>
+    <tr class="tr fifthrow">
+        <td class="first" ><textarea rows="1"  spellcheck="false" readonly="true" >Admin Password</textarea> </td>
+        <td class="active"><textarea id = "adminpassword" rows="1"  spellcheck="false"></textarea>  </td>
     </tr>
 
 </tbody></table>

@@ -156,12 +156,12 @@ async function getPublicApibossServerDetails() {
     return Object.values(publicServerDetail);
 }
 
-async function setDefaultSettings(org,userid,server,port,apikey,isPublic) {
+async function setDefaultSettings(org,userid,server,port,packageName,apikey,isPublic,adminid,adminpassword) {
     apiman.registerAPIKeys({"*":"fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389"},"X-API-Key");
 
     try {   // try to publish now
         return {result: (await apiman.rest(APP_CONSTANTS.API_SETDEFAULTSETTINGS, "POST", 
-            { org,id:userid,server,port,apikey,isPublic}, true,true)).result, err: "Setting default server failed at the server", 
+            { org,id:userid,server,port,package:packageName,apikey,isPublic,adminid,adminpassword}, true,true)).result, err: "Setting default server failed at the server", 
             raw_err: "Setting default server failed at the server", key: "SetDefaultServerIssue"};
     } catch (err)  {return {result: false, err: "Setting failed", raw_err: err, key: "SetDefaultServerIssue"} }
 }

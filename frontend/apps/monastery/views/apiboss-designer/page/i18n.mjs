@@ -29,9 +29,10 @@ export const i18n = {
         "SetDefaultServerIssue":"Setting default server failed at the server",
         "FillKey":"Please fill the apikey",
         "WrongAPIKey":"API Key is incorrect",
-        "APIsNotPublished":"APIs are not being Published yet on this server",
+        "APIsNotPublished":"APIs are not being Published yet with these details",
         "SetSuccess":"Server Details for Developer Portal has been set successfully",
-        "IncorrectAPI":"API Key is incorrect"
+        "IncorrectAPI":"API Key is incorrect",
+        "ApibossConnectIssue":"Configured APIBoss Server is not reachable now"
 
 
     },

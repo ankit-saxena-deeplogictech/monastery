@@ -51,7 +51,7 @@ exports.doService = async jsonReq => {
 
 	if (result.tokenflag) LOG.info(`User logged in: ${result.user_id}.`); else LOG.error(`Bad login or not approved for ID: ${jsonReq.id}.`);
 
-	if (result.result) return { result: result.result, name: result.name, id: result.user_id, "org": org_name, role: result.role, "products": products, tokenflag: result.tokenflag };
+	if (result.result) return { result: result.result, name: result.name, id: result.user_id, "org": org_name, role: result.role, "products": products, tokenflag: result.tokenflag ,domain:result.domain};
 	else return CONSTANTS.FALSE_RESULT;
 }
 

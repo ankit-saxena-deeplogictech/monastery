@@ -13,9 +13,10 @@ exports.doService = async jsonReq => {
     if (data.hasOwnProperty(jsonReq.org) ) {
         const apiKey = data[jsonReq.org]["apikey"];
         const publicApikey = data[jsonReq.org]["publicapikey"];
+      
 
-        data[jsonReq.org] = {server:jsonReq.server,port:jsonReq.port,apikey:jsonReq.apikey,publicapikey:publicApikey };
-        if(jsonReq.isPublic) data[jsonReq.org] = {server:jsonReq.server,port:jsonReq.port,publicapikey:jsonReq.apikey,apikey:apiKey};
+        if(jsonReq.isPublic) data[jsonReq.org] = {server:jsonReq.server,port:jsonReq.port,package:"",publicapikey:jsonReq.apikey,apikey:apiKey,adminid:"",adminpassword:""};
+        else data[jsonReq.org] = {server:jsonReq.server,port:jsonReq.port,package:jsonReq.package,apikey:jsonReq.apikey,publicapikey:publicApikey,adminid: jsonReq.adminid,adminpassword:jsonReq.adminpassword};
         fs.writeFileSync(`${APP_CONSTANTS.CONF_DIR}/settings.json`,JSON.stringify(data, null, 4))
         return { result:result };
     }

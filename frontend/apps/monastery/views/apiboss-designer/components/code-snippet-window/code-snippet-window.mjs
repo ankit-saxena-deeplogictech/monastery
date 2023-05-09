@@ -98,6 +98,7 @@ function updateData(){
       headers: {
          'Content-Type': 'application/json',
          'accept': 'application/json',
+         'x-api-key' : '<valid-api-key>'
          ${token?`'authorization': 'Bearer`:""} ${token?`${token}'`+',':""}
          ${basicToken?`'authorization': 'Basic`:""} ${basicToken?`${basicToken}'`+',':""}
          ${key?"'x-api-key':":""} ${key?`'${key}'`:""}
@@ -165,6 +166,7 @@ function updateData(){
           conn.setRequestMethod("${exposedmethod}");
           conn.setRequestProperty("Content-Type", "application/json");
           conn.setRequestProperty("accept", "application/json");
+          conn.setRequestProperty("x-api-key", "<valid-api-key>");
           ${key ? `conn.setRequestProperty("x-api-key", "${key}");` : ""}
           ${token ? `conn.setRequestProperty("authorization", "Bearer ${token}");` : ""}
           ${basicToken ? ` conn.setRequestProperty("authorization", "Basic ${basicToken}");` : ""}
@@ -205,7 +207,7 @@ function updateData(){
 
     async function setShellValue(){
       if(document.querySelector(`floating-window`) && floatingWindowHTMLCurlID && currentFloatingWindow=="curl"){
-        let data = `curl --request ${exposedmethod}  --url ${exposedpath}  --header "Content-Type: application/json"   ${token?`--header "authorization: Bearer ${token?token :''}"`:""}   ${key?`--header "x-api-key:${key?key:''}"`:""} ${basicToken?`--header "authorization: Basic ${basicToken?basicToken :''}"`:""}  ${attrData?`--data ${JSON.stringify(`${JSON.stringify(attrData)}`)}`:""} `
+        let data = `curl --request ${exposedmethod}  --url ${exposedpath}  --header "Content-Type: application/json" --header "x-api-key: <valid-api-key>"  ${token?`--header "authorization: Bearer ${token?token :''}"`:""}   ${key?`--header "x-api-key:${key?key:''}"`:""} ${basicToken?`--header "authorization: Basic ${basicToken?basicToken :''}"`:""}  ${attrData?`--data ${JSON.stringify(`${JSON.stringify(attrData)}`)}`:""} `
     
           data =data.replace(/^\s*\n/gm, "");
           curlData = data;
