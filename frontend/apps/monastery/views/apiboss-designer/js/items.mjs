@@ -30,7 +30,8 @@ async function getItemList() {
             const loginResult = await serverManager.loginToServer(defaultSeverDetails.data.server, defaultSeverDetails.data.port, defaultSeverDetails.data.adminid, defaultSeverDetails.data.adminpassword);
             if (loginResult.result) {
                 try {
-                    const listApiResponse =  await apiman.rest(`http://${defaultSeverDetails.data.server}:${defaultSeverDetails.data.port}/apps/apiboss/admin/list`, "POST", 
+                    serverDetails.secure = loginResult.scheme == "https";
+                    const listApiResponse =  await apiman.rest(`${loginResult.scheme}://${defaultSeverDetails.data.server}:${defaultSeverDetails.data.port}/apps/apiboss/admin/list`, "POST", 
                     { apikey:defaultSeverDetails.data.apikey,domain }, true,true);
                     const listApiResult = [];
                     listApiResponse.apis.forEach((apipath)=>{
@@ -74,7 +75,8 @@ async function getItemList() {
             const loginResult = await serverManager.loginToServer(publicServerDetails.serverIP, publicServerDetails.port, publicServerDetails.adminid, publicServerDetails.adminpassword);
             if (loginResult.result) {
                 try {
-                    const listApiResponse =  await apiman.rest(`http://${publicServerDetails.serverIP}:${publicServerDetails.port}/apps/apiboss/admin/list`, "POST", 
+                    serverDetails.secure = loginResult.scheme == "https";
+                    const listApiResponse =  await apiman.rest(`${loginResult.scheme}://${publicServerDetails.serverIP}:${publicServerDetails.port}/apps/apiboss/admin/list`, "POST", 
                     { apikey:defaultSeverDetails.data.apikey,domain}, true,true);
                     const listApiResult = [];
                     listApiResponse.apis.forEach((apipath)=>{
