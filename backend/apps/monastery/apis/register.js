@@ -47,7 +47,7 @@ exports.doService = async jsonReq => {
 	const result1 = await userid.getProducts();
 	if (result1 && result1.products && result1.products.length > 0) for (let product of result1.products) products.push(product.product_name);
 
-	return { result: result.result, "products": products, name: result.name, id: result.id, org: result.org, role: result.role, tokenflag: result.approved ? true : false };
+	return { result: result.result, "products": products, name: result.name, id: result.id, org: result.org, role: result.role, tokenflag: result.approved ? true : false,domain:result.domain };
 }
 
 exports.updateOrgAndDomain = async jsonReq => {
