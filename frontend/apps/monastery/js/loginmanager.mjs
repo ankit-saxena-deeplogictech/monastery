@@ -48,12 +48,12 @@ async function registerOrUpdate(old_id, name, id, pass, org, totpSecret, totpCod
         session.set(APP_CONSTANTS.USERNAME, name);
         session.set(APP_CONSTANTS.USERORG, org);
         session.set("__org_telemeet_cuser_pass", pass);
+        session.set("__org_domain", resp.domain);
         securityguard.setCurrentRole(resp.role);
         const PERMISSIONS_MAP = securityguard.getPermissionsMap();
         PERMISSIONS_MAP[org] = resp.products;
         securityguard.setPermissionsMap(PERMISSIONS_MAP);
-        // const serverDetails= await apiman.rest(APP_CONSTANTS.API_GETAPPCONFIG, "GET", {},true);
-        // session.set("__org_server_details", serverDetails);
+  
 
         
  return loginmanager.ID_OK;

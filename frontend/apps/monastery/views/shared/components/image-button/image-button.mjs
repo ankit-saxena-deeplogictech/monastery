@@ -11,7 +11,7 @@ import { drop_down } from "../../../apiboss-designer/components/drop-down/drop-d
 import {i18n} from "/framework/js/i18n.mjs";
 
 
-const COMPONENT_PATH = util.getModulePath(import.meta), VIEW_PATH=`${COMPONENT_PATH}/../../../apiboss-designer`, DIALOG = window.monkshu_env.components["dialog-box"];;
+const COMPONENT_PATH = util.getModulePath(import.meta), VIEW_PATH=`${COMPONENT_PATH}/../../../apiboss-designer`, DIALOG = window.monkshu_env.components["dialog-box"];
 
 const elementConnected = async element => {
     const data = {img: element.getAttribute("img"), text: element.getAttribute("text"), 
