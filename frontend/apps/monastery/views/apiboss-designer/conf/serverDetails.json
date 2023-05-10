@@ -1,7 +1,7 @@
 {
-    "serverIP": "127.0.0.1",
+    "serverIP": "139.59.81.153",
     "port": "9092",
     "adminid": "admin",
     "adminpassword": "DLT4TekMonks",
-    "package": "bhavesh"
+    "package": "dev"
 }
