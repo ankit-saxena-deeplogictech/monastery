@@ -111,6 +111,7 @@ function getModel() {
 }
 
 function getparsedData() {
+    console.log(session.get("__org_domain"));
     let domain = getRootDomain(session.get("__org_domain").native);
     // let domain = _getDomain(userid.native);
     let parsedData = {},finalData = [], rateLimit = {}, inputoutput = {}, apiregistrydata = {};
