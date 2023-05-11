@@ -26,4 +26,13 @@ const userDialog = async () => {
         document.body.appendChild(div);
     }
 }
-export const dialog = { adminDialog, userDialog }
+
+const apiconfigureDialog = async () => {
+    if (!document.querySelector('.apiconfigureDialog')) {
+        const div = document.createElement('div');
+        div.classList.add("apiconfigureDialog");
+        div.innerHTML = `<div class="apiconfigurecontainer"> <span id="orgtext">APIs are not yet configured</span>  <img  id="apiconfigureimg" src="${APP_CONSTANTS.IMG_SRC}/admin.svg" alt="SVG Icon"></div>`;
+        document.body.appendChild(div);
+     }
+}
+export const dialog = { adminDialog, userDialog, apiconfigureDialog }

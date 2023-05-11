@@ -77,7 +77,7 @@ async function getItemList() {
                 try {
                     serverDetails.secure = loginResult.scheme == "https";
                     const listApiResponse =  await apiman.rest(`${loginResult.scheme}://${publicServerDetails.serverIP}:${publicServerDetails.port}/apps/apiboss/admin/list`, "POST", 
-                    { apikey:defaultSeverDetails.data.apikey,domain}, true,true);
+                    { apikey:defaultSeverDetails.data.publicapikey,domain}, true,true);
                     const listApiResult = [];
                     listApiResponse.apis.forEach((apipath)=>{
                         if(_checkDomainAndSubdomain(apipath.split("/",2).join("/").substring(1), String(domain))) {listApiResult.push(apipath)}
@@ -86,6 +86,15 @@ async function getItemList() {
                     result = await apiman.rest(APP_CONSTANTS.API_GETMETADATA, "POST", { org: org, name: publicServerDetails.package, id: userid, server: publicServerDetails.serverIP, port: publicServerDetails.port, isPublicServer: true }, true, true);
                     if(listApiResult.length&&result.result){
                     session.set(ORG_METADATA, result.data);
+                    if(!defaultSeverDetails.data.publicapikey.length) { 
+                        await loader.afterLoading(); 
+                        dialog.apiconfigureDialog();
+                        serverDetails.host = defaultSeverDetails.data.server != "" ? defaultSeverDetails.data.server : publicServerDetails.serverIP;
+                        serverDetails.port = defaultSeverDetails.data.port != "" ? defaultSeverDetails.data.port : publicServerDetails.port;
+                        serverDetails.name = defaultSeverDetails.data.name != "" ? defaultSeverDetails.data.package : publicServerDetails.package;
+                        session.set("__org_server_details", JSON.stringify(serverDetails));
+                        return "[]";
+                    };
 
                     let listApis = listApiResult;
                     let apilist = [];   
@@ -96,7 +105,6 @@ async function getItemList() {
                         }
                       })
                     });
-                                        
                     let policy = [];
                     apilist.forEach((api)=>{
                       result.data.policies.forEach((eachpolicy)=>{
