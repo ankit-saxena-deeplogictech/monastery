@@ -106,7 +106,7 @@ async function publishModel(parsedData, name, server, port, adminid, adminpasswo
     const loginResult = await loginToServer(server, port, adminid, adminpassword);
     if (!loginResult.result) return loginResult;    // failed to connect or login
     try {   // try to publish now
-        return {result: (await apiman.rest(`http://${server}:${port}/apps/apiboss/admin/updateconf`, "POST", 
+        return {result: (await apiman.rest(`${loginResult.scheme}://${server}:${port}/apps/apiboss/admin/updateconf`, "POST", 
             { data: parsedData}, true,true)).result, err: "Publishing failed at the server", 
             raw_err: "Publishing failed at the server", key: "PublishServerIssue"};
     } catch (err)  {return {result: false, err: "Server connection issue", raw_err: err, key: "LoginIssue"} }
