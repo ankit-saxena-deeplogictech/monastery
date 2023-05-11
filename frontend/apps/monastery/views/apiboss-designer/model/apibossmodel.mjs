@@ -111,9 +111,7 @@ function getModel() {
 }
 
 function getparsedData() {
-    console.log(session.get("__org_domain"));
-    let domain = getRootDomain(session.get("__org_domain").native);
-    // let domain = _getDomain(userid.native);
+    let domain = getRootDomain(session.get("__org_domain").toString());
     let parsedData = {},finalData = [], rateLimit = {}, inputoutput = {}, apiregistrydata = {};
     const retModel = util.clone(apibossmodelObj);
     if(!(retModel.apis.length>0 && retModel.policies.length>0)) return {result:false,key:"Require data is not available to publish"};
