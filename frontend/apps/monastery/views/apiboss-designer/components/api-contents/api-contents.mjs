@@ -30,7 +30,7 @@ import { apibossmodel } from "../../model/apibossmodel.mjs";
  async function bindApiContents(elementid) {
    const data = {}
   //  let userid = session.get(APP_CONSTANTS.USERID);
-  let domain = apibossmodel.getRootDomain(session.get("__org_domain").native);
+  let domain = apibossmodel.getRootDomain((session.get("__org_domain").toString()));
 
    model = session.get(ORG_DEV_METADATA),serverDetails =JSON.parse(session.get("__org_server_details"));;
    for (const api of model.apis) {
