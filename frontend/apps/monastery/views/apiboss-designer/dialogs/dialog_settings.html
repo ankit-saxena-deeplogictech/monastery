@@ -64,6 +64,7 @@ td.active > textarea:focus {
     color: #444444;
 }
 td.first{width: 30%;border-right: 1px solid #B6DEFF;}
+td.first > textarea {cursor: default;}
 tr.firstrow>td, tr.secondrow>td,tr.thirdrow>td, tr.fourthrow>td{border-bottom: 1px solid #B6DEFF;}
 
 
@@ -96,8 +97,6 @@ table::-webkit-scrollbar-thumb {
 }
 </style>
 
-
-
 <table id="inputtable" style="overflow: hidden;">
     <tbody>
         <tr>
@@ -123,7 +122,9 @@ table::-webkit-scrollbar-thumb {
     </tr>
     <tr class="tr fifthrow">
         <td class="first" ><textarea rows="1"  spellcheck="false" readonly="true" >Admin Password</textarea> </td>
-        <td class="active"><textarea id = "adminpassword" rows="1"  spellcheck="false"></textarea>  </td>
+        <td class="active"><password-box style="width:100%;" id="adminpassword" rows="1" spellcheck="false"
+            styleBody="span#container{width: 100%;} input#pwinput{background-color: transparent; border: 0px; outline: none; color: inherit;
+                resize: none; padding: 4px; width: 100%; overflow: hidden; font-family: inherit; display: block; box-sizing: border-box;} img.pwimg{display:none;}"></password-box>  </td>
     </tr>
 
 </tbody></table>

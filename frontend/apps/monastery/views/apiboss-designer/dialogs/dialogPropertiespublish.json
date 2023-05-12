@@ -9,7 +9,7 @@
     "showCancelIcon": true,
     "showErrorNotifier": true,
 
-    "styleBody": "div#buttonbar {justify-content: flex-end;} span#ok {margin-top: 10px;}",
+    "styleBody": "div#buttonbar {justify-content: flex-end;} span#ok {margin-top: 10px; cursor: pointer;}",
     
     "var--dialog-font": "inherit",
     "var--dialog-background": "#DFF0FE",
