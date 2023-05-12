@@ -2,7 +2,7 @@ export const i18n = {
     en: {
         "Description": "APIBoss\nAPI Security ",
         "APIBossView":"APIBoss Developer - Connected",
-        "DoubleClickToOpen":"Please doubleclick the API package to explore",
+        "DoubleClickToOpen":"Please double-click the API package to explore",
         "TokenSubject":"Add Token Subject",
         "SelectDropDown":"Please Select one",
         "FillField":"Please fill out this field",
@@ -29,7 +29,7 @@ export const i18n = {
         "SetDefaultServerIssue":"Setting default server failed at the server",
         "FillKey":"Please fill the apikey",
         "WrongAPIKey":"API Key is incorrect",
-        "APIsNotPublished":"APIs are not being Published yet with these details",
+        "APIsNotPublished":"APIs are not yet published with these details",
         "SetSuccess":"Server Details for Developer Portal has been set successfully",
         "IncorrectAPI":"API Key is incorrect",
         "ApibossConnectIssue":"Configured APIBoss Server is not reachable now"
