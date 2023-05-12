@@ -22,7 +22,7 @@ div#ribbon > div {
 div#ribbon > div >  img {
     height: 40px;
     width: 40px;
-    cursor: copy;
+    cursor: pointer;
 }
 
 div#ribbon > div >  span {
