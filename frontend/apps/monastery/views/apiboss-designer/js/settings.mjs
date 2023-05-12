@@ -13,6 +13,7 @@ import { html_fragment } from "../../shared/components/html-fragment/html-fragme
 import { apimanager as apiman } from "/framework/js/apimanager.mjs";
 
 import { loader } from "../../../js/loader.mjs";
+import { password_box } from "../../../components/password-box/password-box.mjs";
 
 const MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH = `${MODULE_PATH}/..`, MSG_GET_MODEL_NAME = "GET_MODEL_NAME", MSG_FILE_UPLOADED = "FILE_UPLOADED",
     MSG_RENAME_MODEL = "RENAME_MODEL", DIALOG_RET_PROPS = ["apikey"], ORG_METADATA = "__org_metadata",
@@ -53,7 +54,7 @@ async function openDialog() {
                 const port = html_fragment.getShadowRootByHostId("output").querySelector("textarea#port").value;
                 const packageName = html_fragment.getShadowRootByHostId("output").querySelector("textarea#package").value;
                 const adminid = html_fragment.getShadowRootByHostId("output").querySelector("textarea#adminid").value;
-                const adminpassword = html_fragment.getShadowRootByHostId("output").querySelector("textarea#adminpassword").value
+                const adminpassword = password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value;
 
                 if (!server.length && !port.length && !packageName.length) {
                     if (!result.apikey) { DIALOG.showError(dialogElement, await i18n.get("FillKey")); return; }
