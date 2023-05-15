@@ -68,7 +68,7 @@ async function openDialog() {
                                 blackboard.broadcastMessage(MSG_FILE_UPLOADED, { name: publicServerDetails.package, data: JSON.stringify(publicMetaresult.data) });
                                 await serverManager.setDefaultSettings(org, userid, server, port, packageName, result.apikey, true);
                                 session.set(ORG_METADATA, publicMetaresult.data);
-                                return true;
+                                DIALOG.showMessage(await i18n.get("SetSuccess"), null, null, messageTheme, "MSG_DIALOG"); return true;
                             }
                             else { DIALOG.showError(dialogElement, await i18n.get("IncorrectAPI")); return; }
                         }
