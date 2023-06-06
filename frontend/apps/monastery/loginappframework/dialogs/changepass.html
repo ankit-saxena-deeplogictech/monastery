@@ -107,7 +107,7 @@ span#toggler {
 
 <script>
 function pwToggle(element) {
-    const shadowRoot = monkshu_env.components["dialog-box"].getShadowRootByContainedElement(element);
+    const shadowRoot = monkshu_env.components["display-box"].getShadowRootByContainedElement(element);
     if (shadowRoot.querySelector("input#pwToggle").checked) {
         shadowRoot.querySelector("input#p1").type = "text"; shadowRoot.querySelector("input#p2").type = "text";
     } else {
@@ -116,8 +116,8 @@ function pwToggle(element) {
 }
 
 function pwFieldsChanged(element) {
-    monkshu_env.components["dialog-box"].hideError(element);
-    const shadowRoot = monkshu_env.components["dialog-box"].getShadowRootByContainedElement(element);
+    monkshu_env.components["display-box"].hideError(element);
+    const shadowRoot = monkshu_env.components["display-box"].getShadowRootByContainedElement(element);
     if (shadowRoot.querySelector("input#p1").value != shadowRoot.querySelector("input#p2").value) {
         shadowRoot.querySelector("input#p1").classList.add("error");
         shadowRoot.querySelector("input#p2").classList.add("error");
@@ -128,10 +128,10 @@ function pwFieldsChanged(element) {
 }
 
 function onOK(element) {
-    const shadowRoot = monkshu_env.components["dialog-box"].getShadowRootByContainedElement(element);
+    const shadowRoot = monkshu_env.components["display-box"].getShadowRootByContainedElement(element);
     const p1 = shadowRoot.querySelector("input#p1").value, p2 = shadowRoot.querySelector("input#p2").value;
-    if (p1 != p2) {monkshu_env.components["dialog-box"].error(element, "{{i18n.PWNOTSAME}}"); return;}
-    if (p1.length < APP_CONSTANTS.MIN_PW_LENGTH) {monkshu_env.components["dialog-box"].error(element, "{{i18n.PWMUSTBE}}"); return;}
-    monkshu_env.components["dialog-box"].submit(element);
+    if (p1 != p2) {monkshu_env.components["display-box"].error(element, "{{i18n.PWNOTSAME}}"); return;}
+    if (p1.length < APP_CONSTANTS.MIN_PW_LENGTH) {monkshu_env.components["display-box"].error(element, "{{i18n.PWMUSTBE}}"); return;}
+    monkshu_env.components["display-box"].submit(element);
 }
 </script>

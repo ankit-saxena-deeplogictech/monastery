@@ -21,11 +21,11 @@ import {monkshu_component} from "/framework/js/monkshu_component.mjs";
 const COMPONENT_PATH = util.getModulePath(import.meta), DIALOGS_PATH = `${COMPONENT_PATH}/dialogs`;
 let API_GETMATCHINGORGS;
 
-let conf, dialog_box, fetchedOrgsList, previousOrgFetchFor;
+let conf, display_box, fetchedOrgsList, previousOrgFetchFor;
 
 async function elementConnected(host) {
-	if (window.monkshu_env.components["dialog-box"]) dialog_box = window.monkshu_env.components["dialog-box"];
-	else dialog_box = (await import("./subcomponents/dialog-box/dialog-box.mjs"))["dialog_box"];
+	if (window.monkshu_env.components["display-box"]) display_box = window.monkshu_env.components["display-box"];
+	else display_box = (await import("./subcomponents/display-box/display-box.mjs"))["display_box"];
 
 	API_GETMATCHINGORGS = `${host.getAttribute("apiPath")}/getorgsmatching`;
 
@@ -100,7 +100,7 @@ async function registerOrUpdate(element) {
 
 async function openAuthenticator(containedElement, totpURL) {
 	const secret = new URL(totpURL).searchParams.get("secret"), newURL = await _getTOTPURL(secret, register_box.getHostElement(containedElement));
-	if ($$.getOS() == "ios") dialog_box.showDialog(`${DIALOGS_PATH}/ios_totp_message.html`, false, false, {totpURL, secret}, "register_box_dialog");
+	if ($$.getOS() == "ios") display_box.showDialog(`${DIALOGS_PATH}/ios_totp_message.html`, false, false, {totpURL, secret}, "register_box_dialog");
 	else window.open(newURL);
 }
 

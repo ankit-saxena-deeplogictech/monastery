@@ -9,7 +9,7 @@ import {session} from "/framework/js/session.mjs";
 import {securityguard} from "/framework/js/securityguard.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 
-const dialog = _ => monkshu_env.components['dialog-box'], gohomeListeners = [];
+const dialog = _ => monkshu_env.components['display-box'], gohomeListeners = [];
 
 function toggleMenu() {
     const imgElement = document.querySelector("span#menubutton > img"), menuIsOpen = imgElement.src.indexOf("menu.svg") != -1;
