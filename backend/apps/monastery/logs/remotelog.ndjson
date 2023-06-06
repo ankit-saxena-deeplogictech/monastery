@@ -1,0 +1,69 @@
+{"ts":"2023:06:05:17:17:34","level":"info","message":"[127.0.0.1] Registration succeeded ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:17:23:36","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:17:28:35","level":"warning","message":"[127.0.0.1] Bad OTP given for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:17:28:48","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:17:31:05","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:17:34:11","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:17:48:46","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:17:48:56","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:17:50:45","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:17:50:50","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:17:51:02","level":"info","message":"[127.0.0.1] Logout of user ID: ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:17:51:16","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:18:12:05","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:18:12:06","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:18:12:06","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:18:31:34","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:18:31:34","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:18:31:34","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:18:33:21","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:18:33:21","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:18:33:21","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:18:33:21","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:18:35:02","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:18:35:02","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:18:35:02","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:18:49:30","level":"warning","message":"[127.0.0.1] Bad OTP given for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:18:49:46","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:18:49:46","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:18:49:46","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:18:49:46","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:18:51:29","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:18:52:24","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:18:56:00","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:18:56:10","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:18:56:10","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:18:56:10","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:18:59:15","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:18:59:15","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:18:59:15","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:18:59:15","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:18:59:59","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:18:59:59","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:18:59:59","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:19:00:01","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:19:00:01","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:19:00:01","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:19:00:07","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:19:00:07","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:19:00:07","level":"error","message":"[127.0.0.1] Error in initializing embeded app monasteryapp, error is TypeError: Cannot read properties of undefined (reading 'main')."}
+{"ts":"2023:06:05:19:06:40","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:19:06:40","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:19:06:40","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:19:30:00","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:19:30:00","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:19:30:00","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:19:31:18","level":"error","message":"[127.0.0.1] Error in initializing view http://localhost:8080/apps/monastery/monasteryapp/views/chooser."}
+{"ts":"2023:06:05:19:33:30","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:19:33:30","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:19:33:30","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:19:49:37","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:19:49:37","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:19:49:43","level":"error","message":"[127.0.0.1] Error in initializing view http://localhost:8080/apps/monastery/monasteryapp/views/chooser."}
+{"ts":"2023:06:05:19:50:29","level":"info","message":"[127.0.0.1] Login succeeded for ankit.saxena@deeplogictech.com."}
+{"ts":"2023:06:05:19:50:29","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:19:50:30","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:19:50:35","level":"error","message":"[127.0.0.1] Error in initializing view http://localhost:8080/apps/monastery/monasteryapp/views/chooser."}
+{"ts":"2023:06:05:19:50:52","level":"info","message":"[127.0.0.1] data, main"}
+{"ts":"2023:06:05:19:50:52","level":"info","message":"[127.0.0.1] [object Object]"}
+{"ts":"2023:06:05:19:50:57","level":"error","message":"[127.0.0.1] Error in initializing view http://localhost:8080/apps/monastery/monasteryapp/views/chooser."}
