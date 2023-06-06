@@ -6,7 +6,7 @@
 import { algos } from "./algos.mjs";
 import { util } from "/framework/js/util.mjs";
 import { blackboard } from "/framework/js/blackboard.mjs";
-import { session } from "../../../../../framework/js/session.mjs";
+import { session } from "/framework/js/session.mjs";
 import { APP_CONSTANTS } from "../../../js/constants.mjs";
 
 const EMPTY_MODEL = { apis: [], policies: [] }, DEFAULT_BUNDLE = "apis";

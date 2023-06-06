@@ -7,7 +7,7 @@ import { monkshu_component } from "/framework/js/monkshu_component.mjs";
 import { text_editor } from "../text-editor/text-editor.mjs";
 import { apimanager as apiman } from "/framework/js/apimanager.mjs";
 import { APP_CONSTANTS } from "../../../../js/constants.mjs";
-import { session } from "../../../../../../framework/js/session.mjs";
+import { session } from "/framework/js/session.mjs";
 import { code_snippet_window } from "../code-snippet-window/code-snippet-window.mjs";
 import { loader } from "../../../../js/loader.mjs";
 import {page_generator} from "/framework/components/page-generator/page-generator.mjs";

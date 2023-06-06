@@ -197,7 +197,7 @@ div.lgbox > span {
 <div class="lgbox">
 	<span><br><br>{{i18n.RegisterMsg}}<br><br></span>
 	<register-box id="register" roles='["{{APP_CONSTANTS.GUEST_ROLE}}", "{{APP_CONSTANTS.USER_ROLE}}"]' 
-		routeOnSuccess="{{APP_CONSTANTS.CHOOSER_HTML}}" type="register" minlength="{{APP_CONSTANTS.MIN_PASS_LENGTH}}"
+		routeOnSuccess="./main.html" type="register" minlength="{{APP_CONSTANTS.MIN_PASS_LENGTH}}"
 		dataOnSuccess='{"showDialog":{"message": "&#x7B;&#x7B;#needs_verification&#x7D;&#x7D;{{i18n.RegisterSuccessNeedsVerification}}&#x7B;&#x7B;/needs_verification&#x7D;&#x7D;&#x7B;&#x7B;^needs_verification&#x7D;&#x7D;{{i18n.RegisterSuccess}}&#x7B;&#x7B;/needs_verification}}"}}' 
 		routeOnNotApproved="./notapproved.html" 
 		mobileQueries='{"start": "{{APP_CONSTANTS.MOBILE_MEDIA_QUERY_START}}", "end": "{{APP_CONSTANTS.MOBILE_MEDIA_QUERY_END}}"}',
