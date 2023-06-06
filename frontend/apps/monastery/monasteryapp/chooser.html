@@ -35,7 +35,7 @@
 			width: 6em;
 		}
 		div#left > span {text-align: center; overflow: hidden; text-overflow: ellipsis;}
-		div#left > span#copyright {font-size: x-small;}
+		span#copyright {font-size: x-small; text-align: center;}
 
 		div#right {
 			height: calc(100vh - 20vh);
@@ -57,7 +57,7 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			padding: 5%;
+			padding: 4%;
 			box-sizing: border-box;
 			justify-content: space-between;
 			border: 1px solid #98CCFD;
@@ -74,13 +74,14 @@
 			display: flex;
 			flex-direction: row;
 			justify-content: space-around;
-			overflow: hidden;
 		}
-		div#right > div.idebutton > div#img > img {width: 80%}
+		div#right > div.idebutton > div#img > img {width: 90%; margin-bottom:20%}
 		div#right > div.idebutton > span {
 			display: block;
     		text-align: center;
 			white-space: pre-line;
+			width: 100%;
+			margin-top: 15%
 		}
 
 		div#topright {
@@ -156,7 +157,7 @@
 		{{#views}}
 		<div class="idebutton" ondblclick="monkshu_env.apps[APP_CONSTANTS.EMBEDDED_APP_NAME].main.openView('{{{viewname}}}')">
 			<div id="img"><img src="{{viewicon}}"></div>
-			<span>{{view}}</span>
+			<span>{{viewlabel}}</span>
 		</div>
 		{{/views}}		
 	</div>

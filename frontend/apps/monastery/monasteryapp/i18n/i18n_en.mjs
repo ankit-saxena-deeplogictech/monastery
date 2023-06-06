@@ -33,8 +33,8 @@ export const i18n = {
 "Cancel": "Cancel",
 "ExitMessage" : "Thank you. Please close this window.",
 "IDEH1": "Monastery is TekMonks' Cloud integrated development environment.",
-"IDEH2": "To start please pick one of the tasks listed on this page by double-clicking it.",
-"CopyRight": "(C) TekMonks - All Rights Reserved",
+"IDEH2": "To start please pick one of the product listed below by double-clicking it.",
+"CopyRight": "© TekMonks - All Rights Reserved",
 "Exit": "Exit",
 "Login": "Login",
 "UserID": "User ID",
@@ -42,8 +42,8 @@ export const i18n = {
 "NotAuthorized": "Not Authorized",
 "LoginError": "Login error",
 
-"logintagline": "XBin Enterprise Content Manager",
-"loginsubtag": "Secure, integrated, and easy to use. Cloud content manager.",
+"logintagline": "Monastery",
+"loginsubtag": "Cloud Integrated Development Environment",
 "learn":"Learn More",
 "Name": "Name",
 "Email": "Email",
@@ -216,8 +216,8 @@ export const i18n = {
 "OverwriteFailed": "Overwrite failed, skipping upload, for file ",
 "FileAlreadyExists": "File already exists, can't overwrite.",
 
-"logintagline": "XBin Enterprise Content Manager",
-"loginsubtag": "Secure, integrated, and easy to use. Cloud content manager.",
+"logintagline": "Monastery",
+"loginsubtag": "Cloud Integrated Development Environment",
 "learn":"Learn More",
 "Name": "Name",
 "Email": "Email",
@@ -302,5 +302,11 @@ export const i18n = {
 "validData": "Please enter vaild data",
 "namePattern": "^[a-zA-Z]+([ _-]?[a-zA-Z0-9]+)*[a-zA-Z0-9]?$",
 "orgPattern":"^[a-zA-Z0-9]+$",
-"InvalidDetails": "Invalid Details"
+"InvalidDetails": "Invalid Details",
+"ViewLabel_api400-designer": "Develop AS/400 APIs",
+"ViewLabel_apiboss-designer": "APIBoss API Security",
+"ViewLabel_asb-designer": "Develop Integrations",
+"ViewLabel_monkruls-designer": "Develop Business Rules",
+"ViewLabel_monboss-designer": "Develop Monitoring Flows",
+"ViewLabel_kloudust-designer": "Kloudust Hybrid Cloud"
 }
