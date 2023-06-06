@@ -1,22 +1,16 @@
 {
     "extensions": [
-        "proxy",
         "redirect"
-    ],
-    "proxies": [
-        {
-            "^http(.*)://([^:/]+)[:]?.*?/apps/xbin/proxiedapis/(.*)$": "http{{{$1}}}://{{{$2}}}:9090/apps/xbin/proxiedapis/{{{$3}}}"
-        }
     ],
     "redirects": [
         {
-            "^http(.*)://([^/]+?)/index.html$": "http{{{$1}}}://{{{$2}}}/apps/monastery/index.html"
+            "^http(.*)://([^/]+?)/index.html$": "http{{{$1}}}://{{{$2}}}/apps/monastery/loginappframework/index.html"
         },
         {
-            "^http(.*)://([^/]+?)/$": "http{{{$1}}}://{{{$2}}}/apps/monastery/index.html"
+            "^http(.*)://([^/]+?)/$": "http{{{$1}}}://{{{$2}}}/apps/monastery/loginappframework/index.html"
         },
         {
-            "^http(.*)://([^/]+?)$": "http{{{$1}}}://{{{$2}}}/apps/monastery/index.html"
+            "^http(.*)://([^/]+?)$": "http{{{$1}}}://{{{$2}}}/apps/monastery/loginappframework/index.html"
         }
     ],
     "diskCache": {
@@ -28,10 +22,11 @@
         "ignoreAfterMaxHits": 10
     },
     "httpdHeaders": {
-        "Cache-Control": "no-cache"
+        "Cache-Control": "max-age=604800, must-revalidate, private"
     },
     "ssl": false,
     "sslKeyFile": "C:\\Users\\rvkapoor\\source\\etc\\dnsip_privkey.pem",
     "sslCertFile": "C:\\Users\\rvkapoor\\source\\etc\\dnsip_fullchain.pem",
-    "port": 8080
+    "port": 8080,
+    "host": "{{{hostname}}}"
 }

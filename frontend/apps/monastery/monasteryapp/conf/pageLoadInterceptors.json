@@ -1,0 +1,7 @@
+[
+    {"module": "monasteryapp/js/application.mjs", "function":"interceptPageLoadData"},
+    {"module": "monasteryapp/js/loginmanager.mjs", "function":"interceptPageLoad"},
+    {"module": "monasteryapp/js/main.mjs", "function":"interceptPageData"},
+    {"module": "monasteryapp/js/chooser.mjs", "function":"interceptPageLoadData"}
+
+]
