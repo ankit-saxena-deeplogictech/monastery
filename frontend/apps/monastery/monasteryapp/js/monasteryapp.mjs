@@ -30,7 +30,7 @@ async function _createdata(data) {
         viewPath = viewsAllowed.length == 1?`${APP_CONSTANTS.VIEWS_PATH}/${viewsAllowed[0]}` :
             `${APP_CONSTANTS.EMBEDDED_APP_PATH}`;
         views = []; for (const view of viewsAllowed) if (view != APP_CONSTANTS.VIEW_CHOOSER) views.push(  // views we can choose from
-            {viewicon: `${APP_CONSTANTS.VIEWS_PATH}/${view}/page/logo.png`, 
+            {viewicon: `${APP_CONSTANTS.VIEWS_PATH}/${view}/page/logo.svg`, 
                 viewlabel: await i18n.get(`ViewLabel_${view}`), viewname: view});
     } else {
         if (viewsAllowed.length > 1) data.showhome = true;
@@ -51,10 +51,7 @@ async function openView(viewname) {
     const {loginmanager} = await import (`${APP_CONSTANTS.LOGINFRAMEWORK_LIB_PATH}/loginmanager.mjs`);
     loginmanager.addLogoutListener(`${MODULE_PATH}/monasteryapp.mjs`, "monasteryapp", "onlogout");
     router.loadPage(`${APP_CONSTANTS.MONASTERY_MAIN_HTML}?view=${viewname}`);
-
     // router.navigate(APP_CONSTANTS.MONASTERY_MAIN_HTML);
-
-
 }
 
 function onlogout() {session.remove(APP_CONSTANTS.FORCE_LOAD_VIEW);}

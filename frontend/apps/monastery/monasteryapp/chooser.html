@@ -12,25 +12,23 @@
 		body {
 			background-color: #DFF0FE;
 			display: flex;
-			flex-direction: row;
+			flex-direction: column;
 			font-family: 'Red Hat Text';
-			margin: 0px;
-			padding: 10vh 5vw;
 			justify-content: center;
 			align-items: center;
 		}
 
 		div#left {
-			height: calc(100vh - 20vh);
-			width: 50%;
-			padding: 5%;
+			height: calc(100vh - 90vh);
+			width: 100%;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			box-sizing: border-box;
-			background-color: #E8F4FF;
+			background-color: #98CCFD;
+			color: white;
 			justify-content: space-between;
-			border-radius: 20px;
+			border-radius: 5px;
 			overflow: hidden;
 		}
 		div#left > img {
@@ -41,19 +39,16 @@
 
 		div#right {
 			height: calc(100vh - 20vh);
-			width: 50%;
-			padding: 5% 0 5% 5%;
 			box-sizing: border-box;
 			background-color: transparent;
-			justify-content: space-around;
 			overflow-y: scroll;
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap;
 		}
 		div#right > div.idebutton {
-			width: 40%;
-			margin: 5%;
+			width: 15%;
+			margin: 2% 5%;
 			height: 40%;
 			cursor: pointer;
 			user-select: none;
@@ -66,7 +61,6 @@
 			box-sizing: border-box;
 			justify-content: space-between;
 			border: 1px solid #98CCFD;
-			overflow: hidden;
 		}
 		div#right > div.idebutton:hover {
 			border-color: #4788C7;
@@ -155,25 +149,17 @@
 </head>
 
 <body>
-	<div id="topright">
-		{{#admin}}
-		<span-with-menu id="gear" styleBody="url(./pages/menu.stylebody.css)"><img src="./img/settings.svg" style="height: 2em;width: 2em;vertical-align: middle; cursor: pointer;">
-			<menu-item onclick="monkshu_env.frameworklibs.router.navigate(APP_CONSTANTS.MANAGE_HTML)" label="{{i18n.ManageUsers}}"></menu-item>
-		</span-with-menu>
-		{{/admin}}
-		<img src="../monasteryapp/img/exit.svg" title="{{i18n.Exit}}" style="cursor: pointer; margin-right: 3.5em;" onclick="window.monkshu_env.__chooser.exitClicked()">	</div>
 	<div id="left">
-		<img src="../monasteryapp/img/monastery.svg">
-		<span id="text"><p>{{i18n.IDEH1}}</p><p>&nbsp;</p> <p>{{i18n.IDEH2}}</p></span>
-		<span id="copyright">{{i18n.CopyRight}}</span>
+		<span id="text"><p>{{i18n.IDEH1}} &nbsp; {{i18n.IDEH2}}</p></span>
 	</div>
 	<div id="right">
 		{{#views}}
 		<div class="idebutton" ondblclick="monkshu_env.apps[APP_CONSTANTS.EMBEDDED_APP_NAME].main.openView('{{{viewname}}}')">
-			<div id="img"><img src="./views/{{name}}/page/logo.png"></div>
-			<span>{{description}}</span>
+			<div id="img"><img src="{{viewicon}}"></div>
+			<span>{{view}}</span>
 		</div>
-		{{/views}}
+		{{/views}}		
 	</div>
+	<span id="copyright">{{i18n.CopyRight}}</span>
 </body>
 </html>
