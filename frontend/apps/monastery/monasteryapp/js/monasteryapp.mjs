@@ -11,7 +11,7 @@ import {router} from "/framework/js/router.mjs";
 import {session} from "/framework/js/session.mjs";
 
 const MODULE_PATH = util.getModulePath(import.meta), 
-    MAIN_HTML = util.resolveURL(`${APP_CONSTANTS.EMBEDDED_APP_PATH}/main.html`);
+    CHOOSE_PRODUCT_HTML = util.resolveURL(`${APP_CONSTANTS.EMBEDDED_APP_PATH}/chooseproduct.html`);
 
 let loginappMain;
 
@@ -20,7 +20,7 @@ const main = async (data, mainLoginAppModule) => {
     loginappMain = mainLoginAppModule; loginappMain.addGoHomeListener(gohome);
     APP_CONSTANTS.VIEWS_PATH = util.resolveURL(`${APP_CONSTANTS.EMBEDDED_APP_PATH}/views`);
     await _createdata(data); 
-    data.maincontent = await router.loadHTML(MAIN_HTML, {...data}); 
+    data.maincontent = await router.loadHTML(CHOOSE_PRODUCT_HTML, {...data}); 
 }
 
 async function _createdata(data) {   
@@ -50,8 +50,11 @@ async function openView(viewname) {
     session.set(APP_CONSTANTS.FORCE_LOAD_VIEW, viewname);
     const {loginmanager} = await import (`${APP_CONSTANTS.LOGINFRAMEWORK_LIB_PATH}/loginmanager.mjs`);
     loginmanager.addLogoutListener(`${MODULE_PATH}/monasteryapp.mjs`, "monasteryapp", "onlogout");
+    router.loadPage(`${APP_CONSTANTS.MONASTERY_MAIN_HTML}?view=${viewname}`);
 
-    router.navigate(APP_CONSTANTS.MAIN_HTML);
+    // router.navigate(APP_CONSTANTS.MONASTERY_MAIN_HTML);
+
+
 }
 
 function onlogout() {session.remove(APP_CONSTANTS.FORCE_LOAD_VIEW);}

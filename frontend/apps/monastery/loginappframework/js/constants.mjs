@@ -28,6 +28,8 @@ export const APP_CONSTANTS = {
     DOWNLOAD_HTML: LOGINAPP_PATH+"/download.html",
 
     CHOOSER_HTML: EMBEDDED_APP_PATH+"/chooser.html",
+    MONASTERY_MAIN_HTML: `${EMBEDDED_APP_PATH}/main.html`,
+
 
     APIBOSS_CONF_PATH: `${APP_PATH}/views/apiboss-designer/conf`,
     IMG_SRC: `${APP_PATH}/img`,
