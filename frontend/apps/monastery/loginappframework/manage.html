@@ -134,7 +134,7 @@ span#mobilefooter > img {
 	<script type="module">
 	import {user_manager} from "./components/user-manager/user-manager.mjs";
 	import "./components/span-with-menu/span-with-menu.mjs";
-	import "./components/dialog-box/dialog-box.mjs";
+	import "./components/display-box/display-box.mjs";
 	import {main} from "./js/main.mjs"; monkshu_env.apps[APP_CONSTANTS.APP_NAME].main = main; 
 	import {loginmanager} from "./js/loginmanager.mjs"; monkshu_env.apps[APP_CONSTANTS.APP_NAME].loginmanager = loginmanager;
 	</script>
@@ -166,7 +166,7 @@ span#mobilefooter > img {
 	<img src="./img/mobilefooter_logout.svg" onclick="monkshu_env.apps[APP_CONSTANTS.APP_NAME].main.logoutClicked()">
 </span>
 
-<dialog-box id="dialog"></dialog-box>
+<display-box id="dialog"></display-box>
 
 </body>
 </html>

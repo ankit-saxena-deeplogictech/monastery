@@ -141,6 +141,6 @@ function _resetUI(shadowRoot) {
 }
 
 const trueWebComponentMode = true;	// making this false renders the component without using Shadow DOM
-export const dialog_box = {showDialog, trueWebComponentMode, hideDialog, cancel, error, showMessage, hideError, submit,
+export const display_box = {showDialog, trueWebComponentMode, hideDialog, cancel, error, showMessage, hideError, submit,
     setShowHideInterceptor}
-monkshu_component.register("dialog-box", `${COMPONENT_PATH}/dialog-box.html`, dialog_box);
+monkshu_component.register("display-box", `${COMPONENT_PATH}/display-box.html`, display_box);

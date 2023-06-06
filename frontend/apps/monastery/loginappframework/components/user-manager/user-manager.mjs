@@ -66,7 +66,7 @@ async function orgMenuClicked(event, element, org) {
 
 async function addUser(element) {
 	const roles = []; for (const thisrole of conf.roles) roles.push({label:await i18n.get(thisrole), value: thisrole, selected: thisrole==conf.user_role?true:undefined});
-	monkshu_env.components['dialog-box'].showDialog(`${COMPONENT_PATH}/dialogs/addeditprofile.html`, true, true, 
+	monkshu_env.components['display-box'].showDialog(`${COMPONENT_PATH}/dialogs/addeditprofile.html`, true, true, 
 			{approved: true, roles, CONF:conf, COMPONENT_PATH}, "dialog", ["name", "new_id", "role", "approved"], async ret => {
 		
 		if (ret.approved.toLowerCase() == "true") ret.approved = true; else ret.approved = false;
@@ -79,12 +79,12 @@ async function addUser(element) {
 				addResult.reason == "internal" ? "Internal" : addResult.reason == "securityerror" ? "Security" :
 				addResult.reason == "domainerror" ? "Domain" :  "Internal" : "Internal";
 			const err = await i18n.get(`AddError${errorKey}`); 
-			LOG.error(err); monkshu_env.components['dialog-box'].hideDialog("dialog"); _showError(err);
+			LOG.error(err); monkshu_env.components['display-box'].hideDialog("dialog"); _showError(err);
 		} else if (!addResult.emailresult) {	// account created but login email send failed
 			const err = mustache_instance.render(await i18n.get("AddEmailError"), {name: ret.name, id: ret.id, 
 				loginurl: addResult.loginurl}); 
-			LOG.error(err); monkshu_env.components['dialog-box'].hideDialog("dialog"); _showError(err);
-		} else monkshu_env.components['dialog-box'].hideDialog("dialog");
+			LOG.error(err); monkshu_env.components['display-box'].hideDialog("dialog"); _showError(err);
+		} else monkshu_env.components['display-box'].hideDialog("dialog");
 
 		user_manager.reload(user_manager.getHostElementID(element));
 	});
@@ -92,7 +92,7 @@ async function addUser(element) {
 
 async function editUser(name, old_id, role, approved, element) {
 	const roles = []; for (const thisrole of conf.roles) roles.push({label:await i18n.get(thisrole), value: thisrole, selected: thisrole==role?true:undefined});
-	monkshu_env.components['dialog-box'].showDialog(`${COMPONENT_PATH}/dialogs/addeditprofile.html`, true, true, 
+	monkshu_env.components['display-box'].showDialog(`${COMPONENT_PATH}/dialogs/addeditprofile.html`, true, true, 
 			{name, old_id, role, approved:approved==1?true:undefined, roles, CONF:conf, doNotAllowIDChange: true,
 				doNotAllowRoles:old_id==session.get(conf.userid_session_variable).toString()?true:undefined, 
 				doNotAllowApproval:old_id==session.get(conf.userid_session_variable).toString()?true:undefined, 
@@ -108,9 +108,9 @@ async function editUser(name, old_id, role, approved, element) {
 				editResult.reason == "domainerror" ? "DomainError" : editResult.reason == "iddoesntexist" ? "IDNotExistForUpdateError" : 
 				"Internal" : "Internal";
 			const err = mustache_instance.render(await i18n.get(`EditError${errorKey}`), {name, old_id}); 
-			LOG.error(err); monkshu_env.components['dialog-box'].error("dialog", err);
+			LOG.error(err); monkshu_env.components['display-box'].error("dialog", err);
 		} else {
-			monkshu_env.components['dialog-box'].hideDialog("dialog");
+			monkshu_env.components['display-box'].hideDialog("dialog");
 			user_manager.reload(user_manager.getHostElementID(element));
 		}
 	});
@@ -126,7 +126,7 @@ async function editOrg(org, element) {
 	if ((!orgDetails) || (!orgDetails.result)) {const err = await i18n.get("OrgFetchError"); LOG.error(err); _showError(err); return;}
 
 	let dontCheckAutoUserMigrations = false;
-	monkshu_env.components['dialog-box'].showDialog(`${COMPONENT_PATH}/dialogs/editorg.html`, true, true, 
+	monkshu_env.components['display-box'].showDialog(`${COMPONENT_PATH}/dialogs/editorg.html`, true, true, 
 		{orgname: orgDetails.name, orgaddress: orgDetails.address, orgcontactname: orgDetails.primary_contact_name, 
 			orgcontactemail: orgDetails.primary_contact_email, orgdomain: orgDetails.domain, 
 			orgnames: JSON.stringify(orgDetails.alternate_names), orgdomains: JSON.stringify(orgDetails.alternate_domains), 
@@ -146,13 +146,13 @@ async function editOrg(org, element) {
 			for (const oldDomain of orgDetails.alternate_domains) if ( (!ret.orgdomains.includes(oldDomain))
 				&& (!orgDetails.deletable_domains.includes(oldDomain)) ) undeletableDomainFoundDeleted.push(oldDomain);
 		if (undeletableDomainFoundDeleted.length) {
-			monkshu_env.components['dialog-box'].error("dialog", mustache_instance.render(
+			monkshu_env.components['display-box'].error("dialog", mustache_instance.render(
 				await i18n.get("SomeUndeletableDomainsFound"), {domains: undeletableDomainFoundDeleted.join(", ")}));
 			return;
 		}
 
 		if ((!dontCheckAutoUserMigrations) && _arrayBNotSubsetOfA(ret.orgnames, orgDetails.alternate_names)) {
-			monkshu_env.components['dialog-box'].error("dialog", await i18n.get("ChangingSuborgsWillMigrateUsers"));
+			monkshu_env.components['display-box'].error("dialog", await i18n.get("ChangingSuborgsWillMigrateUsers"));
 			dontCheckAutoUserMigrations = true;
 			return;	// inform admin if he changes org alternate names we will migrate associated users
 		}
@@ -166,10 +166,10 @@ async function editOrg(org, element) {
 		if (!(editResult?.result)) { 
 			const key = !editResult ? "Internal" : editResult.reason == "internal" ? "Internal" : editResult.reason == "domainerror" ? "Domain" : "Internal";
 			const err = await i18n.get(`OrgEditError${key}`); LOG.error(err); 
-			monkshu_env.components['dialog-box'].error("dialog", err); 
+			monkshu_env.components['display-box'].error("dialog", err); 
 		} else { 
 			session.set(conf.userorg_session_variable, ret.orgname);	// update org name for the current user
-			monkshu_env.components['dialog-box'].hideDialog("dialog"); 
+			monkshu_env.components['display-box'].hideDialog("dialog"); 
 			user_manager.reload(user_manager.getHostElementID(element)); 
 		}
 	});
@@ -223,23 +223,23 @@ function _createData(host, users) {
 }
 
 const _callBackendAPIShowingSpinner = async (url, req, method="POST", sendToken=true, extractToken) => {
-	const dialogShadowRoot = monkshu_env.components['dialog-box'].getShadowRootByHostId("dialog");
+	const dialogShadowRoot = monkshu_env.components['display-box'].getShadowRootByHostId("dialog");
 	dialogShadowRoot.querySelector("span#spinner").classList.add("visible");
 	const result = await apiman.rest(url, method, req, sendToken, extractToken);
 	dialogShadowRoot.querySelector("span#spinner").classList.remove("visible");
 	return result;
 }
 
-const _showError = async error => { await monkshu_env.components['dialog-box'].showDialog(`${COMPONENT_PATH}/dialogs/error.html`, 
-	true, false, {error, CONF:conf}, "dialog", []); monkshu_env.components['dialog-box'].hideDialog("dialog"); }
-const _showMessage = async message => { await monkshu_env.components['dialog-box'].showDialog(`${COMPONENT_PATH}/dialogs/message.html`, 
-	true, false, {message, CONF:conf}, "dialog", []); monkshu_env.components['dialog-box'].hideDialog("dialog"); }
+const _showError = async error => { await monkshu_env.components['display-box'].showDialog(`${COMPONENT_PATH}/dialogs/error.html`, 
+	true, false, {error, CONF:conf}, "dialog", []); monkshu_env.components['display-box'].hideDialog("dialog"); }
+const _showMessage = async message => { await monkshu_env.components['display-box'].showDialog(`${COMPONENT_PATH}/dialogs/message.html`, 
+	true, false, {message, CONF:conf}, "dialog", []); monkshu_env.components['display-box'].hideDialog("dialog"); }
 const _execOnConfirm = (message, cb) => {
-	if (cb) monkshu_env.components['dialog-box'].showDialog(`${COMPONENT_PATH}/dialogs/message.html`, 
-		true, true, {message, CONF:conf}, "dialog", [], _=>{monkshu_env.components['dialog-box'].hideDialog("dialog"); cb();});
-	else return new Promise(resolve => monkshu_env.components['dialog-box'].showDialog(
+	if (cb) monkshu_env.components['display-box'].showDialog(`${COMPONENT_PATH}/dialogs/message.html`, 
+		true, true, {message, CONF:conf}, "dialog", [], _=>{monkshu_env.components['display-box'].hideDialog("dialog"); cb();});
+	else return new Promise(resolve => monkshu_env.components['display-box'].showDialog(
 		`${COMPONENT_PATH}/dialogs/message.html`, true, true, {message, CONF:conf}, "dialog", [],
-		_=>{monkshu_env.components['dialog-box'].hideDialog("dialog"); resolve(true)}, _=>resolve(false)));
+		_=>{monkshu_env.components['display-box'].hideDialog("dialog"); resolve(true)}, _=>resolve(false)));
 }
 
 export const user_manager = {trueWebComponentMode: true, elementConnected, userMenuClicked, orgMenuClicked, addUser, 

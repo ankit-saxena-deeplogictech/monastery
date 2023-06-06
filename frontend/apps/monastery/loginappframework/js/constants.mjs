@@ -33,7 +33,7 @@ export const APP_CONSTANTS = {
 
     APIBOSS_CONF_PATH: `${APP_PATH}/views/apiboss-designer/conf`,
     IMG_SRC: `${APP_PATH}/img`,
-    DIALOGS_PATH: APP_PATH+"/dialogs",
+    // DIALOGS_PATH: APP_PATH+"/dialogs",
 
     API_LIST_USER_APIS:`${BACKEND}/apps/apiboss/admin/listuserapis`,
     MSG_OBJECT_DRAGGED: "OBJECT_BEING_DRAGGED", 
