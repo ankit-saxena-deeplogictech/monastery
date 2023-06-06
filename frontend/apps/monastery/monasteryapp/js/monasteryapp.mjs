@@ -28,18 +28,16 @@ async function _createdata(data) {
     const viewsAllowed = (session.get(APP_CONSTANTS.LOGIN_RESPONSE))?.views||[];
     if (!session.get(APP_CONSTANTS.FORCE_LOAD_VIEW)) {
         viewPath = viewsAllowed.length == 1?`${APP_CONSTANTS.VIEWS_PATH}/${viewsAllowed[0]}` :
-            `${APP_CONSTANTS.VIEWS_PATH}/${APP_CONSTANTS.VIEW_CHOOSER}`;
+            `${APP_CONSTANTS.EMBEDDED_APP_PATH}`;
         views = []; for (const view of viewsAllowed) if (view != APP_CONSTANTS.VIEW_CHOOSER) views.push(  // views we can choose from
             {viewicon: `${APP_CONSTANTS.VIEWS_PATH}/${view}/page/logo.png`, 
                 viewlabel: await i18n.get(`ViewLabel_${view}`), viewname: view});
     } else {
         if (viewsAllowed.length > 1) data.showhome = true;
-        viewPath = `${APP_CONSTANTS.VIEWS_PATH}/${session.get(APP_CONSTANTS.FORCE_LOAD_VIEW)}`;
+        viewPath = `${APP_CONSTANTS.EMBEDDED_APP_PATH}`;
     }
 
-    // const viewURL = `${viewPath}/main.html`, viewMainMJS = `${viewPath}/js/main.mjs`;
-    const viewURL = `http://localhost:8080/apps/monastery/monasteryapp/chooser.html`, 
-        viewMainMJS = `http://localhost:8080/apps/monastery/monasteryapp/js/chooser.mjs`;
+    const viewURL = `${viewPath}/chooser.html`, viewMainMJS = `${viewPath}/js/chooser.mjs`;
     data.viewpath = viewPath; 
     try { const viewMain = await import(viewMainMJS); await viewMain.main.initView(data, monasteryapp); }    // init the view before loading it
     catch (err) { LOG.error(`Error in initializing view ${viewPath}.`); }

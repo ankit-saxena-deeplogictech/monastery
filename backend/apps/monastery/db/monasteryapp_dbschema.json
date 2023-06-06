@@ -8,13 +8,13 @@
 
     "CREATE TABLE views(domain varchar not null, view varchar not null)",
 
-    "INSERT INTO views (domain, view) VALUES ('tekmonks.com', 'api400-designer')",
+    "INSERT INTO views (domain, view) VALUES ('deeplogictech.com', 'api400-designer')",
 
-    "INSERT INTO views (domain, view) VALUES ('tekmonks.com', 'apiboss-designer')",
+    "INSERT INTO views (domain, view) VALUES ('deeplogictech.com', 'apiboss-designer')",
 
-    "INSERT INTO views (domain, view) VALUES ('tekmonks.com', 'monkruls-designer')",
+    "INSERT INTO views (domain, view) VALUES ('deeplogictech.com', 'monkruls-designer')",
 
-    "INSERT INTO views (domain, view) VALUES ('tekmonks.com', 'asb-designer')",
+    "INSERT INTO views (domain, view) VALUES ('deeplogictech.com', 'asb-designer')",
 
     "CREATE TABLE usage(timestamp TIMESTAMP DEFAULT (strftime('%s', 'now')), id varchar not null, usage integer not null, model varchar not null)",
 	
