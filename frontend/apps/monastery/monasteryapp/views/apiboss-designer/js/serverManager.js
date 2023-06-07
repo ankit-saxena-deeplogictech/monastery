@@ -3,7 +3,6 @@
  * (C) 2020 TekMonks. All rights reserved.
  * License: See enclosed LICENSE file.
  */
-import { APP_CONSTANTS } from "../../../js/constants.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 import { session } from "/framework/js/session.mjs";
 import {loader} from "../../../js/loader.mjs";

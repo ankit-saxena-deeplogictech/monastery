@@ -1,16 +1,17 @@
 const fs = require("fs");
 const userid = require(`${APP_CONSTANTS.LIB_DIR}/userid.js`);
+const MONASTERY_CONSTANTS = LOGINAPP_CONSTANTS.ENV.MONASTERYAPP_CONSTANTS;
 
 exports.doService = async jsonReq => {
   if (!validateRequest(jsonReq)) { LOG.error(`Bad Request`); return { result: false }; }
   else {
-    const userslist = await userid.getUserMatchingOnOrg(jsonReq.org);
+    const userslist = await userid.getUsersForOrgOrSuborg(jsonReq.org);
     if (userslist.result && userslist.users.length > 0) {
-      const result = userslist.users.some(user => user.user_id == jsonReq.id);
+      const result = userslist.users.some(user => user.id == jsonReq.id);
       if(!jsonReq.isPublicServer) {
-        if(!fs.existsSync(`${APP_CONSTANTS.META_DIR}/${jsonReq.org}/${jsonReq.name}_${jsonReq.server}_${jsonReq.port}.json`)) return { result: false }
+        if(!fs.existsSync(`${MONASTERY_CONSTANTS.META_DIR}/${jsonReq.org}/${jsonReq.name}_${jsonReq.server}_${jsonReq.port}.json`)) return { result: false }
       } else {
-        if(!fs.existsSync(`${APP_CONSTANTS.META_DIR}/public/${jsonReq.org}/${jsonReq.name}_${jsonReq.server}_${jsonReq.port}.json`)) return { result: false }
+        if(!fs.existsSync(`${MONASTERY_CONSTANTS.META_DIR}/public/${jsonReq.org}/${jsonReq.name}_${jsonReq.server}_${jsonReq.port}.json`)) return { result: false }
       }
       if (result) return  { result: true, data: _getMetadata(jsonReq),name:jsonReq.org,isPublic:jsonReq.isPublicServer}
       else return { result: false};
@@ -23,9 +24,9 @@ exports.doService = async jsonReq => {
 function _getMetadata(jsonReq) {
   let filedata;
   if(!jsonReq.isPublicServer) {
-    filedata = fs.readFileSync(`${APP_CONSTANTS.META_DIR}/${jsonReq.org}/${jsonReq.name}_${jsonReq.server}_${jsonReq.port}.json`);
+    filedata = fs.readFileSync(`${MONASTERY_CONSTANTS.META_DIR}/${jsonReq.org}/${jsonReq.name}_${jsonReq.server}_${jsonReq.port}.json`);
   } else {
-    filedata = fs.readFileSync(`${APP_CONSTANTS.META_DIR}/public/${jsonReq.org}/${jsonReq.name}_${jsonReq.server}_${jsonReq.port}.json`);
+    filedata = fs.readFileSync(`${MONASTERY_CONSTANTS.META_DIR}/public/${jsonReq.org}/${jsonReq.name}_${jsonReq.server}_${jsonReq.port}.json`);
   }
   return JSON.parse(filedata);
 }
