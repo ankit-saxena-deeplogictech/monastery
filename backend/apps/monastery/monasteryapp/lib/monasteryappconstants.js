@@ -10,6 +10,8 @@ const APPROOT = path.resolve(`${LOGINAPP_CONSTANTS.APP_ROOT}/${LOGINAPP_CONSTANT
 exports.APPROOT = path.resolve(APPROOT);
 exports.APIDIR = path.resolve(`${APPROOT}/apis`);
 exports.CONFDIR = path.resolve(`${APPROOT}/conf`);
+exports.META_DIR = path.resolve(`${APPROOT}/conf/meta`);
+
 exports.LIBDIR = path.resolve(`${APPROOT}/lib`);
 exports.TRAININGPROMPTSDIR = path.resolve(`${APPROOT}/training_prompts`);
 exports.RESPONSESDIR = path.resolve(`${APPROOT}/sample_responses`);

@@ -77,7 +77,7 @@ function exit() {
 	session.remove(APP_EXIT_FLAG);
 }
 
-function exitToChooser() { router.navigate(APP_CONSTANTS.CHOOSER_HTML); }
+function exitToChooser() { router.navigate(APP_CONSTANTS.MAIN_HTML); }
 
 const _registerComponents = async _ => { for (const component of APP_CONSTANTS.COMPONENTS) 
 	await import(`${APP_CONSTANTS.APP_PATH}/${component}/${component.substring(component.lastIndexOf("/")+1)}.mjs`); }

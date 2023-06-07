@@ -16,7 +16,7 @@ async function init() {
 }
 
 async function clicked() {
- router.loadPage(`${APP_CONSTANTS.MAIN_HTML}?view=apiboss-designer`);
+ router.loadPage(`${APP_CONSTANTS.MONASTERY_MAIN_HTML}?view=apiboss-designer`);
 }
 
 const getImage = _ => IMAGE;

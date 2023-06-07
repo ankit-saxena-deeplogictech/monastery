@@ -78,7 +78,7 @@ exports.addUser = async (jsonReq, servObject, byAdmin=false) => {
 	
 	return {...result, needs_verification: verifyEmail, 
 		reason:result.result?undefined:(result.reason==userid.ID_EXISTS?REASONS.ID_EXISTS:REASONS.INTERNAL_ERROR),
-		approved: result.approved==1?true:false};
+		approved: result.approved==1?true:false,domain:result.domain};
 }
 
 exports.updateOrgAndDomain = async jsonReq => {
