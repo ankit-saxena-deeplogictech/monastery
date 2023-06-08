@@ -3,7 +3,6 @@
  */
 import {util} from "/framework/js/util.mjs";
 import {application} from "../../../../../../../loginappframework/js/application.mjs";
-import { home } from "../../../../home.mjs";
 const PLUGIN_PATH = util.getModulePath(import.meta);
 let IMAGE, I18N;
 
@@ -14,7 +13,7 @@ async function init() {
     return true;
 }
 
-const clicked = _=> application.exitToChooser();
+const clicked =async _=> (await import(`${APP_CONSTANTS.LOGINAPP_PATH}/js/application.mjs`))[application.exitToChooser()];
 
 const getImage = _ => IMAGE;
 
