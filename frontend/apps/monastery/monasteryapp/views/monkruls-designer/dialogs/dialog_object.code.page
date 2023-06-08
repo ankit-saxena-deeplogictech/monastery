@@ -47,5 +47,5 @@ body {
     width: 100%;
 }
 
-text-editor#data {position: relative;}
+text-editor#data {position: relative;width:100%;}
 =======
