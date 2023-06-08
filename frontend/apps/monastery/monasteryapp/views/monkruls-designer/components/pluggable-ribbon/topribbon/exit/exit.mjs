@@ -14,7 +14,7 @@ async function init() {
     return true;
 }
 
-const clicked = _=> application.exit();
+const clicked = _=> application.exitToChooser();
 
 const getImage = _ => IMAGE;
 

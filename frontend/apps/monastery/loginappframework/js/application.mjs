@@ -10,6 +10,10 @@ import {session} from "/framework/js/session.mjs";
 import {securityguard} from "/framework/js/securityguard.mjs";
 import {apimanager as apiman} from "/framework/js/apimanager.mjs";
 import {APP_CONSTANTS as AUTO_APP_CONSTANTS} from "./constants.mjs";
+import { loginmanager } from "./loginmanager.mjs";
+import { main as loginmain } from "./main.mjs";
+
+const APP_EXIT_FLAG = "__org_monkshu_app_exit";
 
 const init = async hostname => {
 	window.monkshu_env.apps[AUTO_APP_CONSTANTS.APP_NAME] = {};
@@ -77,7 +81,7 @@ function exit() {
 	session.remove(APP_EXIT_FLAG);
 }
 
-function exitToChooser() { router.navigate(APP_CONSTANTS.MAIN_HTML); }
+function exitToChooser() { loginmain.gohome(); }
 
 const _registerComponents = async _ => { for (const component of APP_CONSTANTS.COMPONENTS) 
 	await import(`${APP_CONSTANTS.APP_PATH}/${component}/${component.substring(component.lastIndexOf("/")+1)}.mjs`); }
