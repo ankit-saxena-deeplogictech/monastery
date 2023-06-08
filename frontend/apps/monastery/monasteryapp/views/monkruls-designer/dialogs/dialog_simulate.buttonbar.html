@@ -39,13 +39,13 @@ img.button {width: 20px;}
 </style>
 
 <script type="module">
-    import {simulate} from "./views/{{url.view}}/js/simulate.mjs"; window.monkshu_env.__simulate = simulate;
+    import {simulate} from "../monasteryapp/views/{{url.view}}/js/simulate.mjs"; window.monkshu_env.__simulate = simulate;
 </script>
 
 <span id="toolbar">
     <span id="leftitems">
         <span class="button" onclick="window.monkshu_env.__simulate.test(this)">
-            <img class="button" src="./views/{{url.view}}/dialogs/test.svg">&nbsp;&nbsp;{{i18n.Simulate}}
+            <img class="button" src="../monasteryapp/views/{{url.view}}/dialogs/test.svg">&nbsp;&nbsp;{{i18n.Simulate}}
         </span>
     </span>
 </span>
