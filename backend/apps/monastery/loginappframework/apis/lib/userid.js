@@ -9,8 +9,11 @@ const bcryptjs = require("bcryptjs");
 const serverutils = require(`${CONSTANTS.LIBDIR}/utils.js`);
 const DB_PATH = path.resolve(`${APP_CONSTANTS.DB_DIR}/loginapp.db`);
 const DB_CREATION_SQLS = require(`${APP_CONSTANTS.DB_DIR}/loginapp_dbschema.json`);
+const MONASTERY_DB_PATH = path.resolve(`${APP_CONSTANTS.DB_DIR}/monastery.db`);
+const MONASTERY_DB_CREATION_SQLS = require(`${APP_CONSTANTS.DB_DIR}/monasteryapp_dbschema.json`);
 const ID_BLACK_WHITE_LISTS = require(`${APP_CONSTANTS.CONF_DIR}/idblackwhitelists.json`)
 const db = require(`${CONSTANTS.LIBDIR}/db.js`).getDBDriver("sqlite", DB_PATH, DB_CREATION_SQLS);
+const monasteryDb = require(`${CONSTANTS.LIBDIR}/db.js`).getDBDriver("sqlite", MONASTERY_DB_PATH, MONASTERY_DB_CREATION_SQLS);
 
 const idDeletionListeners = [];
 
@@ -28,8 +31,9 @@ exports.register = async (id, name, org, pwph, totpSecret, role, approved, verif
 		const orgCreateResult = await exports.addOrUpdateOrg(org, org, name, id, undefined, domain);	
 		if (!orgCreateResult.result) finalResult = false;
 	}
-
+	
 	if (finalResult) {
+		await addProductsForDomain(domain);
 		finalResult = await db.runCmd(
 			"INSERT INTO users (id, name, org, suborg, pwph, totpsec, role, approved, verified, domain) VALUES (?,?,?,?,?,?,?,?,?,?)",
 			[id, name, existingRootOrg||org, org, pwphHashed, totpSecret, role, approved?1:0, verifyEmail?0:1, domain]);
@@ -318,6 +322,17 @@ function _flattenArray(results, columnName, functionToCall) {
 	if (!results) return [];
 	const retArray = []; for (const result of results) retArray.push(
 		functionToCall?functionToCall(result[columnName]):result[columnName]); return retArray;
+}
+
+async function addProductsForDomain (domain) {
+	const products = ['api400-designer', 'apiboss-designer', 'asb-designer', 'monkruls-designer', 'monboss-designer', 'kloudust-designer'];
+
+	const productsList = await monasteryDb.getQuery("SELECT * FROM views WHERE domain = ? COLLATE NOCASE", [domain])
+	if (productsList && productsList.length) { return; }
+
+	for(const each of products){
+		await monasteryDb.runCmd("INSERT INTO views (domain, view) VALUES (?,?)", [domain, each])
+	};
 }
 
 exports.ID_EXISTS = "useridexists"; exports.NO_ID = "noid"; exports.BAD_PASSWORD = "badpassword";
