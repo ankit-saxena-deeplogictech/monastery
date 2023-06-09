@@ -69,6 +69,7 @@ async function registerOrUpdate(old_id, name, id, pass, org, totpSecret, totpCod
         session.set(APP_CONSTANTS.USERORGDOMAIN, resp.domain);
         session.set(APP_CONSTANTS.USER_NEEDS_VERIFICATION, resp.needs_verification);
         session.set(APP_CONSTANTS.LOGIN_RESPONSE, resp);
+        session.set(LOGOUT_LISTENERS, []); // reset listeners on sign in
         session.set("__org_monkshu_cuser_pass", pass);
         securityguard.setCurrentRole(resp.role);
 
