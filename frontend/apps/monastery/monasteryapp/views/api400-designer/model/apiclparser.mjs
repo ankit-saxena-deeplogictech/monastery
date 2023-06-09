@@ -4,28 +4,45 @@
  * License: See enclosed LICENSE file.
  */
 
-import { serverManager } from "../js/serverManager.js"
+import { serverManager } from "../js/serverManager.js";
+import {i18n} from "/framework/js/i18n.mjs";
+import {util} from "/framework/js/util.mjs";
+import { openserverhelper } from "../js/openserverhelper.mjs";
 
-let xCounter, yCounter, counter = 0, dependencies ,result, storeIDS, flagNOthenYESelse = 0,
-    apicl, initAPICL, commandCounter, nextElseDependency ;
+
+
+const DIALOG = window.monkshu_env.components["dialog-box"], MODULE_PATH = util.getModulePath(import.meta), VIEW_PATH=`${MODULE_PATH}/..`;
+let xCounter, yCounter, counter = 0, dependencies, result, storeIDS, flagNOthenYESelse = 0,
+    apicl, initAPICL, commandCounter, nextElseDependency;
 
 /**
 * Convert the apicl into the final model object
 * @param data The incoming apicl to convert, the format should be { "index:" : "command" }
 * @returns The  api400modelobject, { "apicl": [{ "commands": finalCommands, "name": "commands", "id": counter }] }
 */
-async function apiclParser(data) {
+async function apiclParser(data,uploadType) {
+    let labelRe = /^\s*{*\s*[\"\'](.+?)[\"\']\s*\:/gm, labels = [], match;
+    while (match = labelRe.exec(data)) labels.push(match[1]);
+    const messageTheme = await $$.requireJSON(`${VIEW_PATH}/dialogs/dialogPropertiesPrompt.json`);
+    if(new Set(labels).size !== labels.length){ await  DIALOG.showMessage(await i18n.get("IncorrectApicl"), "error", null, messageTheme, "MSG_DIALOG");return false;}
     xCounter = 100, yCounter = 80, dependencies = [], storeIDS = {}, commandCounter = [],
-    result = [], nextElseDependency=[], apicl = JSON.parse(data), initAPICL = _initializeAPICLIndex(JSON.parse(data));
-
+        result = [], nextElseDependency = [], apicl = {}, initAPICL = _initializeAPICLIndexAndFixJSON(JSON.parse(data), labels);
+ 
+    if (apicl[Object.keys(apicl).length - 1].includes("NOP")) {
+        const lastCommand = apicl[Object.keys(apicl).length];
+        apicl[Object.keys(apicl).length] = apicl[Object.keys(apicl).length - 1];
+        apicl[Object.keys(apicl).length - 1] = lastCommand;
+    }
     for (const key in apicl) {
         if (!initAPICL[key]) {
-            const modelObject = await _parseCommand(apicl[key],key);
+            const modelObject = await _parseCommand(apicl[key], key,uploadType);
             if (Object.keys(modelObject).length > 0) { result.push(modelObject); initAPICL[key] = modelObject.id; }
         }
     }
     const resolvedPromises = await Promise.all(result);
-    const finalCommands = _correctAPICL(resolvedPromises);
+    let finalCommands = _correctAPICL(resolvedPromises);
+    if (apicl[Object.keys(apicl).length].includes("NOP")) finalCommands = _updateCordiantes(finalCommands, apicl[Object.keys(apicl).length]);
+    else if (apicl[Object.keys(apicl).length + 1] && apicl[Object.keys(apicl).length + 1].includes("NOP")) finalCommands = _updateCordiantes(finalCommands, apicl[Object.keys(apicl).length + 1]);
     counter = 0;
     return { "apicl": [{ "commands": finalCommands, "name": "commands", "id": counter }] };
 }
@@ -38,8 +55,8 @@ async function apiclParser(data) {
 * @param key index number of the command 
 * @returns modelobject, which contains nodeName, description, id, x-coordinates, y-coordinates, and other required properties for that command
 */
-const _parseCommand = async function (command, key) {
-     counter++;
+const _parseCommand = async function (command, key,uploadType) {
+    counter++;
     let ret = {}, nodeNameAsSubCmd = '', attr, cmd = command.split(' '), nodeName = cmd[0].toLowerCase();
     if (nodeName == "runjs" && _findBetweenParenthesis(command, "MOD") != "") nodeName = "mod";
     if (nodeName == "if") nodeName = "condition";
@@ -50,30 +67,30 @@ const _parseCommand = async function (command, key) {
     const isThisSubCmd = (nodeNameAsSubCmd) ? true : false;
     nodeName = (nodeNameAsSubCmd) ? nodeNameAsSubCmd : nodeName;
 
-    if (nodeName == 'strapi')          { ret = await _parseStrapi(command) }
-    else if (nodeName == 'runsql')     { ret = await _parseRunsql(command, isThisSubCmd) }
-    else if (nodeName == 'runjs')      { ret = await _parseRunjs(command, isThisSubCmd) }
-    else if (nodeName == 'sndapimsg')  { ret = await _parseSndapimsg(command) }
-    else if (nodeName == 'chgvar')     { ret = await _parseChgvar(command) }
-    else if (nodeName == 'condition')  { ret = await _parseIfCondition(command, key) }
-    else if (nodeName == 'iftrue')     { ret = await _parseIfTrue() }
-    else if (nodeName == 'iffalse')    { ret = await _parseIfFalse() }
-    else if (nodeName == 'goto')       { ret = await _parseGoto(command) }
-    else if (nodeName == 'chgdtaara')  { ret = await _parseChgdtaara(command) }
-    else if (nodeName == 'rtvdtaara')  { ret = await _parseRtvdtaara(command) }
-    else if (nodeName == 'qrcvdtaq')   { ret = await _parseQrcvdtaq(command) }
-    else if (nodeName == 'qsnddtaq')   { ret = await _parseQsnddtaq(command) }
-    else if (nodeName == 'dsppfm')     { ret = await _parseDsppfm(command, isThisSubCmd) }
-    else if (nodeName == 'log')        { ret = await _parseLog(command) }
-    else if (nodeName == 'call')       { ret = await _parseCall(command) }
-    else if (nodeName == 'runsqlprc')  { ret = await _parseRunsqlprc(command) }
-    else if (nodeName == 'rest')       { ret = await _parseRest(command, isThisSubCmd) }
-    else if (nodeName == 'jsonata')    { ret = await _parseJsonata(command, isThisSubCmd) }
-    else if (nodeName == 'map')        { ret = await _parseMap(command, isThisSubCmd) }
-    else if (nodeName == 'scr')        { ret = await _parseScr(command, isThisSubCmd, key) }
-    else if (nodeName == 'mod')        { ret = await _parseMod(command) }
-    else if (nodeName == 'substr')     { ret = await _parseSubstr(command, isThisSubCmd) }
-    else if (nodeName == 'endapi')     { ret = await _parseEndapi() }
+    if (nodeName == 'strapi') { ret = await _parseStrapi(command) }
+    else if (nodeName == 'runsql') { ret = await _parseRunsql(command, isThisSubCmd) }
+    else if (nodeName == 'runjs') { ret = await _parseRunjs(command, isThisSubCmd) }
+    else if (nodeName == 'sndapimsg') { ret = await _parseSndapimsg(command) }
+    else if (nodeName == 'chgvar') { ret = await _parseChgvar(command) }
+    else if (nodeName == 'condition') { ret = await _parseIfCondition(command, key) }
+    else if (nodeName == 'iftrue') { ret = await _parseIfTrue() }
+    else if (nodeName == 'iffalse') { ret = await _parseIfFalse() }
+    else if (nodeName == 'goto') { ret = await _parseGoto(command) }
+    else if (nodeName == 'chgdtaara') { ret = await _parseChgdtaara(command) }
+    else if (nodeName == 'rtvdtaara') { ret = await _parseRtvdtaara(command) }
+    else if (nodeName == 'qrcvdtaq') { ret = await _parseQrcvdtaq(command) }
+    else if (nodeName == 'qsnddtaq') { ret = await _parseQsnddtaq(command) }
+    else if (nodeName == 'dsppfm') { ret = await _parseDsppfm(command, isThisSubCmd) }
+    else if (nodeName == 'log') { ret = await _parseLog(command) }
+    else if (nodeName == 'call') { ret = await _parseCall(command) }
+    else if (nodeName == 'runsqlprc') { ret = await _parseRunsqlprc(command) }
+    else if (nodeName == 'rest') { ret = await _parseRest(command, isThisSubCmd) }
+    else if (nodeName == 'jsonata') { ret = await _parseJsonata(command, isThisSubCmd) }
+    else if (nodeName == 'map') { ret = await _parseMap(command, isThisSubCmd) }
+    else if (nodeName == 'scr') { ret = await _parseScr(command, isThisSubCmd, key) }
+    else if (nodeName == 'mod') { ret = await _parseMod(command,uploadType) }
+    else if (nodeName == 'substr') { ret = await _parseSubstr(command, isThisSubCmd) }
+    else if (nodeName == 'endapi') { ret = await _parseEndapi() }
 
     if (ret && ret.nodeName) { attr = await _setAttribute(ret.nodeName, key); }
     return { ...ret, ...attr };
@@ -99,7 +116,7 @@ const _parseStrapi = async function (command) {
  * @param isThisSubCmd Contains true or false to check wheather a sub command or not
  * @returns RUNSQL node object with required properties
  */
- const _parseRunsql = async function (command, isThisSubCmd) {
+const _parseRunsql = async function (command, isThisSubCmd) {
     const ret = {};
     if (isThisSubCmd) {
         ret["result"] = _subStrUsingNextIndex(command, "VAR(", ")");
@@ -119,7 +136,7 @@ const _parseStrapi = async function (command) {
  * @param isThisSubCmd Contains true or false to check wheather a sub command or not
  * @returns RUNJS node object with required properties
  */
- const _parseRunjs = async function (command, isThisSubCmd) {
+const _parseRunjs = async function (command, isThisSubCmd) {
     const ret = {};
     if (isThisSubCmd) {
         ret["result"] = _subStrUsingNextIndex(command, "VAR(", ")");
@@ -136,7 +153,7 @@ const _parseStrapi = async function (command) {
  * @param command  apicl command for SNDAPIMSG
  * @returns SNDAPIMSG node object with required properties
  */
- const _parseSndapimsg = async function (command) {
+const _parseSndapimsg = async function (command) {
     const ret = {};
     ret["listbox"] = command.match(/\(([^)]+)\)/) ? JSON.stringify(command.match(/\(([^)]+)\)/)[1].split(" ").filter(Boolean)) : JSON.stringify(['']);
     ret["nodeName"] = "sndapimsg";
@@ -149,7 +166,7 @@ const _parseStrapi = async function (command) {
  * @param command  apicl command for CHGVAR
  * @returns CHGVAR node object with required properties
  */
- const _parseChgvar = async function (command) {
+const _parseChgvar = async function (command) {
     const ret = {};
     ret["variable"] = _findBetweenParenthesis(command, "VAR");
     ret["value"] = _findBetweenParenthesis(command, "VALUE");
@@ -163,7 +180,7 @@ const _parseStrapi = async function (command) {
  * @param command  apicl command for IF COND
  * @param key index number of this command
  */
- const _parseIfCondition = async function (command, key) {
+const _parseIfCondition = async function (command, key) {
     const ret = {}; let afterTrueCmd, iftrue = '', iffalse = '';
     ret["nodeName"] = "condition";
     ret["condition"] = _findBetweenParenthesis(command, "COND");
@@ -237,7 +254,7 @@ const _parseGoto = async function (command) {
  * @param command  apicl command for CHGDTAARA
  * @returns CHGDTAARA node object with required properties
  */
- const _parseChgdtaara = async function (command) {
+const _parseChgdtaara = async function (command) {
     const ret = {}, dataAreaName = _findBetweenParenthesis(command, "DTAARA").split("/");
     ret["libraryname"] = dataAreaName[0];
     ret["dataarea"] = dataAreaName[1];
@@ -323,7 +340,7 @@ const _parseDsppfm = async function (command, isThisSubCmd) {
  * @param command  apicl command for LOG
  * @returns LOG node object with required properties
  */
- const _parseLog = async function (command) {
+const _parseLog = async function (command) {
     const ret = {};
     ret["log"] = _findBetweenParenthesis(command, "MSG");
     ret["nodeName"] = "log";
@@ -340,7 +357,7 @@ const _parseCall = async function (command) {
     const ret = {}, programName = _findBetweenParenthesis(command, "PGM").split("/");
     ret["libraryname"] = programName[0];
     ret["programname"] = programName[1];
-    ret["listbox"] = JSON.stringify(_findBetweenParenthesis(command, "PARM").split(" ").filter(Boolean));
+    ret["listbox"] = JSON.stringify(_findBetweenParenthesis(command, "PARM").replace(/\'/gi, '').split(" ").filter(Boolean));
     ret["nodeName"] = "call";
     return ret;
 }
@@ -368,7 +385,7 @@ const _parseRunsqlprc = async function (command) {
             paramNature = `&${otherParams[0]}`
         }
         else parameter = param;
-        finalValues.push([parameter,paramNature,  paramType]);
+        finalValues.push([paramNature,parameter,paramType]);
     }
     ret["listbox"] = JSON.stringify(finalValues);
     ret["nodeName"] = "runsqlprc";
@@ -422,7 +439,7 @@ const _parseJsonata = async function (command, isThisSubCmd) {
  * @param isThisSubCmd Contains true or false to check wheather a sub command or not
  * @returns MAP node object with required properties
  */
- const _parseMap = async function (command, isThisSubCmd) {
+const _parseMap = async function (command, isThisSubCmd) {
     const ret = {};
     if (isThisSubCmd) {
         ret["result"] = _subStrUsingNextIndex(command, "VAR(", ")");
@@ -452,11 +469,15 @@ const _parseJsonata = async function (command, isThisSubCmd) {
  * @param command  apicl command for RUNJS MOD
  * @returns RUNJS MOD node object with required properties
  */
-async function _parseMod(command) {
-    const ret = {};
+async function _parseMod(command,uploadType) {
+    const messageTheme = await $$.requireJSON(`${VIEW_PATH}/dialogs/dialogPropertiesPrompt.json`), ret = {};
     ret["modulename"] = _findBetweenParenthesis(command, "MOD");
-    const jsData = await serverManager.getModule(_findBetweenParenthesis(command, "MOD")); // gets the JS code from module file (passsing module name in function)
+    if(!uploadType){
+    const serverDetails = await openserverhelper.serverDetails();
+    const jsData = await serverManager.getModule(_findBetweenParenthesis(command, "MOD"),serverDetails); // gets the JS code from module file (passsing module name in function)
     ret["code"] = jsData.mod;
+    if(!jsData.result)  await  DIALOG.showMessage(await i18n.get("ModNotFound"), "error", null, messageTheme, "MSG_DIALOG");}
+    else {await  DIALOG.showMessage(await i18n.get("IncorrectMod"), "error", null, messageTheme, "MSG_DIALOG");}
     ret["nodeName"] = "mod";
     return ret;
 }
@@ -488,7 +509,7 @@ const _parseScr = async function (command, isThisSubCmd, key) {
             result.push({ ...ret, ...attr });
             initAPICL[key] = attr.id;
             const cmdAfterRemoveScrStart = command.replace('START', '');
-            result.push(await _parseCommand(cmdAfterRemoveScrStart.replace(cmdAfterRemoveScrStart.match(/POOL\(.+\)/i)[0],'')));
+            result.push(await _parseCommand(cmdAfterRemoveScrStart.replace(cmdAfterRemoveScrStart.match(/POOL\(.+\)/i)[0], '')));
             return {};
         }
     } else if (command.includes("STOP")) {
@@ -560,7 +581,7 @@ const _parseEndapi = async function () { return { "nodeName": "endapi" }; }
 const _setAttribute = async function (nodeName, key) {
     const attribute = {}, description = nodeName.charAt(0).toUpperCase() + nodeName.slice(1).toLowerCase();
     attribute["id"] = _getUniqueID();
-    if (description == 'Iftrue' || description == 'Iffalse') { attribute["description"] = description; } 
+    if (description == 'Iftrue' || description == 'Iffalse') { attribute["description"] = description; }
     else { attribute["description"] = `${description}${_addCommandCount(description)}`; }
     storeIDS[key] = attribute.id
     dependencies.push(attribute.id);
@@ -581,7 +602,7 @@ const _setAttribute = async function (nodeName, key) {
  * @param desciption  is an Description of the node
  * @returns an count of that command
  */
-const _addCommandCount = function (description) { 
+const _addCommandCount = function (description) {
     commandCounter[description] = (commandCounter[description] >= 1) ? ++commandCounter[description] : 1;
     return commandCounter[description];
 }
@@ -591,14 +612,61 @@ const _addCommandCount = function (description) {
  * @param initApicl  is an apicl 
  * @returns an object, { "index": false }
  */
-const _initializeAPICLIndex = function (initApicl) { for (const key in initApicl) { initApicl[key] = false; } return initApicl; }
+const _initializeAPICLIndexAndFixJSON = function (initApicl, labels) {
+    
+    let keyValuePair = [], FixedKeyValuePair = [], fixedJSONobj = {};  labels.forEach(keyIndex => keyValuePair.push([keyIndex, initApicl[keyIndex]]));
+    for (let i = 0; i < keyValuePair.length; i++) {
+        let key = keyValuePair[i][0];
+        keyValuePair[i][0] = "&" + (i + 1);
+        _swapKeyWithCustomIndex(key, keyValuePair, keyValuePair[i][0]);
+    }
+
+    for (let i = 0; i < keyValuePair.length; i++) {
+        let flag = 0; if ((keyValuePair[i][1]) === "NOP") {
+            keyValuePair = _swapKeyWithCustomIndex(keyValuePair[i][0], keyValuePair, keyValuePair[i + 1][0]); flag = 1;
+        }
+        if (flag == 0) FixedKeyValuePair.push(keyValuePair[i]);
+    }
+
+    for (let i = 0; i < FixedKeyValuePair.length; i++) {
+        let key = FixedKeyValuePair[i][0]; FixedKeyValuePair[i][0] = (i + 1);
+        _swapKeyWithCustomIndex(key, FixedKeyValuePair, FixedKeyValuePair[i][0]);
+    }
+    FixedKeyValuePair.forEach(cmd => fixedJSONobj[cmd[0]] = false);
+    FixedKeyValuePair.forEach(cmd => apicl[cmd[0]] = cmd[1]);
+    return fixedJSONobj;
+}
+
+
+const _swapKeyWithCustomIndex = function (key, keyValuePair, replacer) {
+
+    for (let cmd of keyValuePair) {
+        let thenGoto = _findBetweenParenthesis(cmd[1], "THEN"), elseGoto = _findBetweenParenthesis(cmd[1], "ELSE");
+        if (thenGoto != "" && thenGoto.includes("GOTO")) {
+            const re = new RegExp(`THEN\\(\\s*GOTO\\s+${key}\\s*\\)`);
+            if (re.test(cmd[1]) && thenGoto.split("GOTO")[1].trim() == key) cmd[1] = cmd[1].replace(re, `THEN(GOTO  ${replacer})`);
+        }
+
+        if (elseGoto != "" && elseGoto.includes("GOTO")) {
+            const re = new RegExp(`ELSE\\(\\s*GOTO\\s+${key}\\s*\\)`);
+            if (re.test(cmd[1]) && elseGoto.split("GOTO")[1].trim() == key) cmd[1] = cmd[1].replace(re, `ELSE(GOTO  ${replacer})`);
+        }
+
+        if (cmd[1].includes('GOTO') && !cmd[1].includes('THEN') && !cmd[1].includes('ELSE'))
+            if (cmd[1].split("GOTO")[1].trim() == key) cmd[1] = `GOTO ${replacer}`;
+
+    }
+    return keyValuePair;
+}
+
+
 
 /**
  * removes {} in the finalCommands object
  * @param result contains model object of the every command in the apicl
  * @returns an finalCommands object 
  */
-const _correctAPICL = function (result) { 
+const _correctAPICL = function (result) {
 
     const finalAPICL = [];
     for (const key in result) { if (Object.keys(result[key]).length > 0) { finalAPICL.push(result[key]); } }
@@ -611,7 +679,7 @@ const _correctAPICL = function (result) {
  * @param nodeName node name of that node
  * @returns an array of IDs
  */
-const _putDependency = function (nodeid, nodeName) { 
+const _putDependency = function (nodeid, nodeName) {
 
     let dependencyId;
     if (nextElseDependency.length > 0) { dependencyId = nextElseDependency[0]; nextElseDependency.pop(); }
@@ -627,7 +695,7 @@ const _putDependency = function (nodeid, nodeName) {
  * @param command  apicl command for that node
  * @returns node name 
  */
-const _checkChgvarSubCommand = async function (command) { 
+const _checkChgvarSubCommand = async function (command) {
     const subCommands = ['SCR', 'REST', 'JSONATA', 'DSPPFM', 'MAP', 'SUBSTR', 'RUNSQL', 'RUNJS'];
     let nodeName = "";
     subCommands.forEach((subCommand) => { if (command.includes(subCommand)) { nodeName = subCommand; } })
@@ -639,7 +707,7 @@ const _checkChgvarSubCommand = async function (command) {
  * @param id  id of the node we need to find.
  * @returns position of the node 
  */
-const _findPosition = async function (id) { let pos = 0; for (pos in result)  if (result[pos].id == id) return pos; }
+const _findPosition = async function (id) { let pos = 0; for (pos in result) if (result[pos].id == id) return pos; }
 
 /**
  * Used to get the substring which is in between the startStr and last match of endStr in str
@@ -648,7 +716,7 @@ const _findPosition = async function (id) { let pos = 0; for (pos in result)  if
  * @param endStr before which the position of the substring ends
  * @returns an substring which is in between the startStr and last match of endStr in str
  */
-const _subStrUsingLastIndex = function (str, startStr, endStr) { 
+const _subStrUsingLastIndex = function (str, startStr, endStr) {
     return str.substring(str.indexOf(startStr) + startStr.length, str.lastIndexOf(endStr));
 };
 
@@ -662,11 +730,27 @@ const _subStrUsingLastIndex = function (str, startStr, endStr) {
 const _subStrUsingNextIndex = function (str, startStr, endStr) {
     return str.substring(str.indexOf(startStr) + startStr.length, str.indexOf(endStr));
 };
+const _updateCordiantes = function (finalCommands, NOP) {
+
+    const coordinatesData = NOP.match(/\(([^)]+)\)/) ? JSON.parse(NOP.match(/\(([^)]+)\)/)[1]).CORDINATES : [];
+    if (!(finalCommands.length == coordinatesData.length)) return finalCommands;
+    else {
+        finalCommands = finalCommands.map((node, index) => {
+            node["description"] = coordinatesData[index].description;
+            node["x"] = coordinatesData[index].x;
+            node["y"] = coordinatesData[index].y;
+
+            return node;
+        })
+        return finalCommands;
+    }
+};
 
 const _getUniqueID = _ => `${Date.now()}${Math.random() * 100}`; // return an unique ID
 
-const _findBetweenParenthesis = function (string, fromWord) { 
+const _findBetweenParenthesis = function (string, fromWord) {
     return string.match(new RegExp(`${fromWord}\\(([^)]+)\\)`)) ? string.match(new RegExp(`${fromWord}\\(([^)]+)\\)`))[1] : "";
 }
+
 
 export const apiclparser = { apiclParser }
