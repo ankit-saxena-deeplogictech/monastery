@@ -46,6 +46,7 @@ async function openDialog() {
                 result.adminpassword = password_box.getShadowRootByHostId("adminpassword").querySelector("#pwinput").value;
 
                 try {
+                    DIALOG.hideError();
                     // Step 1 : Publish the Module first , if present
                     const api400mod = api400model.getModel(), jsModule = api400model.getModules();
                     if (jsModule.length != 0) {
@@ -59,7 +60,7 @@ async function openDialog() {
                     if (!pubResult.result) { DIALOG.showError(dialogElement, await i18n.get(pubResult.key)); return; }
 
                     // Step 3 : Call the API
-                    const apiResult = await serverManager.callApi(tempApiName, result.server, result.port, header, body, dialogElement);
+                    const apiResult = await serverManager.callApi(tempApiName, result.server, result.port, header, body, dialogElement,result.adminid, result.adminpassword);
                     if (apiResult){
                         await FLOATING_WINDOW.showWindow(CONSOLE_THEME, Mustache.render(floatingWindowHTML, { message: `${JSON.stringify(apiResult, null, 2)}`, error: undefined }));
                         if (!apiResult.result) DIALOG.showError(dialogElement, await i18n.get("TestAPIFailed"));
