@@ -7,7 +7,7 @@ SCHEMA
     "server": {"html":"input", "type":"text", "placeholder":"{{i18n.Server}}", "required":"true", "spellcheck":"false"},
     "port": {"html":"input", "type":"number", "placeholder":"{{i18n.Port}}", "required":"true"},
     "adminid": {"html":"input", "type":"text", "placeholder":"{{i18n.AdminID}}", "required":"true", "spellcheck":"false"},
-    "adminpassword": {"html":"password-box", "style":"width:100%; ", "placeholder":"{{i18n.AdminPassword}}", "required":"true","customValidity":"{{i18n.FillField}}", "styleBody":"span#container{width: 100%;} ::placeholder {opacity: 0.7;} input#pwinput{padding:1.1em;border-radius:10px;border:none;color:inherit;background-color: #ffffff;}","class":"validate"}
+    "adminpassword": {"html":"password-box", "style":"width:100%; ", "placeholder":"{{i18n.AdminPassword}}", "required":"true","customValidity":"{{i18n.FillField}}", "styleBody":"span#container{width: 100%;} ::placeholder {opacity: 0.7;} input#pwinput{padding:1.4em;border-radius:10px;border:none;color:inherit;background-color: #ffffff;}","class":"validate"}
 }
 ======
 
