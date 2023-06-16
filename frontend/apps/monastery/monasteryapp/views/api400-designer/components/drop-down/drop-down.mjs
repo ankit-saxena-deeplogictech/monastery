@@ -15,7 +15,6 @@ const elementConnected = async (element) => {
   });
   let data = {};
   if (element.getAttribute("onclickHandler")) data = { onclick: element.getAttribute("onclickHandler") };
-
   // In Open from Server , to save the server details in drop-down , till session exists
   if (session.get("__org_api400_server") && !element.getAttribute("list")) {
     let list = [];
@@ -51,7 +50,6 @@ function _setValue(value, element) {
 };
 
 function _attachFormValidationControls(element) {
-
   const selectElement = drop_down.getShadowRootByHostId(element.getAttribute("id")).querySelector("select#choices");
   element.getValue = _ => selectElement.value;
   element.setValue = v => selectElement.value = v;
@@ -60,6 +58,8 @@ function _attachFormValidationControls(element) {
   element.checkValidity = _ => selectElement.checkValidity();
   element.reportValidity = _ => selectElement.reportValidity();
   element.getValidationMessage = _ => selectElement.validationMessage;
+
+  if(element.getAttribute("onclickHandler")) element.setAttribute("onclick", element.getAttribute("onclickHandler"))
 }
 
 export const drop_down = { trueWebComponentMode: true, elementConnected, elementRendered };
