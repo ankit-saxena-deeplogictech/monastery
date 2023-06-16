@@ -100,7 +100,6 @@ const addLogoutListener = (modulePath, exportToCall, functionToCall) => {
 
 async function logout(dueToTimeout) {
     LOG.info(`Logout of user ID: ${session.get(APP_CONSTANTS.USERID)}${dueToTimeout?" due to timeout":""}.`);
-
     for (const listener of (session.get(LOGOUT_LISTENERS)||[])) {
         try {
             const module = await import(listener.modulePath);
@@ -134,7 +133,7 @@ async function getProfileData(id, time) {
     if (resp && resp.result) return resp; else return null;
 }
 
-function startAutoLogoutTimer() { return;
+function startAutoLogoutTimer() { 
     if (!session.get(APP_CONSTANTS.USERID)) return; // no one is logged in
     
     const events = ["load", "mousemove", "mousedown", "click", "scroll", "keypress"];

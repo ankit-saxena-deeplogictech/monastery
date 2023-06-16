@@ -60,7 +60,6 @@
 function disableOrEnableInputField(element) {
     const dropDownShadowRoot = drop_down.getShadowRootByHost(element) ? drop_down.getShadowRootByHost(element) : drop_down.getShadowRootByContainedElement(element);
     const shadowRoot = dialog_box.getShadowRootByContainedElement(drop_down.getHostElement(dropDownShadowRoot));
-    console.log(shadowRoot);
 
     if(drop_down.getHostElement(dropDownShadowRoot).id == "isauthenticationneeded") {
       if(dropDownShadowRoot.querySelector('select').value == "NO"){

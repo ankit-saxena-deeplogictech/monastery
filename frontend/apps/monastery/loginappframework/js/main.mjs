@@ -85,6 +85,7 @@ const interceptPageData = _ => router.addOnLoadPageData(APP_CONSTANTS.MAIN_HTML,
 
 async function gohome() {
     for (const listener of gohomeListeners) await listener();
+   if(session.get(APP_CONSTANTS.FORCE_LOAD_VIEW)) session.remove(APP_CONSTANTS.FORCE_LOAD_VIEW)
     router.navigate(APP_CONSTANTS.MAIN_HTML);
 }
 

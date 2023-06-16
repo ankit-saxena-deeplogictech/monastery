@@ -4,7 +4,8 @@ import { apimanager as apiman } from "/framework/js/apimanager.mjs";
 import {session} from "/framework/js/session.mjs";
 import {loader} from "../../../js/loader.mjs";
 import { password_box } from "../../../../loginappframework/components/password-box/password-box.mjs";
-import {exConfirmPromise} from "./generate-warning-dialog.mjs"
+import {exConfirmPromise} from "./generate-warning-dialog.mjs";
+import { serverManager } from "../js/serverManager.js";
 
 const MODULE_PATH = util.getModulePath(import.meta);
 const CONSOLE_THEME = {
@@ -47,8 +48,9 @@ async function testSQL(element) {
     CONSOLE_THEME.title = await i18n.get("output");  DIALOG.hideError();
     try {
       await loader.beforeLoading();_disableButton(element)
-
-    let  result = await apiman.rest(`http://${server}:${port}/admin/testSQL`, "POST", { user, password, value }, true);
+      const loginResult = await serverManager.loginToServer(server, port, user, password);
+      if (!loginResult.result) return loginResult;
+    let  result = await apiman.rest(`${loginResult.scheme}://${server}:${port}/admin/testSQL`, "POST", { user, password, value }, true);
       if (typeof result == "string") result = JSON.parse(result);
 
       

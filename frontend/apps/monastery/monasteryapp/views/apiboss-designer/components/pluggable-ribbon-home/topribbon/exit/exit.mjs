@@ -3,8 +3,7 @@
  */
 import {util} from "/framework/js/util.mjs";
 import { application } from "../../../../../../../loginappframework/js/application.mjs";
-import {router} from "/framework/js/router.mjs";
-import {session} from "/framework/js/session.mjs";
+
 
 
 const PLUGIN_PATH = util.getModulePath(import.meta);
@@ -17,9 +16,7 @@ async function init() {
     return true;
 }
 
-const   clicked = _ =>{ 
-    session.remove(APP_CONSTANTS.FORCE_LOAD_VIEW)
-    router.navigate(APP_CONSTANTS.MAIN_HTML)}, getImage = _ => IMAGE,
+const   clicked = _ => application.exitToChooser(), getImage = _ => IMAGE,
         getHelpText = (lang = en) => I18N.HELP_TEXTS[lang],
         getDescriptiveName = (lang = en) => I18N.DESCRIPTIVE_NAME[lang];
 
