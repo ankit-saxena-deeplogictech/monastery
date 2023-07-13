@@ -2,7 +2,10 @@
  * (C) 2020 TekMonks. All rights reserved.
  */
 import {util} from "/framework/js/util.mjs";
-import {application} from "../../../../../../../loginappframework/js/application.mjs";
+import { application } from "../../../../../../../loginappframework/js/application.mjs";
+
+
+
 const PLUGIN_PATH = util.getModulePath(import.meta);
 let IMAGE, I18N;
 
@@ -13,12 +16,8 @@ async function init() {
     return true;
 }
 
-const clicked =async _=> (await import(`${APP_CONSTANTS.LOGINAPP_PATH}/js/application.mjs`))[application.exitToChooser()];
-
-const getImage = _ => IMAGE;
-
-const getHelpText = (lang=en) => I18N.HELP_TEXTS[lang];
-
-const getDescriptiveName = (lang=en) => I18N.DESCRIPTIVE_NAME[lang];
+const   clicked = _ => application.exitToChooser(), getImage = _ => IMAGE,
+        getHelpText = (lang = en) => I18N.HELP_TEXTS[lang],
+        getDescriptiveName = (lang = en) => I18N.DESCRIPTIVE_NAME[lang];
 
 export const exit = {init, clicked, getImage, getHelpText, getDescriptiveName}

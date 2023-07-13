@@ -38,11 +38,16 @@
     </style>
 
     <title>{{i18n.Title}}</title>
-    <link href="./img/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="../loginappframework/img/favicon.svg" rel="icon" type="image/x-icon">
 
     <script type="module">
         import { password_box } from "./components/password-box/password-box.mjs"; 
     </script>
+
+<script type="module">
+    import { main } from "../monasteryapp/js/main.mjs"; monkshu_env.apps[APP_CONSTANTS.APP_NAME].main = main;
+    window.addEventListener("DOMContentLoaded", _ => setTimeout(_ => main.showLoginMessages(), 200));
+</script>
 
 
     <script type="module">

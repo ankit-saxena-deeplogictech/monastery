@@ -111,7 +111,7 @@ async function _shapeObjectClickedOnFlowDiagram(shapeName, id, shapelabel) {
     let html = await page_generator.getHTML(pageFile, null, {description: shapelabel, uriEncodedDescription: encodeURIComponent(shapelabel)});
 
     // figure out IDs for all input items on the dialog and fill their defaults, if saved previously
-    const dom = new DOMParser().parseFromString(html, "text/html"), items = dom.getElementsByClassName(PAGE_GENERATOR_GRID_ITEM_CLASS);
+    let dom = new DOMParser().parseFromString(html, "text/html"), items = dom.getElementsByClassName(PAGE_GENERATOR_GRID_ITEM_CLASS);
     const idsNeeded = []; for (const item of items) for (const child of item.childNodes) if (
         HTML_INPUT_ELEMENTS.includes(child.nodeName.toLowerCase()) && child.id ) {
             idsNeeded.push(child.id); 
