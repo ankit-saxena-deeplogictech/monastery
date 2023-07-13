@@ -12,7 +12,7 @@ const adminDialog = async () => {
      let img = document.getElementById("adminimg");
 
      img.addEventListener("click", async function(){
-        await router.navigate(`${APP_CONSTANTS.MAIN_HTML}?view=apiboss-designer&page=home`);
+        await router.navigate(`${APP_CONSTANTS.MONASTERY_MAIN_HTML}?view=apiboss-designer&page=home`);
      });
  
 
