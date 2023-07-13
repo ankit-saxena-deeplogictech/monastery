@@ -1,9 +1,14 @@
 {
     "extensions": [
+        "proxy",
         "redirect"
     ],
-    "redirects": [
+    "proxies": [
         {
+            "^http(.*)://([^:/]+)[:]?.*?/apps/monastery/proxiedapis/(.*)$": "http{{{$1}}}://{{{$2}}}:9092/apps/monastery/proxiedapis/{{{$3}}}"
+        }
+    ],
+	"redirects": [{
             "^http(.*)://([^/]+?)/index.html$": "http{{{$1}}}://{{{$2}}}/apps/monastery/loginappframework/index.html"
         },
         {
@@ -11,10 +16,9 @@
         },
         {
             "^http(.*)://([^/]+?)$": "http{{{$1}}}://{{{$2}}}/apps/monastery/loginappframework/index.html"
-        }
-    ],
-    "diskCache": {
-        "refresh": 1000,
+        }],  
+  "diskCache": {
+        "refresh": 300000,
         "dontCache": [
             ".*\\.pdf"
         ],
@@ -22,11 +26,14 @@
         "ignoreAfterMaxHits": 10
     },
     "httpdHeaders": {
-        "Cache-Control": "max-age=604800, must-revalidate, private"
+        "Server": "Monkshu HTTPD",
+	"X-XSS-Protection": 1,
+	"X-Frame-Options": "deny",
+	"X-Content-Type-Options": "nosniff",
+	"Cache-Control": "max-age=31536000, private"    
     },
-    "ssl": false,
-    "sslKeyFile": "C:\\Users\\rvkapoor\\source\\etc\\dnsip_privkey.pem",
-    "sslCertFile": "C:\\Users\\rvkapoor\\source\\etc\\dnsip_fullchain.pem",
-    "port": 8080,
-    "host": "{{{hostname}}}"
+    "ssl": true,
+    "sslKeyFile":"/etc/letsencrypt/live/monastery.codes/privkey.pem",
+    "sslCertFile":"/etc/letsencrypt/live/monastery.codes/fullchain.pem",
+    "port": 443
 }
