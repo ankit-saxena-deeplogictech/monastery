@@ -2,8 +2,8 @@
  * (C) 2015 TekMonks. All rights reserved.
  * License: MIT - see enclosed license.txt file.
  */
-const FRONTEND = "http://{{{hostname}}}:8080";
-const BACKEND = "http://{{{hostname}}}:9090";
+const FRONTEND = "https://{{{hostname}}}";
+const BACKEND = "https://{{{hostname}}}:9092";
 const APP_NAME = "monastery";
 const EMBEDDED_APP_NAME = "monasteryapp";
 const APP_PATH = `${FRONTEND}/apps/${APP_NAME}`;

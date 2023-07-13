@@ -8,11 +8,12 @@
         "Access-Control-Expose-Headers": "*",
         "Access-Control-Max-Age": 86400
     },
-    "host" : "::",
-    "port" : 9090,
+    "host": "monastery.codes",
+    "port": 9092,
+    "ssl": true,
+    "forceHTTP1": true,
+    "sslKeyFile":"/etc/letsencrypt/live/monastery.codes/privkey.pem",
+    "sslCertFile":"/etc/letsencrypt/live/monastery.codes/fullchain.pem",
     "ipblacklistRefresh": 5000,
-    "ipwhitelistRefresh": 5000,
-    "ssl": false,
-    "sslKeyFile":"C:/Users/rvkapoor/source/etc/192.168.1.8_privkey.pem",
-	"sslCertFile":"C:/Users/rvkapoor/source/etc/192.168.1.8_fullchain.pem"
+    "ipwhitelistRefresh": 5000
 }
